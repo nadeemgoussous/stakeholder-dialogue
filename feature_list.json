@@ -23,7 +23,7 @@
         "Create basic folder structure per CLAUDE.md",
         "Verify app loads offline after first visit"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F002",
