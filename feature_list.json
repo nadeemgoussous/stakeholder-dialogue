@@ -1,0 +1,617 @@
+{
+  "project": "Scenario Dialogue Tool",
+  "version": "1.0.0",
+  "description": "Interactive tool for IRENA workshops helping energy planners understand stakeholder perspectives. OFFLINE-FIRST architecture.",
+  "criticalRequirements": [
+    "MUST work fully offline after initial load",
+    "MUST silently failover to rule-based responses if API unavailable",
+    "MUST NOT calculate LCOE, tariffs, or technical feasibility",
+    "MUST include predict-before-reveal pedagogy",
+    "Data input MUST take under 5 minutes"
+  ],
+  "features": [
+    {
+      "id": "F001",
+      "category": "setup",
+      "priority": 1,
+      "description": "Project scaffolding with Vite + React + TypeScript + Tailwind + PWA",
+      "steps": [
+        "Initialize Vite project with React and TypeScript",
+        "Configure Tailwind with IRENA design tokens from CLAUDE.md",
+        "Install and configure vite-plugin-pwa IMMEDIATELY",
+        "Set up service worker for offline caching",
+        "Create basic folder structure per CLAUDE.md",
+        "Verify app loads offline after first visit"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F002",
+      "category": "offline",
+      "priority": 2,
+      "description": "Rule-based stakeholder response generator (PRIMARY - must work offline)",
+      "steps": [
+        "Create utils/stakeholder-rules.ts",
+        "Implement generateRuleBasedResponse function per CLAUDE.md specification",
+        "Implement getMetricValue helper for nested data access",
+        "Implement all concern trigger checks",
+        "Implement all positive indicator checks",
+        "Implement generateInitialReaction based on concern/appreciation balance",
+        "Implement selectRelevantQuestions based on scenario characteristics",
+        "Test that responses generate correctly without any network calls",
+        "This MUST work without internet connection"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F003",
+      "category": "data",
+      "priority": 3,
+      "description": "TypeScript interfaces for all data structures",
+      "steps": [
+        "Create types/scenario.ts with ScenarioInput interface",
+        "Create types/stakeholder.ts with StakeholderProfile, ConcernTrigger, PositiveIndicator interfaces",
+        "Create types/response.ts with StakeholderResponse, Concern interfaces",
+        "Create types/derived-metrics.ts with DerivedMetrics interface (jobs, land, emissions ONLY)",
+        "Create types/adjustments.ts with AdjustableParameters and DirectionalImpacts",
+        "Verify all types compile without errors"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F004",
+      "category": "data",
+      "priority": 4,
+      "description": "Complete stakeholder profiles data file with all 9 stakeholders",
+      "steps": [
+        "Create data/stakeholder-profiles.ts",
+        "Implement all 9 stakeholder profiles EXACTLY as specified in CLAUDE.md",
+        "Include revised Development Partners profile with debt sustainability concerns",
+        "Include all concernTriggers and positiveIndicators",
+        "Include responseTemplates for rule-based generation",
+        "Export stakeholderProfiles array",
+        "Verify all profiles have correct colors from toolkit"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F005",
+      "category": "data",
+      "priority": 5,
+      "description": "Technology factors for soft metrics calculations only",
+      "steps": [
+        "Create data/technology-factors.ts",
+        "Add JOB_FACTORS (construction and operations jobs per MW)",
+        "Add LAND_FACTORS (hectares per MW for solar and wind only)",
+        "Add EMISSION_FACTORS (tCO2 per GWh for fossil fuels)",
+        "DO NOT add LCOE or cost factors",
+        "Match all values exactly to CLAUDE.md specification"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F006",
+      "category": "calculations",
+      "priority": 6,
+      "description": "Derived metrics calculator (soft metrics ONLY)",
+      "steps": [
+        "Create utils/calculations.ts",
+        "Implement calculateJobs using JOB_FACTORS",
+        "Implement calculateLandUse using LAND_FACTORS",
+        "Implement calculateEmissions using EMISSION_FACTORS",
+        "DO NOT implement calculateLCOE or any cost calculations",
+        "Create calculateDerivedMetrics that returns DerivedMetrics object",
+        "Add unit tests for calculations"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F007",
+      "category": "setup",
+      "priority": 7,
+      "description": "Header and footer with IRENA branding and offline indicator",
+      "steps": [
+        "Create components/layout/Header.tsx with IRENA logo placeholder",
+        "Create components/layout/Footer.tsx with toolkit reference",
+        "Add offline/online status indicator in header",
+        "Apply IRENA color scheme (#0078a7 primary, #f7941d accent)",
+        "Verify responsive layout"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F008",
+      "category": "setup",
+      "priority": 8,
+      "description": "Four-tab navigation system",
+      "steps": [
+        "Create components/layout/TabNavigation.tsx",
+        "Implement tabs: Input, Stakeholder Dialogue, Explore Impacts, Communicate",
+        "Add tab state management",
+        "Style with IRENA colors and active indicators",
+        "Verify tab switching preserves state"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F009",
+      "category": "data",
+      "priority": 9,
+      "description": "Sample Rwanda baseline scenario data",
+      "steps": [
+        "Create public/sample-data/rwanda-baseline.json",
+        "Populate with realistic SPLAT-MESSAGE output structure",
+        "Include all technology categories",
+        "Include milestone years 2025, 2030, 2040, 2050",
+        "Verify structure matches ScenarioInput interface"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F010",
+      "category": "input",
+      "priority": 10,
+      "description": "Input tab with three input options",
+      "steps": [
+        "Create components/input/InputTab.tsx",
+        "Add three option buttons: Load Example, Paste from Template, Quick Entry",
+        "Style according to IRENA design",
+        "Show scenario preview panel on right side",
+        "Display '5-minute input' messaging"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F011",
+      "category": "input",
+      "priority": 11,
+      "description": "Load example scenario functionality",
+      "steps": [
+        "Add 'Load Rwanda Example' button",
+        "Fetch and parse rwanda-baseline.json",
+        "Populate scenario state",
+        "Update preview immediately",
+        "This must work OFFLINE (bundle the JSON)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F012",
+      "category": "input",
+      "priority": 12,
+      "description": "Quick entry form (15 essential fields only)",
+      "steps": [
+        "Create components/input/QuickEntryForm.tsx",
+        "Implement 15-field form per CLAUDE.md QuickScenarioInput",
+        "Add country dropdown (13 EAPP countries)",
+        "Add validation for numeric fields",
+        "Convert to full ScenarioInput on submit",
+        "Target: completable in under 3 minutes"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F013",
+      "category": "input",
+      "priority": 13,
+      "description": "JSON paste functionality for Excel template output",
+      "steps": [
+        "Create components/input/JsonPasteInput.tsx",
+        "Add large text area for pasting JSON",
+        "Parse and validate JSON against ScenarioInput schema",
+        "Show clear error messages for invalid JSON",
+        "Auto-populate scenario state on valid paste"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F014",
+      "category": "input",
+      "priority": 14,
+      "description": "Excel template file for SPLAT output import",
+      "steps": [
+        "Create public/templates/SPLAT-OUTPUT-IMPORTER.xlsx",
+        "Add Instructions sheet with clear guidance",
+        "Add input sheets for Capacity, Generation, Emissions, Investment, Demand",
+        "Add OUTPUT sheet that generates JSON (VBA macro or formulas)",
+        "Test that generated JSON parses correctly in tool",
+        "Include French instructions option"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F015",
+      "category": "input",
+      "priority": 15,
+      "description": "Scenario preview panel with key metrics",
+      "steps": [
+        "Create components/input/ScenarioPreview.tsx",
+        "Display: Country, Scenario Name, RE share 2030/2040, Investment, Emissions reduction",
+        "Add simple capacity mix bar chart using Recharts",
+        "Update reactively on data changes",
+        "Add 'Proceed to Stakeholder Dialogue' button"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F016",
+      "category": "stakeholder",
+      "priority": 16,
+      "description": "Stakeholder tab with icon selector",
+      "steps": [
+        "Create components/stakeholder/StakeholderTab.tsx",
+        "Add row of 9 stakeholder icons",
+        "Implement selection state",
+        "Show stakeholder name and brief description on selection",
+        "Apply stakeholder-specific colors"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F017",
+      "category": "stakeholder",
+      "priority": 17,
+      "description": "Stakeholder icons matching toolkit design",
+      "steps": [
+        "Create or source SVG icons for all 9 stakeholders",
+        "Create components/stakeholder/StakeholderIcon.tsx",
+        "Add tooltip on hover",
+        "Apply colors from CLAUDE.md",
+        "Add selected/unselected visual states",
+        "Place in public/icons/"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F018",
+      "category": "pedagogy",
+      "priority": 18,
+      "description": "Predict-before-reveal input component",
+      "steps": [
+        "Create components/prediction/PredictionInput.tsx",
+        "Display: 'What do you think [Stakeholder] will say?'",
+        "Show stakeholder priorities as hints",
+        "Add text area with minimum 20 character requirement",
+        "Add character counter",
+        "Add 'Reveal Response' button (disabled until 20+ chars)",
+        "Store prediction in state for later comparison"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F019",
+      "category": "pedagogy",
+      "priority": 19,
+      "description": "Compare prediction vs response display",
+      "steps": [
+        "Create components/prediction/CompareView.tsx",
+        "Show user's prediction in highlighted box",
+        "Show simulated response below",
+        "Add 'Reflection' prompt: 'How did your prediction compare?'",
+        "Add buttons: Try Another Stakeholder, Export Brief",
+        "This creates the learning moment"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F020",
+      "category": "stakeholder",
+      "priority": 20,
+      "description": "Stakeholder response display component",
+      "steps": [
+        "Create components/stakeholder/StakeholderResponse.tsx",
+        "Display sections: Initial Reaction, Appreciation, Concerns, Questions, Advice",
+        "Style with checkmarks, warning icons, question marks",
+        "Apply stakeholder accent color",
+        "Show generation type indicator (rule-based vs AI-enhanced)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F021",
+      "category": "offline",
+      "priority": 21,
+      "description": "AI enhancement with silent failover (OPTIONAL)",
+      "steps": [
+        "Create utils/stakeholder-ai.ts",
+        "Implement maybeEnhanceWithAI function per CLAUDE.md",
+        "Use 3-second timeout",
+        "On ANY error: return rule-based response silently (no error UI)",
+        "Check navigator.onLine before attempting",
+        "Check for API key in environment",
+        "Implement buildSystemPrompt with strict guardrails"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F022",
+      "category": "offline",
+      "priority": 22,
+      "description": "Offline indicator and graceful degradation",
+      "steps": [
+        "Add online/offline status listener",
+        "Show subtle offline indicator in header (not alarming)",
+        "When offline: hide 'Regenerate' button, show only rule-based",
+        "NEVER show loading spinners for core stakeholder responses",
+        "Responses must feel instant"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F023",
+      "category": "calculator",
+      "priority": 23,
+      "description": "Explore Impacts tab with directional sliders",
+      "steps": [
+        "Create components/calculator/ExploreTab.tsx",
+        "Add sliders for: RE share 2030, RE share 2040, Coal phaseout year",
+        "Show base values and current values",
+        "Style with IRENA colors",
+        "Add prominent disclaimer per CLAUDE.md CALCULATOR_DISCLAIMER"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F024",
+      "category": "calculator",
+      "priority": 24,
+      "description": "Directional impact indicators (NOT calculations)",
+      "steps": [
+        "Create components/calculator/DirectionalImpacts.tsx",
+        "Show cards for: Jobs, Land Use, Emissions",
+        "Display DIRECTION only (↑ increase, ↓ decrease, → unchanged)",
+        "Display MAGNITUDE (significant, moderate, minimal)",
+        "DO NOT show specific numbers or percentages",
+        "Add explanatory text for each"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F025",
+      "category": "calculator",
+      "priority": 25,
+      "description": "Stakeholder sentiment change display",
+      "steps": [
+        "Create components/calculator/SentimentChanges.tsx",
+        "Show all 9 stakeholders with icons",
+        "Display sentiment arrow (↗ ↘ →) for each",
+        "On click/hover: show positive and negative factors",
+        "Implement calculateSentimentChanges per CLAUDE.md"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F026",
+      "category": "calculator",
+      "priority": 26,
+      "description": "Calculator disclaimer component",
+      "steps": [
+        "Create components/common/CalculatorDisclaimer.tsx",
+        "Display prominent warning box",
+        "Text per CLAUDE.md: 'DIRECTIONAL INDICATORS ONLY...'",
+        "Style with warning colors but not alarming",
+        "Display on Explore tab AND in any exports"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F027",
+      "category": "communicate",
+      "priority": 27,
+      "description": "Communicate tab with audience selector",
+      "steps": [
+        "Create components/output/CommunicateTab.tsx",
+        "Add audience buttons: Finance Ministry, Utility Board, Parliament, Dev Partners, Communities",
+        "Implement selection state",
+        "Show placeholder for selected audience output"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F028",
+      "category": "communicate",
+      "priority": 28,
+      "description": "Audience-specific framing generator",
+      "steps": [
+        "Create data/audience-framings.ts",
+        "Define framings for all 5 audiences",
+        "Include headline, keyMessages, dataToEmphasize",
+        "Create generateAudienceFraming function",
+        "Insert actual scenario numbers into templates"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F029",
+      "category": "communicate",
+      "priority": 29,
+      "description": "Communication output display",
+      "steps": [
+        "Create components/output/CommunicationOutput.tsx",
+        "Display headline prominently",
+        "Display key messages as list",
+        "Show recommended chart type",
+        "Style with audience-appropriate colors"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F030",
+      "category": "communicate",
+      "priority": 30,
+      "description": "Simple chart components",
+      "steps": [
+        "Create components/charts/CapacityMixChart.tsx",
+        "Create components/charts/EmissionsChart.tsx",
+        "Create components/charts/JobsChart.tsx",
+        "Use Recharts with IRENA colors",
+        "Keep charts simple and clear"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F031",
+      "category": "communicate",
+      "priority": 31,
+      "description": "Export stakeholder brief as text",
+      "steps": [
+        "Add 'Export Brief' button to stakeholder response",
+        "Generate markdown summary of response",
+        "Include user's prediction for reflection",
+        "Download as .md or .txt file",
+        "Include disclaimer about illustrative nature"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F032",
+      "category": "communicate",
+      "priority": 32,
+      "description": "Copy chart data to clipboard",
+      "steps": [
+        "Add 'Copy Data' button to charts",
+        "Format as tab-separated values for Excel",
+        "Copy to clipboard",
+        "Show brief success notification"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F033",
+      "category": "persistence",
+      "priority": 33,
+      "description": "IndexedDB storage for offline scenarios",
+      "steps": [
+        "Install and configure Dexie.js",
+        "Create database schema for scenarios",
+        "Auto-save scenario on changes",
+        "Load saved scenario on app start",
+        "Handle storage errors gracefully"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F034",
+      "category": "persistence",
+      "priority": 34,
+      "description": "Export scenario and responses as JSON",
+      "steps": [
+        "Add 'Export Session' button",
+        "Combine scenario, predictions, responses",
+        "Add metadata and timestamp",
+        "Download as JSON file"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F035",
+      "category": "ux",
+      "priority": 35,
+      "description": "Tooltips for technical terms",
+      "steps": [
+        "Create components/common/Tooltip.tsx",
+        "Add tooltips to stakeholder priorities",
+        "Add tooltips to metric names",
+        "Style consistently with IRENA colors"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F036",
+      "category": "ux",
+      "priority": 36,
+      "description": "Error boundaries and fallback UI",
+      "steps": [
+        "Create components/common/ErrorBoundary.tsx",
+        "Wrap main app sections",
+        "Show helpful error messages",
+        "Provide recovery options",
+        "Log errors for debugging"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F037",
+      "category": "ux",
+      "priority": 37,
+      "description": "Responsive design for tablets",
+      "steps": [
+        "Test all tabs at 768px-1024px width",
+        "Adjust layouts with Tailwind responsive classes",
+        "Ensure 44px minimum touch targets",
+        "Verify charts scale properly"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F038",
+      "category": "packaging",
+      "priority": 38,
+      "description": "Local server batch files",
+      "steps": [
+        "Create start-local.bat for Windows",
+        "Create start-local.sh for Mac/Linux",
+        "Scripts run npm install and npm run dev",
+        "Test scripts work on clean system",
+        "Document in README"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F039",
+      "category": "packaging",
+      "priority": 39,
+      "description": "PWA manifest and icons",
+      "steps": [
+        "Create manifest.json with IRENA branding",
+        "Add app icons in multiple sizes",
+        "Configure install prompt",
+        "Test PWA install on Chrome",
+        "Verify offline functionality after install"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F040",
+      "category": "documentation",
+      "priority": 40,
+      "description": "README with setup instructions",
+      "steps": [
+        "Write comprehensive README.md",
+        "Include installation steps",
+        "Document offline-first architecture",
+        "Add screenshots of key features",
+        "Include troubleshooting section"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F041",
+      "category": "documentation",
+      "priority": 41,
+      "description": "Workshop facilitator guide",
+      "steps": [
+        "Create FACILITATOR_GUIDE.md",
+        "Document predict-before-reveal pedagogy",
+        "Include timing for half-day module",
+        "Add discussion questions",
+        "Add troubleshooting for workshop issues"
+      ],
+      "passes": false
+    },
+    {
+      "id": "F042",
+      "category": "documentation",
+      "priority": 42,
+      "description": "Excel template user instructions",
+      "steps": [
+        "Create TEMPLATE_INSTRUCTIONS.md",
+        "Step-by-step guide for using Excel template",
+        "Screenshots of where to find SPLAT outputs",
+        "Troubleshooting common issues",
+        "Include in public/templates/ folder"
+      ],
+      "passes": false
+    }
+  ]
+}
