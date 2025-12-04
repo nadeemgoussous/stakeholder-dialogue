@@ -9,10 +9,18 @@
     "preview": "vite preview",
     "test": "echo \"Tests to be implemented\" && exit 0"
   },
-  "keywords": ["energy", "planning", "stakeholder", "irena", "pwa", "offline"],
+  "keywords": [
+    "energy",
+    "planning",
+    "stakeholder",
+    "irena",
+    "pwa",
+    "offline"
+  ],
   "author": "IRENA",
   "license": "MIT",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
