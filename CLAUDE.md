@@ -419,7 +419,7 @@ When implementing features, consult:
 
 The tool is designed to be adaptable to different regional contexts:
 
-- **Replace regional body profiles** - E.g., EAPP for East Africa, SAPP for Southern Africa, WAPP for West Africa
+- **Replace regional body profiles** - E.g., SAPP for Southern Africa, WAPP for West Africa, various regional power pools
 - **Adjust concern thresholds** - Based on local benchmarks and policy targets
 - **Customize stakeholder lists** - Add/remove stakeholders based on local context
 - **Localize language** - Support multiple languages in UI and templates

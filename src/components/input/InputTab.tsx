@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
 import { ScenarioInput } from '../../types/scenario';
+import QuickEntryForm from './QuickEntryForm';
 
 type InputMethod = 'example' | 'paste' | 'quick' | null;
 
@@ -198,20 +199,7 @@ export default function InputTab() {
       )}
 
       {selectedMethod === 'quick' && !scenario && (
-        <div className="card text-center" data-testid="quick-entry-placeholder">
-          <h3 className="text-xl font-semibold mb-3 text-green-600">
-            Quick Entry Form
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Coming soon: 15-field quick entry form
-          </p>
-          <button
-            onClick={() => setSelectedMethod(null)}
-            className="text-sm text-blue-600 hover:text-blue-700"
-          >
-            ← Back to options
-          </button>
-        </div>
+        <QuickEntryForm onCancel={() => setSelectedMethod(null)} />
       )}
     </div>
   );

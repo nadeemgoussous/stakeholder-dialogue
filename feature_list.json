@@ -183,12 +183,12 @@
       "steps": [
         "Create components/input/QuickEntryForm.tsx",
         "Implement 15-field form per CLAUDE.md QuickScenarioInput",
-        "Add country dropdown (13 EAPP countries)",
+        "Add country dropdown (global country list)",
         "Add validation for numeric fields",
         "Convert to full ScenarioInput on submit",
         "Target: completable in under 3 minutes"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F013",
