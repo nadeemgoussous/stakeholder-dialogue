@@ -2,10 +2,15 @@ import { useState } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
 import { ScenarioInput } from '../../types/scenario';
 import QuickEntryForm from './QuickEntryForm';
+import ScenarioPreview from './ScenarioPreview';
 
 type InputMethod = 'example' | 'paste' | 'quick' | null;
 
-export default function InputTab() {
+interface InputTabProps {
+  onProceedToDialogue?: () => void;
+}
+
+export default function InputTab({ onProceedToDialogue }: InputTabProps) {
   const [selectedMethod, setSelectedMethod] = useState<InputMethod>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -145,39 +150,10 @@ export default function InputTab() {
 
       {/* Scenario Preview (if loaded) */}
       {scenario && !loading && (
-        <div className="card" data-testid="scenario-preview">
-          <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
-            ✓ Scenario Loaded Successfully
-          </h3>
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <p className="text-sm text-gray-600">Country</p>
-              <p className="font-semibold" data-testid="scenario-country">{scenario.metadata.country}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Scenario Name</p>
-              <p className="font-semibold" data-testid="scenario-name">{scenario.metadata.scenarioName}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Model Version</p>
-              <p className="font-semibold" data-testid="scenario-model">{scenario.metadata.modelVersion}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Date Created</p>
-              <p className="font-semibold">{new Date(scenario.metadata.dateCreated).toLocaleDateString()}</p>
-            </div>
-          </div>
-
-          {/* Next Steps */}
-          <div className="bg-green-50 border-l-4 border-green-500 p-4">
-            <p className="text-sm text-green-800 mb-2">
-              <strong>Ready to explore stakeholder responses!</strong>
-            </p>
-            <p className="text-sm text-green-700">
-              Navigate to the <strong>Stakeholder Dialogue</strong> tab to predict and reveal how different stakeholders would respond to this scenario.
-            </p>
-          </div>
-        </div>
+        <ScenarioPreview
+          scenario={scenario}
+          onProceed={onProceedToDialogue}
+        />
       )}
 
       {/* Selected Method Content (Paste/Quick Entry - Coming Soon) */}

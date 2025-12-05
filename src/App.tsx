@@ -19,7 +19,9 @@ function App() {
 
         {/* Main Content Area */}
         <main className="container mx-auto px-4 py-8 flex-1">
-          {activeTab === 'input' && <InputTab />}
+          {activeTab === 'input' && (
+            <InputTab onProceedToDialogue={() => setActiveTab('dialogue')} />
+          )}
 
           {activeTab === 'dialogue' && (
             <div className="card max-w-4xl mx-auto text-center" id="dialogue-panel" role="tabpanel">

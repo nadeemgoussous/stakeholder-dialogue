@@ -233,7 +233,7 @@
         "Update reactively on data changes",
         "Add 'Proceed to Stakeholder Dialogue' button"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F016",
