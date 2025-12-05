@@ -485,4 +485,83 @@ Notes:
 - Tab switching preserves overall page structure
 - Clean flexbox layout ensures footer stays at bottom
 
+[2025-12-05] - SESSION 9 - Rwanda Baseline Scenario Data (F009)
+
+Status: Feature F009 complete ✅
+Current Feature: F009 - Sample Rwanda baseline scenario data [COMPLETED]
+
+Completed Tasks:
+1. ✅ Created public/sample-data/rwanda-baseline.json
+   - Complete Rwanda Business as Usual baseline scenario
+   - SPLAT-MESSAGE output structure
+   - All 12 technology categories with capacity and generation data
+   - Milestone years: 2025, 2030, 2040, 2050
+   - Realistic values reflecting Rwanda's energy profile
+
+2. ✅ Rwanda Scenario Characteristics
+   - Metadata: Rwanda, Business as Usual (Baseline), SPLAT-MESSAGE, 2025-01-15
+   - Strong hydro base: 220-320 MW (reflecting Rwanda's resources)
+   - Fossil fuel dependence: Natural gas (60-350 MW), Diesel (85-50 MW), HFO (120-80 MW)
+   - Renewable growth: Solar PV (15-250 MW), Wind (0-80 MW), Geothermal (0-100 MW)
+   - No coal (Rwanda doesn't use coal)
+   - Rising emissions: 1.85-3.65 Mt CO2 (2025-2050)
+   - Investment: 7.35 billion USD cumulative by 2050
+   - Demand growth: 2,900-8,630 GWh (2025-2050)
+   - Complete sectoral breakdown: residential, commercial, industrial, transport
+
+3. ✅ Created comprehensive Playwright tests
+   - tests/e2e/09-rwanda-baseline.spec.ts
+   - 12 test cases covering all data validation
+   - Chromium-only during development (token optimization)
+
+4. ✅ Test Results: 12/12 passing (100%)
+   - File loads correctly
+   - Valid metadata structure
+   - All milestone years present (2025, 2030, 2040, 2050)
+   - Complete capacity data for all technologies
+   - Complete generation data for all technologies
+   - Emissions data for all milestone years
+   - Investment data (annual and cumulative, monotonically increasing)
+   - Complete demand data structure
+   - Sectoral demand breakdown (sums to total within 5%)
+   - Realistic Rwanda characteristics (hydro base, no coal, fossil dependence)
+   - Compatible with calculateDerivedMetrics function
+   - Compatible with response generation structure
+
+5. ✅ Ran test suite successfully
+   - All 12 tests passing in Chromium (100%)
+   - All validations complete
+   - Data structure verified against TypeScript interfaces
+
+Achievements:
+- **F009 (Rwanda baseline scenario data) 100% complete**
+- Realistic baseline scenario for workshop demonstrations
+- All technology categories represented with realistic values
+- Complete demand and supply data
+- Investment and emissions trajectories included
+- Data structure fully compatible with existing calculation functions
+- Test coverage ensures data integrity
+- Foundation ready for Load Example feature (F011)
+- Reference example for workshop participants
+
+Git Commit:
+- Commit 1cd3c59: "feat: implement F009 - Sample Rwanda baseline scenario data"
+- 5 files changed, 458 insertions(+), 6 deletions(-)
+- Clean, detailed commit message documenting all characteristics
+- Test results included in commit message
+
+Next Steps:
+- F010: Input tab with three input options
+- F011: Load example scenario functionality (will use rwanda-baseline.json)
+- F012: Quick entry form (15 essential fields)
+- F013: JSON paste functionality for Excel template
+
+Notes:
+- Rwanda baseline shows fossil fuel dependence (realistic BAU)
+- Renewable capacity grows from 235 MW (2025) to 765 MW (2050)
+- Data enables testing of all stakeholder responses and calculations
+- Sample data is essential for workshop demonstrations
+- Participants can use this as reference when creating their own scenarios
+- Token optimization: Chromium-only tests saved ~75% tokens during development
+
 === END LOG ===
