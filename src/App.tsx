@@ -20,11 +20,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-irena-blue text-white shadow-md">
+      <header style={{ backgroundColor: 'var(--color-irena-blue)' }} className="text-white shadow-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-heading font-bold">IRENA Scenario Dialogue Tool</h1>
-            <p className="text-sm text-irena-blue-light">
+            <h1 className="text-2xl font-bold">IRENA Scenario Dialogue Tool</h1>
+            <p className="text-sm opacity-80">
               Understanding Stakeholder Perspectives on Energy Scenarios
             </p>
           </div>
@@ -39,7 +39,7 @@ function App() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="card max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-heading font-bold text-irena-blue mb-4">
+          <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
             Welcome to the Scenario Dialogue Tool
           </h2>
           <p className="text-lg text-gray-700 mb-6">
@@ -68,22 +68,22 @@ function App() {
           {/* Key Features */}
           <div className="grid md:grid-cols-3 gap-6 mt-8">
             <div className="text-left">
-              <div className="text-irena-blue text-3xl mb-2">1</div>
-              <h3 className="font-heading font-semibold mb-2">Import Scenario</h3>
+              <div className="text-3xl mb-2" style={{ color: 'var(--color-irena-blue)' }}>1</div>
+              <h3 className="font-semibold mb-2">Import Scenario</h3>
               <p className="text-gray-600 text-sm">
                 Load your energy model results in under 5 minutes using our Excel template or quick entry form.
               </p>
             </div>
             <div className="text-left">
-              <div className="text-irena-orange text-3xl mb-2">2</div>
-              <h3 className="font-heading font-semibold mb-2">Predict & Learn</h3>
+              <div className="text-3xl mb-2" style={{ color: 'var(--color-irena-orange)' }}>2</div>
+              <h3 className="font-semibold mb-2">Predict & Learn</h3>
               <p className="text-gray-600 text-sm">
                 Predict how stakeholders will respond, then compare with simulated responses.
               </p>
             </div>
             <div className="text-left">
-              <div className="text-green-600 text-3xl mb-2">3</div>
-              <h3 className="font-heading font-semibold mb-2">Communicate</h3>
+              <div className="text-3xl mb-2 text-green-600">3</div>
+              <h3 className="font-semibold mb-2">Communicate</h3>
               <p className="text-gray-600 text-sm">
                 Generate audience-specific framings of your scenario for effective communication.
               </p>
