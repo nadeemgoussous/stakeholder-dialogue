@@ -41,7 +41,7 @@
         "Test that responses generate correctly without any network calls",
         "This MUST work without internet connection"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F003",

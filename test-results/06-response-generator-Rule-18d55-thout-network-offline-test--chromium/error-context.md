@@ -1,0 +1,46 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "IRENA Scenario Dialogue Tool" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Understanding Stakeholder Perspectives on Energy Scenarios
+      - generic [ref=e10]: ● Offline Mode
+  - main [ref=e11]:
+    - generic [ref=e12]:
+      - heading "Welcome to the Scenario Dialogue Tool" [level=2] [ref=e13]
+      - paragraph [ref=e14]: This interactive tool helps energy planners understand how different stakeholders would perceive and respond to their energy scenarios.
+      - generic [ref=e16]:
+        - img [ref=e18]
+        - generic [ref=e20]:
+          - heading "Offline-First Design" [level=3] [ref=e21]
+          - paragraph [ref=e22]: This tool works fully offline after the initial load. All core features are available without an internet connection - perfect for workshop environments.
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]: "1"
+          - heading "Import Scenario" [level=3] [ref=e26]
+          - paragraph [ref=e27]: Load your energy model results in under 5 minutes using our Excel template or quick entry form.
+        - generic [ref=e28]:
+          - generic [ref=e29]: "2"
+          - heading "Predict & Learn" [level=3] [ref=e30]
+          - paragraph [ref=e31]: Predict how stakeholders will respond, then compare with simulated responses.
+        - generic [ref=e32]:
+          - generic [ref=e33]: "3"
+          - heading "Communicate" [level=3] [ref=e34]
+          - paragraph [ref=e35]: Generate audience-specific framings of your scenario for effective communication.
+      - button "Get Started" [ref=e37]
+    - generic [ref=e38]:
+      - paragraph [ref=e39]: ⚠️ ILLUSTRATIVE TOOL ONLY
+      - paragraph [ref=e40]:
+        - text: This tool shows
+        - strong [ref=e41]: directional impacts
+        - text: for discussion purposes. It does
+        - strong [ref=e42]: NOT
+        - text: replace energy system optimization models (MESSAGE, OSeMOSYS, LEAP, SPLAT). Always verify technical and economic feasibility in the full model.
+  - contentinfo [ref=e43]:
+    - generic [ref=e44]:
+      - paragraph [ref=e45]: Part of IRENA's Participatory Processes for Strategic Energy Planning toolkit
+      - paragraph [ref=e46]: Version 1.0.0 • Offline-First Design
+```

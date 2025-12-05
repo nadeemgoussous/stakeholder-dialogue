@@ -16,7 +16,8 @@
       "Bash(npx playwright install)",
       "Bash(curl:*)",
       "Bash(ls:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(./init.sh:*)"
     ],
     "deny": [],
     "ask": []

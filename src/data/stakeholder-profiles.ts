@@ -405,7 +405,7 @@ export const csosNgos: StakeholderProfile = {
 
   positiveIndicators: [
     {
-      metric: 'emissions.reductionPercent2050',
+      metric: 'emissions.reductionPercent.2050',
       threshold: 80,
       direction: 'above',
       praiseText: 'Deep emissions reduction of {value}% shows serious climate commitment.'
