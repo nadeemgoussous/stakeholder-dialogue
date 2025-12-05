@@ -4,9 +4,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 interface ScenarioPreviewProps {
   scenario: ScenarioInput;
   onProceed?: () => void;
+  onLoadDifferent?: () => void;
 }
 
-export default function ScenarioPreview({ scenario, onProceed }: ScenarioPreviewProps) {
+export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }: ScenarioPreviewProps) {
   // Calculate key metrics
   const calculateREShare = (year: number): number => {
     const capacity = scenario.supply.capacity;
@@ -173,28 +174,42 @@ export default function ScenarioPreview({ scenario, onProceed }: ScenarioPreview
         </div>
       </div>
 
-      {/* Proceed Button */}
-      {onProceed && (
-        <div className="bg-green-50 border-l-4 border-green-500 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-semibold text-green-800 mb-1">
-                Ready to explore stakeholder responses!
-              </p>
-              <p className="text-sm text-green-700">
-                Predict how different stakeholders will respond to this scenario.
-              </p>
+      {/* Action Buttons */}
+      <div className="flex gap-4">
+        {/* Load Different Scenario Button */}
+        {onLoadDifferent && (
+          <button
+            onClick={onLoadDifferent}
+            className="btn-secondary flex-shrink-0"
+            data-testid="load-different-button"
+          >
+            ← Load Different Scenario
+          </button>
+        )}
+
+        {/* Proceed Button */}
+        {onProceed && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 flex-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-green-800 mb-1">
+                  Ready to explore stakeholder responses!
+                </p>
+                <p className="text-sm text-green-700">
+                  Predict how different stakeholders will respond to this scenario.
+                </p>
+              </div>
+              <button
+                onClick={onProceed}
+                className="btn-primary whitespace-nowrap"
+                data-testid="proceed-button"
+              >
+                Proceed to Dialogue →
+              </button>
             </div>
-            <button
-              onClick={onProceed}
-              className="btn-primary whitespace-nowrap"
-              data-testid="proceed-button"
-            >
-              Proceed to Dialogue →
-            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

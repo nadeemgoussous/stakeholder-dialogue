@@ -14,11 +14,12 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
   const [selectedMethod, setSelectedMethod] = useState<InputMethod>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { scenario, loadScenario } = useScenario();
+  const { scenario, loadScenario, clearScenario } = useScenario();
 
   const handleLoadExample = async () => {
     setLoading(true);
     setError(null);
+    setSelectedMethod(null); // Clear any selected method to show preview
     try {
       // Load the Rwanda baseline scenario (bundled with the app - works offline)
       const response = await fetch('/sample-data/rwanda-baseline.json');
@@ -27,7 +28,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
       }
       const data: ScenarioInput = await response.json();
       loadScenario(data);
-      setSelectedMethod('example');
+      // Don't set selectedMethod - let the preview show
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load example');
     } finally {
@@ -37,10 +38,18 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
 
   const handlePasteJSON = () => {
     setSelectedMethod('paste');
+    setError(null);
   };
 
   const handleQuickEntry = () => {
     setSelectedMethod('quick');
+    setError(null);
+  };
+
+  const handleLoadDifferent = () => {
+    clearScenario();
+    setSelectedMethod(null);
+    setError(null);
   };
 
   return (
@@ -148,16 +157,17 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         </div>
       )}
 
-      {/* Scenario Preview (if loaded) */}
-      {scenario && !loading && (
+      {/* Scenario Preview (if loaded and no method selected) */}
+      {scenario && !loading && !selectedMethod && (
         <ScenarioPreview
           scenario={scenario}
           onProceed={onProceedToDialogue}
+          onLoadDifferent={handleLoadDifferent}
         />
       )}
 
-      {/* Selected Method Content (Paste/Quick Entry - Coming Soon) */}
-      {selectedMethod === 'paste' && !scenario && (
+      {/* Selected Method Content (Paste/Quick Entry) */}
+      {selectedMethod === 'paste' && (
         <div className="card text-center" data-testid="paste-placeholder">
           <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--color-irena-orange)' }}>
             Paste JSON from Template
@@ -174,8 +184,11 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         </div>
       )}
 
-      {selectedMethod === 'quick' && !scenario && (
-        <QuickEntryForm onCancel={() => setSelectedMethod(null)} />
+      {selectedMethod === 'quick' && (
+        <QuickEntryForm
+          onCancel={() => setSelectedMethod(null)}
+          onSubmit={() => setSelectedMethod(null)}
+        />
       )}
     </div>
   );

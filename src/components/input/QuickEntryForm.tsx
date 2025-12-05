@@ -48,9 +48,10 @@ const COUNTRIES = [
 
 interface QuickEntryFormProps {
   onCancel: () => void;
+  onSubmit?: () => void;
 }
 
-export default function QuickEntryForm({ onCancel }: QuickEntryFormProps) {
+export default function QuickEntryForm({ onCancel, onSubmit }: QuickEntryFormProps) {
   const { loadScenario } = useScenario();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<QuickScenarioInput>({
@@ -279,6 +280,10 @@ export default function QuickEntryForm({ onCancel }: QuickEntryFormProps) {
 
     const fullScenario = convertToFullScenario(formData);
     loadScenario(fullScenario);
+    // Notify parent that form was submitted successfully
+    if (onSubmit) {
+      onSubmit();
+    }
   };
 
   return (
