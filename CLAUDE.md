@@ -387,7 +387,7 @@ If `claude-progress.txt` exists:
 3. Read `feature_list.json` for next failing feature
 4. Run `./init.sh` to start dev server
 5. Work on ONE feature only
-6. Test with Playwright
+6. Test with Playwright (use Chromium-only during development, multi-browser before commits)
 7. Mark feature `"passes": true` only after testing
 8. Git commit
 9. Update `claude-progress.txt`
@@ -400,6 +400,7 @@ If `claude-progress.txt` exists:
 - ALWAYS leave code committable
 - Reference CLAUDE.md and docs/ for all specifications
 - Test offline functionality explicitly
+- **Token Optimization**: Use Chromium-only tests during development (`--project=chromium`), full multi-browser before commits
 
 ### Reference Documentation
 
@@ -443,6 +444,31 @@ Sample scenarios should represent diverse contexts:
 ---
 
 ## Testing Strategy
+
+### Browser Testing Efficiency
+
+To optimize token usage during development, use targeted browser testing:
+
+**During Active Development:**
+- Run Chromium-only tests: `npm test -- <test-file> --project=chromium`
+- Saves ~75% tokens (~6,000-7,500 tokens per full test run)
+- Chromium tests are sufficient for most logic/data validation
+
+**Before Commits:**
+- Run full multi-browser suite: `npm test -- <test-file>`
+- Tests across Chromium, Firefox, Webkit, and Mobile Safari
+- Essential for PWA and cross-browser compatibility verification
+
+**Token Usage Estimates:**
+- Chromium-only: ~2,000-2,500 tokens
+- Multi-browser (4 browsers): ~8,000-10,000 tokens
+
+**When to Use Multi-Browser:**
+- Before git commits
+- CSS/styling changes
+- PWA/offline functionality changes
+- Final feature validation
+- Responsive design updates
 
 ### Critical Test Scenarios
 
