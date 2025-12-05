@@ -56,7 +56,7 @@
         "Create types/adjustments.ts with AdjustableParameters and DirectionalImpacts",
         "Verify all types compile without errors"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F004",
@@ -83,11 +83,11 @@
         "Create data/technology-factors.ts",
         "Add JOB_FACTORS (construction and operations jobs per MW)",
         "Add LAND_FACTORS (hectares per MW for solar and wind only)",
-        "Add EMISSION_FACTORS (tCO2 per GWh for fossil fuels)",
+        "ADD EMISSION_FACTORS (tCO2 per GWh for fossil fuels)",
         "DO NOT add LCOE or cost factors",
         "Match all values exactly to CLAUDE.md specification"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F006",
