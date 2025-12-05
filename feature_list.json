@@ -103,7 +103,7 @@
         "Create calculateDerivedMetrics that returns DerivedMetrics object",
         "Add unit tests for calculations"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F007",
