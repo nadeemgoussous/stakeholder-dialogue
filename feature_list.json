@@ -72,7 +72,7 @@
         "Export stakeholderProfiles array",
         "Verify all profiles have correct colors from toolkit"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F005",
