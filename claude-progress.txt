@@ -1,5 +1,46 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-05 (F015 - Scenario Preview Panel)
+
+**Status**: ✅ COMPLETE
+
+**Completed**:
+- Created comprehensive ScenarioPreview.tsx component with key metrics display
+- Implemented RE share calculation (renewable capacity / total capacity * 100)
+- Calculated emissions reduction percentage from baseline to 2050
+- Added interactive capacity mix bar chart using Recharts:
+  - Stacked bar chart showing all technology types
+  - Data for 2030 and 2040 milestone years
+  - Color-coded by technology (hydro, solar, wind, etc.)
+  - Responsive container with proper axes and legend
+- Displayed key metrics in color-coded cards:
+  - Country, scenario name, model version
+  - RE share for 2030 and 2040
+  - Total investment (displayed in billions)
+  - Emissions reduction percentage
+- Added "Proceed to Stakeholder Dialogue" button with tab navigation
+- Integrated preview into InputTab with onProceedToDialogue callback
+- Updated App.tsx to pass tab navigation function
+- Component updates reactively when scenario data changes
+
+**Tests**: 13/13 passing in Chromium
+- Preview displays after loading example
+- Key metadata shown correctly
+- RE share calculations accurate for 2030 and 2040
+- Investment displayed in billions
+- Emissions reduction calculated
+- Capacity mix chart renders with SVG
+- Chart shows data for both years
+- Proceed button visible and functional
+- Navigation to dialogue tab works
+- Responsive design tested
+
+**Commit**: 18c23c1 - feat: implement F015 - Scenario Preview Panel with key metrics
+
+**Next Feature**: F016 - Stakeholder tab with icon selector (or F017 for stakeholder icons)
+
+---
+
 ### Session: 2025-12-05 (F012 - Quick Entry Form)
 
 **Status**: ✅ COMPLETE
@@ -53,7 +94,7 @@
 
 **F001-F009**: All complete (scaffolding, data structures, calculations, layout, sample data)
 
-**Current Status**: 12/42 features complete (28.6%)
+**Current Status**: 13/42 features complete (31.0%)
 
 **Architecture Status**:
 - ✅ Offline-first PWA configured
@@ -66,6 +107,7 @@
 - ✅ Input Tab with three input options
 - ✅ Load Example functionality working offline
 - ✅ Quick Entry Form with global country list
+- ✅ Scenario Preview Panel with key metrics and capacity mix chart
 
 **Key Decisions**:
 - Tool is now fully generic and applicable to any country/region
