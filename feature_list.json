@@ -159,7 +159,7 @@
         "Show scenario preview panel on right side",
         "Display '5-minute input' messaging"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F011",
@@ -173,7 +173,7 @@
         "Update preview immediately",
         "This must work OFFLINE (bundle the JSON)"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F012",

@@ -1,0 +1,49 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "IRENA Scenario Dialogue Tool" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Understanding Stakeholder Perspectives on Energy Scenarios
+      - status [ref=e10]: ● Online
+  - navigation "Main navigation" [ref=e11]:
+    - generic [ref=e13]:
+      - tab "Input Import scenario data" [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: Input
+          - generic [ref=e17]: Import scenario data
+      - tab "Stakeholder Dialogue Predict & learn" [active] [selected] [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: Stakeholder Dialogue
+          - generic [ref=e21]: Predict & learn
+      - tab "Explore Impacts Directional sensitivity" [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: Explore Impacts
+          - generic [ref=e25]: Directional sensitivity
+      - tab "Communicate Audience-specific outputs" [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]: Communicate
+          - generic [ref=e29]: Audience-specific outputs
+  - main [ref=e30]:
+    - tabpanel [ref=e31]:
+      - heading "Stakeholder Dialogue" [level=2] [ref=e32]
+      - paragraph [ref=e33]: Predict how different stakeholders will respond to your scenario, then compare with simulated responses.
+      - emphasis [ref=e35]: "Coming soon: Stakeholder selection and predict-before-reveal interface"
+    - generic [ref=e36]:
+      - paragraph [ref=e37]: ⚠️ ILLUSTRATIVE TOOL ONLY
+      - paragraph [ref=e38]:
+        - text: This tool shows
+        - strong [ref=e39]: directional impacts
+        - text: for discussion purposes. It does
+        - strong [ref=e40]: NOT
+        - text: replace energy system optimization models (MESSAGE, OSeMOSYS, LEAP, SPLAT). Always verify technical and economic feasibility in the full model.
+  - contentinfo [ref=e41]:
+    - generic [ref=e42]:
+      - paragraph [ref=e43]:
+        - text: Part of IRENA's
+        - strong [ref=e44]: Participatory Processes for Strategic Energy Planning
+        - text: toolkit
+      - paragraph [ref=e45]: Version 1.0.0 • Offline-First Design
+```
