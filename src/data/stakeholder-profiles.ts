@@ -689,7 +689,7 @@ export const developmentPartners: StakeholderProfile = {
       threshold: 4000,
       direction: 'above',
       concernText: 'Large investment requirements of {value} million USD raise debt sustainability questions.',
-      explanation: 'Development partners assess fiscal sustainability and guarantee exposure.'
+      explanation: 'Development partners assess debt sustainability and guarantee exposure.'
     },
     {
       metric: 'access.electrificationRate.2030',
