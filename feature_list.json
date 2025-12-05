@@ -117,7 +117,7 @@
         "Apply IRENA color scheme (#0078a7 primary, #f7941d accent)",
         "Verify responsive layout"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F008",
@@ -131,7 +131,7 @@
         "Style with IRENA colors and active indicators",
         "Verify tab switching preserves state"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F009",
