@@ -304,4 +304,68 @@ Notes:
 - All helper functions exported for testing and reuse
 - Metric path format: 'supply.investment.cumulative.2030' or 'renewableShare.2040'
 
+[2025-12-05] - SESSION 7 - Derived Metrics Calculator (F006)
+
+Status: Feature F006 complete ✅
+Current Feature: F006 - Derived metrics calculator (soft metrics ONLY) [COMPLETED]
+
+Completed Tasks:
+1. ✅ Created src/utils/calculations.ts
+   - calculateJobs(): Employment impacts (construction and operations)
+   - calculateLandUse(): Land requirements (solar, wind, battery only)
+   - calculateEmissions(): CO2 emissions with reduction percentages
+   - calculateEnergyShares(): Renewable vs fossil capacity shares
+   - calculateCapacityMetrics(): Total capacity and VRE penetration
+   - calculateInvestmentMetrics(): Cumulative, peak, and average investment
+   - calculateDerivedMetrics(): Main function combining all calculations
+
+2. ✅ Created comprehensive Playwright tests
+   - tests/e2e/07-calculations.spec.ts
+   - 8 test cases covering all calculation functions
+   - 8/8 tests passing in Chromium (100%)
+   - Chromium-only during development (token optimization)
+
+3. ✅ Verified critical exclusions
+   - NO LCOE calculations (contradicts optimization model)
+   - NO tariff calculations (requires economic modeling)
+   - NO technical feasibility metrics (reserve margin, reliability)
+   - Test confirms forbidden functions don't exist
+
+Test Results:
+✅ PASSING (8/8 tests):
+  - Jobs calculation with construction and operations
+  - Land use for solar, wind, and battery only
+  - Emissions from scenario data or generation
+  - Renewable and fossil shares
+  - Capacity metrics including VRE share
+  - Investment metrics (cumulative, peak, average)
+  - Complete DerivedMetrics object integration
+  - CRITICAL: Forbidden functions don't exist
+
+Achievements:
+- **F006 (Derived metrics calculator) 100% complete**
+- All soft metrics calculations working correctly
+- Uses IRENA job factors and emission factors from F005
+- Properly excludes LCOE, tariffs, and technical metrics
+- All calculations return properly typed DerivedMetrics object
+- Foundation ready for UI components to display metrics
+- Supports both scenario-provided and calculated emissions
+
+Git Commit:
+- Commit 430d1ce: "feat: implement F006 - derived metrics calculator (soft metrics only)"
+- Clean, detailed commit message documenting all components
+- Test results included in commit message
+
+Next Steps:
+- F007: Header and footer with IRENA branding and offline indicator
+- F008: Four-tab navigation system
+- F009: Sample Rwanda baseline scenario data
+
+Notes:
+- Calculation functions handle missing data gracefully (return 0)
+- Emissions use scenario data if provided, otherwise calculate from generation
+- Land use only calculated for solar, wind, battery (others too site-specific)
+- All calculations follow IRENA research and methodology
+- Metric paths consistent with stakeholder response generator (F002)
+
 === END LOG ===
