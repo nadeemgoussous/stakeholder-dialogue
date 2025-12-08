@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
+import DirectionalImpacts from './DirectionalImpacts';
 
 /**
  * ExploreTab Component - F023
@@ -280,18 +281,23 @@ export default function ExploreTab() {
         )}
       </div>
 
-      {/* Placeholder for Future Features (F024-F025) */}
-      <div className="card bg-gray-50">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Directional Impacts</h3>
-        <p className="text-gray-600 mb-4">
-          {hasAdjustments
-            ? "Showing how your adjustments might directionally affect key metrics and stakeholder sentiment..."
-            : "Adjust parameters above to see directional impacts on jobs, land use, emissions, and stakeholder sentiment."}
-        </p>
-        <div className="text-gray-500 text-sm">
-          <em>Coming soon in F024-F025: Directional impact indicators and stakeholder sentiment changes</em>
+      {/* Directional Impacts (F024) */}
+      {hasAdjustments && currentValues ? (
+        <DirectionalImpacts
+          baseValues={baseValues}
+          adjustedValues={currentValues}
+        />
+      ) : (
+        <div className="card bg-gray-50">
+          <h3 className="text-xl font-semibold mb-4 text-gray-800">Directional Impacts</h3>
+          <p className="text-gray-600 mb-4">
+            Adjust parameters above to see directional impacts on jobs, land use, and emissions.
+          </p>
+          <div className="text-gray-500 text-sm">
+            <em>Note: Stakeholder sentiment changes coming in F025</em>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -372,7 +372,7 @@
         "DO NOT show specific numbers or percentages",
         "Add explanatory text for each"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F025",
