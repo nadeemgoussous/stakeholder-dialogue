@@ -1,22 +1,29 @@
 import { useState } from 'react';
 import { stakeholderProfiles } from '../../data/stakeholder-profiles';
 import type { StakeholderProfile } from '../../types/stakeholder';
+import type { StakeholderResponse } from '../../types/response';
 import { StakeholderIcon } from './StakeholderIcon';
 import PredictionInput from '../prediction/PredictionInput';
+import CompareView from '../prediction/CompareView';
+import { useScenario } from '../../context/ScenarioContext';
+import { generateRuleBasedResponse } from '../../utils/stakeholder-rules';
 
 interface StakeholderTabProps {
   onStakeholderSelected?: (stakeholder: StakeholderProfile) => void;
 }
 
 export default function StakeholderTab({ onStakeholderSelected }: StakeholderTabProps) {
+  const { scenario, derivedMetrics } = useScenario();
   const [selectedStakeholder, setSelectedStakeholder] = useState<StakeholderProfile | null>(null);
   const [showPrediction, setShowPrediction] = useState(false);
   const [userPrediction, setUserPrediction] = useState<string>('');
+  const [stakeholderResponse, setStakeholderResponse] = useState<StakeholderResponse | null>(null);
 
   const handleStakeholderClick = (stakeholder: StakeholderProfile) => {
     setSelectedStakeholder(stakeholder);
     setShowPrediction(false);
     setUserPrediction('');
+    setStakeholderResponse(null);
     onStakeholderSelected?.(stakeholder);
   };
 
@@ -26,15 +33,47 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
 
   const handleRevealResponse = (prediction: string) => {
     setUserPrediction(prediction);
-    // TODO: Generate and show response (F019/F020)
-    console.log('User prediction:', prediction);
-    console.log('Now showing response for:', selectedStakeholder?.name);
+
+    // Generate stakeholder response using rule-based generator
+    if (scenario && derivedMetrics && selectedStakeholder) {
+      console.log('Generating response for:', selectedStakeholder.name);
+      console.log('Scenario loaded:', !!scenario);
+      console.log('Derived metrics loaded:', !!derivedMetrics);
+      const response = generateRuleBasedResponse(scenario, derivedMetrics, selectedStakeholder);
+      console.log('Response generated:', response);
+      setStakeholderResponse(response);
+    } else {
+      console.error('Missing data for response generation:');
+      console.error('- Scenario:', !!scenario);
+      console.error('- Derived metrics:', !!derivedMetrics);
+      console.error('- Selected stakeholder:', !!selectedStakeholder);
+    }
   };
 
   const handleBackToSelection = () => {
     setShowPrediction(false);
     setUserPrediction('');
+    setStakeholderResponse(null);
   };
+
+  const handleTryAnother = () => {
+    setSelectedStakeholder(null);
+    setShowPrediction(false);
+    setUserPrediction('');
+    setStakeholderResponse(null);
+  };
+
+  // If showing compare view (after response generation), render that
+  if (stakeholderResponse && selectedStakeholder && userPrediction) {
+    return (
+      <CompareView
+        stakeholder={selectedStakeholder}
+        userPrediction={userPrediction}
+        stakeholderResponse={stakeholderResponse}
+        onTryAnother={handleTryAnother}
+      />
+    );
+  }
 
   // If showing prediction input, render that instead
   if (showPrediction && selectedStakeholder) {

@@ -1,0 +1,114 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - heading "IRENA Scenario Dialogue Tool" [level=1] [ref=e7]
+          - paragraph [ref=e8]: Understanding Stakeholder Perspectives on Energy Scenarios
+        - status [ref=e10]: ● Online
+    - navigation "Main navigation" [ref=e11]:
+      - generic [ref=e13]:
+        - tab "Input Import scenario data" [ref=e14]:
+          - generic [ref=e15]:
+            - generic [ref=e16]: Input
+            - generic [ref=e17]: Import scenario data
+        - tab "Stakeholder Dialogue Predict & learn" [selected] [ref=e18]:
+          - generic [ref=e19]:
+            - generic [ref=e20]: Stakeholder Dialogue
+            - generic [ref=e21]: Predict & learn
+        - tab "Explore Impacts Directional sensitivity" [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]: Explore Impacts
+            - generic [ref=e25]: Directional sensitivity
+        - tab "Communicate Audience-specific outputs" [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: Communicate
+            - generic [ref=e29]: Audience-specific outputs
+    - main [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic "Grid Operators" [ref=e34]:
+              - img "Grid Operators icon" [ref=e35]
+            - heading "Grid Operators" [level=2] [ref=e36]
+          - paragraph [ref=e37]: Compare your prediction with the simulated response
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: 💭
+            - heading "Your Prediction" [level=3] [ref=e41]
+          - paragraph [ref=e43]: Grid operators will focus on system reliability, reserve margins, and integration challenges with high renewable penetration levels.
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - generic [ref=e46]: 💬
+            - generic [ref=e47]:
+              - heading "Simulated Response" [level=3] [ref=e48]
+              - paragraph [ref=e49]: 🔧 Rule-Based Response
+          - generic [ref=e50]:
+            - heading "Initial Reaction" [level=4] [ref=e51]: Initial Reaction
+            - paragraph [ref=e53]: We have some important questions and concerns about this scenario that we would like to discuss.
+          - generic [ref=e54]:
+            - heading "❓ Questions They Would Ask" [level=4] [ref=e55]:
+              - generic [ref=e56]: ❓
+              - text: Questions They Would Ask
+            - list [ref=e57]:
+              - listitem [ref=e58]:
+                - generic [ref=e59]: ❓
+                - generic [ref=e60]: What transmission upgrades are assumed?
+              - listitem [ref=e61]:
+                - generic [ref=e62]: ❓
+                - generic [ref=e63]: What flexibility resources support high renewable shares?
+              - listitem [ref=e64]:
+                - generic [ref=e65]: ❓
+                - generic [ref=e66]: How are interconnector flows coordinated with neighbors?
+              - listitem [ref=e67]:
+                - generic [ref=e68]: ❓
+                - generic [ref=e69]: What is the battery storage deployment timeline?
+              - listitem [ref=e70]:
+                - generic [ref=e71]: ❓
+                - generic [ref=e72]: How will distribution networks handle new loads?
+          - generic [ref=e73]:
+            - heading "💡 Engagement Tips" [level=4] [ref=e74]:
+              - generic [ref=e75]: 💡
+              - text: Engagement Tips
+            - list [ref=e76]:
+              - listitem [ref=e77]:
+                - generic [ref=e78]: →
+                - generic [ref=e79]: Engage early to incorporate existing plans
+              - listitem [ref=e80]:
+                - generic [ref=e81]: →
+                - generic [ref=e82]: Include distribution-level operators
+              - listitem [ref=e83]:
+                - generic [ref=e84]: →
+                - generic [ref=e85]: Involve regulators for grid permits
+        - generic [ref=e86]:
+          - 'heading "🤔 Reflection: How did your prediction compare?" [level=3] [ref=e87]':
+            - generic [ref=e88]: 🤔
+            - text: "Reflection: How did your prediction compare?"
+          - generic [ref=e89]:
+            - paragraph [ref=e90]: "Consider these questions:"
+            - list [ref=e91]:
+              - listitem [ref=e92]: What did you predict correctly?
+              - listitem [ref=e93]: What concerns or priorities did you miss?
+              - listitem [ref=e94]: How might this influence your real stakeholder engagement strategy?
+        - button "← Try Another Stakeholder" [ref=e96]
+        - generic [ref=e97]: 💡 This is a learning exercise. Real stakeholder responses will vary based on context, relationships, and many other factors not captured in this simulation.
+      - generic [ref=e98]:
+        - paragraph [ref=e99]: ⚠️ ILLUSTRATIVE TOOL ONLY
+        - paragraph [ref=e100]:
+          - text: This tool shows
+          - strong [ref=e101]: directional impacts
+          - text: for discussion purposes. It does
+          - strong [ref=e102]: NOT
+          - text: replace energy system optimization models (MESSAGE, OSeMOSYS, LEAP, SPLAT). Always verify technical and economic feasibility in the full model.
+    - contentinfo [ref=e103]:
+      - generic [ref=e104]:
+        - paragraph [ref=e105]:
+          - text: Part of IRENA's
+          - strong [ref=e106]: Participatory Processes for Strategic Energy Planning
+          - text: toolkit
+        - paragraph [ref=e107]: Version 1.0.0 • Offline-First Design
+  - generic [ref=e108]: "0"
+```

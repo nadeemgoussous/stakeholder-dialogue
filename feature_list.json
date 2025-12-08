@@ -293,7 +293,7 @@
         "Add buttons: Try Another Stakeholder, Export Brief",
         "This creates the learning moment"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F020",
