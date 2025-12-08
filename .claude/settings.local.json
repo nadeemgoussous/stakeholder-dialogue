@@ -17,7 +17,8 @@
       "Bash(curl:*)",
       "Bash(ls:*)",
       "Bash(cat:*)",
-      "Bash(./init.sh:*)"
+      "Bash(./init.sh:*)",
+      "Bash(python extract-icons.py:*)"
     ],
     "deny": [],
     "ask": []

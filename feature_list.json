@@ -278,7 +278,7 @@
         "Add 'Reveal Response' button (disabled until 20+ chars)",
         "Store prediction in state for later comparison"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F019",

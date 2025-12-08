@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { stakeholderProfiles } from '../../data/stakeholder-profiles';
 import type { StakeholderProfile } from '../../types/stakeholder';
 import { StakeholderIcon } from './StakeholderIcon';
+import PredictionInput from '../prediction/PredictionInput';
 
 interface StakeholderTabProps {
   onStakeholderSelected?: (stakeholder: StakeholderProfile) => void;
@@ -9,11 +10,42 @@ interface StakeholderTabProps {
 
 export default function StakeholderTab({ onStakeholderSelected }: StakeholderTabProps) {
   const [selectedStakeholder, setSelectedStakeholder] = useState<StakeholderProfile | null>(null);
+  const [showPrediction, setShowPrediction] = useState(false);
+  const [userPrediction, setUserPrediction] = useState<string>('');
 
   const handleStakeholderClick = (stakeholder: StakeholderProfile) => {
     setSelectedStakeholder(stakeholder);
+    setShowPrediction(false);
+    setUserPrediction('');
     onStakeholderSelected?.(stakeholder);
   };
+
+  const handleProceedToPrediction = () => {
+    setShowPrediction(true);
+  };
+
+  const handleRevealResponse = (prediction: string) => {
+    setUserPrediction(prediction);
+    // TODO: Generate and show response (F019/F020)
+    console.log('User prediction:', prediction);
+    console.log('Now showing response for:', selectedStakeholder?.name);
+  };
+
+  const handleBackToSelection = () => {
+    setShowPrediction(false);
+    setUserPrediction('');
+  };
+
+  // If showing prediction input, render that instead
+  if (showPrediction && selectedStakeholder) {
+    return (
+      <PredictionInput
+        stakeholder={selectedStakeholder}
+        onRevealResponse={handleRevealResponse}
+        onBack={handleBackToSelection}
+      />
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -149,10 +181,7 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
             <button
               className="btn-primary px-8 py-3 text-lg"
               style={{ backgroundColor: selectedStakeholder.color }}
-              onClick={() => {
-                // Future: Navigate to prediction input
-                console.log('Proceeding to predict response for:', selectedStakeholder.name);
-              }}
+              onClick={handleProceedToPrediction}
             >
               Predict Their Response →
             </button>
