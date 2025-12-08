@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 
 /**
  * Header component with IRENA branding and online/offline status indicator
@@ -6,24 +6,11 @@ import { useState, useEffect } from 'react'
  * Features:
  * - IRENA blue background (#0078a7)
  * - Tool name and subtitle
- * - Real-time online/offline indicator
+ * - Real-time online/offline indicator (NOT alarming - offline is expected)
  * - Responsive layout
  */
 export default function Header() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
+  const isOnline = useOnlineStatus()
 
   return (
     <header
@@ -39,13 +26,20 @@ export default function Header() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span
-            className={`text-sm ${isOnline ? 'text-green-300' : 'text-yellow-300'}`}
+          {/* Subtle status indicator - offline is NOT an error state */}
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+              isOnline
+                ? 'bg-green-600 bg-opacity-20 text-green-200'
+                : 'bg-blue-600 bg-opacity-30 text-blue-100'
+            }`}
             role="status"
             aria-live="polite"
+            title={isOnline ? 'Connected to internet' : 'Working offline - AI enhancement may be limited'}
           >
-            {isOnline ? '● Online' : '● Offline Mode'}
-          </span>
+            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-300' : 'bg-blue-300'}`} />
+            <span>{isOnline ? 'Online' : 'Offline'}</span>
+          </div>
         </div>
       </div>
     </header>

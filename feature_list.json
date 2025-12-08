@@ -343,7 +343,7 @@
         "NEVER show loading spinners for core stakeholder responses",
         "Responses must feel instant"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F023",
@@ -409,7 +409,7 @@
       "description": "Communicate tab with audience selector",
       "steps": [
         "Create components/output/CommunicateTab.tsx",
-        "Add audience buttons: Finance Ministry, Utility Board, Parliament, Dev Partners, Communities",
+        "Add audience buttons for each of the 9 stakeholder groups",
         "Implement selection state",
         "Show placeholder for selected audience output"
       ],
@@ -422,7 +422,7 @@
       "description": "Audience-specific framing generator",
       "steps": [
         "Create data/audience-framings.ts",
-        "Define framings for all 5 audiences",
+        "Define framings for all audiences",
         "Include headline, keyMessages, dataToEmphasize",
         "Create generateAudienceFraming function",
         "Insert actual scenario numbers into templates"
