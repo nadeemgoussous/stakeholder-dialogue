@@ -7,6 +7,7 @@ import PredictionInput from '../prediction/PredictionInput';
 import CompareView from '../prediction/CompareView';
 import { useScenario } from '../../context/ScenarioContext';
 import { generateRuleBasedResponse } from '../../utils/stakeholder-rules';
+import { maybeEnhanceWithAI, DEFAULT_AI_CONFIG } from '../../utils/stakeholder-ai';
 
 interface StakeholderTabProps {
   onStakeholderSelected?: (stakeholder: StakeholderProfile) => void;
@@ -31,17 +32,29 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
     setShowPrediction(true);
   };
 
-  const handleRevealResponse = (prediction: string) => {
+  const handleRevealResponse = async (prediction: string) => {
     setUserPrediction(prediction);
 
-    // Generate stakeholder response using rule-based generator
+    // Generate stakeholder response with AI enhancement
     if (scenario && derivedMetrics && selectedStakeholder) {
       console.log('Generating response for:', selectedStakeholder.name);
       console.log('Scenario loaded:', !!scenario);
       console.log('Derived metrics loaded:', !!derivedMetrics);
-      const response = generateRuleBasedResponse(scenario, derivedMetrics, selectedStakeholder);
-      console.log('Response generated:', response);
-      setStakeholderResponse(response);
+
+      // Generate rule-based response first (always works)
+      const ruleBasedResponse = generateRuleBasedResponse(scenario, derivedMetrics, selectedStakeholder);
+
+      // Try to enhance with AI (silent failover if unavailable)
+      const enhancedResponse = await maybeEnhanceWithAI(
+        ruleBasedResponse,
+        selectedStakeholder,
+        scenario,
+        derivedMetrics,
+        DEFAULT_AI_CONFIG
+      );
+
+      console.log('Response generated:', enhancedResponse.generationType);
+      setStakeholderResponse(enhancedResponse);
     } else {
       console.error('Missing data for response generation:');
       console.error('- Scenario:', !!scenario);
