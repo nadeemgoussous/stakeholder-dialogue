@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer'
 import TabNavigation from './components/layout/TabNavigation'
 import InputTab from './components/input/InputTab'
 import StakeholderTab from './components/stakeholder/StakeholderTab'
+import ExploreTab from './components/calculator/ExploreTab'
 import { ScenarioProvider } from './context/ScenarioContext'
 
 function App() {
@@ -29,17 +30,7 @@ function App() {
           )}
 
           {activeTab === 'explore' && (
-            <div className="card max-w-4xl mx-auto text-center" id="explore-panel" role="tabpanel">
-              <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
-                Explore Impacts
-              </h2>
-              <p className="text-gray-600">
-                Explore directional impacts of adjusting key scenario parameters.
-              </p>
-              <div className="mt-6 text-gray-500">
-                <em>Coming soon: Directional sensitivity sliders and stakeholder sentiment changes</em>
-              </div>
-            </div>
+            <ExploreTab />
           )}
 
           {activeTab === 'communicate' && (

@@ -115,3 +115,43 @@ h1, h2, h3, h4, h5, h6 {
 .offline-indicator {
   animation: pulse-slow 2s ease-in-out infinite;
 }
+
+/* Range slider styling */
+input[type="range"].slider-thumb-irena {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="range"].slider-thumb-irena::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-irena-blue);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 200ms;
+}
+
+input[type="range"].slider-thumb-irena::-webkit-slider-thumb:hover {
+  background: var(--color-irena-blue-dark);
+  transform: scale(1.1);
+}
+
+input[type="range"].slider-thumb-irena::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-irena-blue);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 200ms;
+}
+
+input[type="range"].slider-thumb-irena::-moz-range-thumb:hover {
+  background: var(--color-irena-blue-dark);
+  transform: scale(1.1);
+}

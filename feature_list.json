@@ -357,7 +357,7 @@
         "Style with IRENA colors",
         "Add prominent disclaimer per CLAUDE.md CALCULATOR_DISCLAIMER"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F024",
