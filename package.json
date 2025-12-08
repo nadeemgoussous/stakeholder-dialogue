@@ -39,6 +39,7 @@
     "workbox-window": "^7.4.0"
   },
   "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.80",
     "dexie": "^4.2.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

@@ -620,6 +620,44 @@
         "Include in public/templates/ folder"
       ],
       "passes": false
+    },
+    {
+      "id": "F043",
+      "category": "offline",
+      "priority": 43,
+      "description": "WebLLM integration for browser-based AI (for workshop participants)",
+      "status": "PLANNED - Critical for final packaging. Package installed (@mlc-ai/web-llm). Implementation guide at docs/WEBLLM-IMPLEMENTATION.md",
+      "deploymentPriority": "HIGH - Must implement before workshop deployment",
+      "steps": [
+        "Update AIConfig interface to support WebLLM settings",
+        "Implement initializeWebLLM() function with progress tracking",
+        "Implement enhanceWithWebLLM() using @mlc-ai/web-llm",
+        "Update failover priority: WebLLM → Ollama → Cloud → Rule-based",
+        "Create ModelLoadingProgress.tsx component for first-time load",
+        "Create AISettings.tsx component for user configuration",
+        "Test model caching in IndexedDB",
+        "Verify offline functionality after model loaded",
+        "Test on minimum spec hardware (4GB RAM, integrated GPU)",
+        "Verify browser compatibility (Chrome 113+, Edge 113+)",
+        "Test PWA installation with WebLLM bundle",
+        "Create workshop deployment guide for WebLLM",
+        "Test air-gapped environment (USB drive distribution)"
+      ],
+      "technicalNotes": [
+        "Model: Phi-3.5-mini-instruct-q4f16_1-MLC (~800MB)",
+        "Browser: Requires WebGPU support (Chrome 113+)",
+        "Performance: 2-4 seconds inference on modern hardware",
+        "Caching: Model stored in browser IndexedDB (one-time download)",
+        "Fallback: Silent failover to Ollama or rule-based if unsupported"
+      ],
+      "benefits": [
+        "Zero installation for workshop participants",
+        "Truly offline AI after first model load",
+        "Privacy-preserving (data stays in browser)",
+        "PWA compatible (can be bundled)",
+        "Workshop-ready (pre-load on USB drives)"
+      ],
+      "passes": false
     }
   ]
 }

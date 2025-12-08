@@ -516,9 +516,39 @@ Before deploying to workshops:
 
 ---
 
+## Critical Pre-Deployment Enhancement
+
+### WebLLM Integration (F043) - HIGH PRIORITY
+
+**Status**: PLANNED - Package installed, awaiting implementation
+**Priority**: Must complete before workshop deployment
+**Implementation Guide**: docs/WEBLLM-IMPLEMENTATION.md
+
+**Why Critical**:
+- Current Ollama implementation requires separate installation (facilitators only)
+- Workshop participants need zero-setup AI enhancement
+- WebLLM enables truly offline AI in browser (no installation required)
+
+**Benefits**:
+- ✅ Zero installation for participants
+- ✅ Runs 100% in browser (WebGPU)
+- ✅ Truly offline after first model load
+- ✅ Privacy-preserving (data stays local)
+- ✅ PWA compatible
+- ✅ Can be pre-loaded on USB drives
+
+**Model**: Phi-3.5-mini-instruct (~800MB, one-time download)
+**Browser Support**: Chrome 113+, Edge 113+ (WebGPU required)
+**Performance**: 2-4 seconds inference on modern hardware
+**Fallback**: Silent failover to Ollama or rule-based if unsupported
+
+**Implementation Priority**: After completing current features (F022-F042), before final packaging
+
+---
+
 ## Future Enhancements (Not Initial Scope)
 
-Potential future additions (not for first version):
+Potential future additions (after WebLLM):
 
 - Multi-scenario comparison
 - Sensitivity analysis visualization
