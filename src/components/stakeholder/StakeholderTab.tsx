@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { stakeholderProfiles } from '../../data/stakeholder-profiles';
 import type { StakeholderProfile } from '../../types/stakeholder';
+import { StakeholderIcon } from './StakeholderIcon';
 
 interface StakeholderTabProps {
   onStakeholderSelected?: (stakeholder: StakeholderProfile) => void;
@@ -56,12 +57,9 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
               aria-pressed={selectedStakeholder?.id === stakeholder.id}
               aria-label={`Select ${stakeholder.name}`}
             >
-              {/* Icon Placeholder */}
-              <div
-                className="w-16 h-16 mb-2 rounded-full flex items-center justify-center text-white font-bold text-xl"
-                style={{ backgroundColor: stakeholder.color }}
-              >
-                {stakeholder.name.charAt(0)}
+              {/* Icon */}
+              <div className="mb-2">
+                <StakeholderIcon stakeholder={stakeholder} size="medium" />
               </div>
 
               {/* Stakeholder Name */}
@@ -81,11 +79,8 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
         >
           <div className="flex items-start gap-4 mb-6">
             {/* Icon */}
-            <div
-              className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0"
-              style={{ backgroundColor: selectedStakeholder.color }}
-            >
-              {selectedStakeholder.name.charAt(0)}
+            <div className="flex-shrink-0">
+              <StakeholderIcon stakeholder={selectedStakeholder} size="large" />
             </div>
 
             {/* Header */}

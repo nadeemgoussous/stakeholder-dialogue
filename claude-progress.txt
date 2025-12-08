@@ -1,5 +1,40 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-08 (F017 - Stakeholder Icons)
+
+**Status**: ✅ COMPLETE
+
+**Completed**:
+- Extracted 7 stakeholder icons from source image (stakeholder-icons.png)
+  - Used Python script to crop icons without text labels
+  - Applied transparent background (removed white backgrounds)
+  - Standardized sizing to 128x128px with consistent aspect ratio
+- Created 2 additional SVG icons for missing stakeholders:
+  - regional-bodies.svg (globe icon)
+  - development-partners.svg (handshake icon)
+- Created StakeholderIcon.tsx component:
+  - Handles both PNG and SVG formats
+  - Supports 3 size variants (small, medium, large)
+  - Displays icons with proper alt text for accessibility
+- Updated StakeholderTab.tsx to use actual icons instead of letter placeholders
+- Created test suite (18-stakeholder-icons.spec.ts) with 7 tests
+- All icons stored in public/icons/ directory
+
+**Files Created**:
+- extract-icons.py (Python script for icon extraction)
+- public/icons/*.png (7 extracted PNG icons)
+- public/icons/*.svg (2 created SVG icons)
+- src/components/stakeholder/StakeholderIcon.tsx
+- tests/e2e/18-stakeholder-icons.spec.ts
+
+**Note**: Icons may need refinement later (some rough edges from extraction)
+
+**Commit**: df8b336 (F016), pending commit for F017
+
+**Next Feature**: F018 - Predict-before-reveal input component
+
+---
+
 ### Session: 2025-12-08 (F016 - Stakeholder Tab with Icon Selector)
 
 **Status**: ✅ COMPLETE
@@ -7,43 +42,13 @@
 **Completed**:
 - Created StakeholderTab.tsx component with comprehensive stakeholder selection interface
 - Implemented 9-stakeholder icon grid with color-coded selection states
-- Added detailed stakeholder information panel:
-  - Stakeholder icon and name with accent color
-  - Description
-  - Key priorities (2-column grid)
-  - Typical questions they ask
-  - Why engage section (whyEngage + benefitForThem)
-- Applied stakeholder-specific colors throughout (from stakeholder profiles)
+- Added detailed stakeholder information panel
+- Applied stakeholder-specific colors throughout
 - Integrated into App.tsx, replacing dialogue tab placeholder
-- Created comprehensive test suite (14 tests)
 
-**Tests**: 13/14 passing in Chromium (with retries for transient timeouts)
-- Display header and instructions ✓
-- Show all 9 stakeholder icons ✓
-- Select stakeholder on click ✓
-- Display stakeholder details ✓
-- Show priorities ✓ (passed on retry)
-- Show typical questions ✓ (passed on retry)
-- Show why engage information ✓ (passed on retry)
-- Apply stakeholder-specific colors ✓ (passed on retry)
-- Show "Predict Their Response" button ✓
-- Allow switching between stakeholders ✓
-- Hide instruction text after selection ✓
-- Support keyboard navigation and accessibility ✓
-- Display proper grid layout on desktop ✓
-- Show responsive grid on tablet ✓
+**Tests**: 13/14 passing in Chromium (with retries)
 
-**Key Features**:
-- Letter-based icon placeholders (using first letter of stakeholder name)
-- Responsive grid (3 cols mobile → 5 cols tablet → 9 cols desktop)
-- Smooth hover and selection animations
-- Accessible with aria-pressed and aria-label attributes
-- Stakeholder-specific border and text colors when selected
-- Prominent "Predict Their Response" button (ready for F018 integration)
-
-**Commit**: (pending)
-
-**Next Feature**: F017 - Stakeholder icons (or F018 for predict-before-reveal input)
+**Commit**: df8b336 - feat: implement F016 - Stakeholder Tab with icon selector
 
 ---
 
