@@ -3,6 +3,7 @@ import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import TabNavigation from './components/layout/TabNavigation'
 import InputTab from './components/input/InputTab'
+import StakeholderTab from './components/stakeholder/StakeholderTab'
 import { ScenarioProvider } from './context/ScenarioContext'
 
 function App() {
@@ -24,17 +25,7 @@ function App() {
           )}
 
           {activeTab === 'dialogue' && (
-            <div className="card max-w-4xl mx-auto text-center" id="dialogue-panel" role="tabpanel">
-              <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
-                Stakeholder Dialogue
-              </h2>
-              <p className="text-gray-600">
-                Predict how different stakeholders will respond to your scenario, then compare with simulated responses.
-              </p>
-              <div className="mt-6 text-gray-500">
-                <em>Coming soon: Stakeholder selection and predict-before-reveal interface</em>
-              </div>
-            </div>
+            <StakeholderTab />
           )}
 
           {activeTab === 'explore' && (

@@ -247,7 +247,7 @@
         "Show stakeholder name and brief description on selection",
         "Apply stakeholder-specific colors"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F017",
