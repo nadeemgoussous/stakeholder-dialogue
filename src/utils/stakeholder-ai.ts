@@ -2,13 +2,15 @@
  * AI Enhancement for Stakeholder Responses
  *
  * Multi-tier approach with silent failover:
- * 1. Local LLM (Ollama - gemma2:2b) - PREFERRED for workshops
- * 2. Cloud API (Anthropic/OpenAI) - OPTIONAL fallback
- * 3. Rule-based response - ALWAYS works (no enhancement)
+ * 1. WebLLM (browser-based) - BEST for workshop participants
+ * 2. Ollama (local server) - BEST for facilitators
+ * 3. Cloud API (Anthropic/OpenAI) - OPTIONAL fallback
+ * 4. Rule-based response - ALWAYS works (no enhancement)
  *
  * CRITICAL: Never show errors to user. Always failover silently.
  */
 
+import * as webllm from '@mlc-ai/web-llm';
 import type { StakeholderResponse, StakeholderProfile } from '../types/stakeholder';
 import type { ScenarioInput } from '../types/scenario';
 import type { DerivedMetrics } from '../types/derived-metrics';
@@ -17,7 +19,12 @@ import type { DerivedMetrics } from '../types/derived-metrics';
  * AI enhancement configuration
  */
 export interface AIConfig {
-  // Ollama settings (local LLM)
+  // WebLLM settings (browser-based LLM) - NEW
+  webLLMEnabled: boolean;
+  webLLMModel: string; // Default: Phi-3.5-mini-instruct-q4f16_1-MLC
+  webLLMTimeout: number; // Default: 5000ms (browser inference)
+
+  // Ollama settings (local server LLM)
   ollamaEnabled: boolean;
   ollamaUrl: string; // Default: http://localhost:11434
   ollamaModel: string; // Default: gemma2:2b
@@ -32,12 +39,21 @@ export interface AIConfig {
 
 /**
  * Default AI configuration
+ * Prioritizes WebLLM for workshop participants (zero installation)
  */
 export const DEFAULT_AI_CONFIG: AIConfig = {
+  // WebLLM for participants (browser-based, zero setup)
+  webLLMEnabled: true,
+  webLLMModel: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
+  webLLMTimeout: 5000,
+
+  // Ollama for facilitators (better performance)
   ollamaEnabled: true,
   ollamaUrl: 'http://localhost:11434',
   ollamaModel: 'gemma2:2b',
   ollamaTimeout: 3000,
+
+  // Cloud API disabled by default
   cloudEnabled: false,
   cloudTimeout: 3000,
 };
@@ -67,6 +83,150 @@ export async function checkOllamaAvailability(config: AIConfig): Promise<boolean
   } catch (error) {
     // Ollama not running or network error - fail silently
     return false;
+  }
+}
+
+/**
+ * WebLLM Engine Singleton
+ */
+let webLLMEngine: webllm.MLCEngine | null = null;
+let webLLMInitPromise: Promise<webllm.MLCEngine | null> | null = null;
+let webLLMInitialized = false;
+
+/**
+ * Check if WebLLM is supported (WebGPU available)
+ */
+export function isWebLLMSupported(): boolean {
+  try {
+    // Check if WebGPU is available
+    return 'gpu' in navigator;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Initialize WebLLM engine (singleton pattern)
+ * Shows progress during first load (~800MB model download)
+ */
+export async function initializeWebLLM(
+  config: AIConfig,
+  onProgress?: (progress: webllm.InitProgressReport) => void
+): Promise<webllm.MLCEngine | null> {
+  // Return existing engine if already initialized
+  if (webLLMEngine && webLLMInitialized) {
+    return webLLMEngine;
+  }
+
+  // Wait for existing initialization if in progress
+  if (webLLMInitPromise) {
+    return webLLMInitPromise;
+  }
+
+  // Check if WebLLM is enabled
+  if (!config.webLLMEnabled) {
+    return null;
+  }
+
+  // Check browser support
+  if (!isWebLLMSupported()) {
+    console.warn('WebGPU not supported - WebLLM unavailable');
+    return null;
+  }
+
+  try {
+    console.log('🚀 Initializing WebLLM...');
+
+    // Initialize engine with progress tracking
+    webLLMInitPromise = (async () => {
+      try {
+        const engine = await webllm.CreateMLCEngine(config.webLLMModel, {
+          initProgressCallback: (progress) => {
+            console.log(`WebLLM Loading: ${progress.text} (${(progress.progress * 100).toFixed(1)}%)`);
+            onProgress?.(progress);
+          },
+        });
+
+        webLLMEngine = engine;
+        webLLMInitialized = true;
+        console.log('✅ WebLLM initialized successfully');
+        return engine;
+      } catch (error) {
+        console.warn('WebLLM initialization failed:', error);
+        webLLMInitPromise = null;
+        return null;
+      }
+    })();
+
+    return await webLLMInitPromise;
+  } catch (error) {
+    console.warn('WebLLM initialization failed:', error);
+    webLLMInitPromise = null;
+    return null;
+  }
+}
+
+/**
+ * Enhance response using WebLLM (browser-based)
+ */
+async function enhanceWithWebLLM(
+  ruleBasedResponse: StakeholderResponse,
+  stakeholder: StakeholderProfile,
+  scenario: ScenarioInput,
+  derivedMetrics: DerivedMetrics,
+  config: AIConfig
+): Promise<StakeholderResponse | null> {
+  try {
+    // Initialize engine if needed (will use cached model after first load)
+    const engine = await initializeWebLLM(config);
+    if (!engine) return null;
+
+    const systemPrompt = buildSystemPrompt(stakeholder, scenario, derivedMetrics);
+    const baseResponseText = JSON.stringify(ruleBasedResponse, null, 2);
+
+    const messages: webllm.ChatCompletionMessageParam[] = [
+      { role: 'system', content: systemPrompt },
+      {
+        role: 'user',
+        content: `${baseResponseText}\n\nEnhance this stakeholder response to make it more natural and conversational while preserving all key points.`,
+      },
+    ];
+
+    // Generate response with timeout
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('WebLLM timeout')), config.webLLMTimeout);
+    });
+
+    const completionPromise = engine.chat.completions.create({
+      messages,
+      temperature: 0.7,
+      max_tokens: 400,
+    });
+
+    const completion = await Promise.race([completionPromise, timeoutPromise]);
+
+    const enhancedText = completion.choices[0]?.message?.content;
+    if (!enhancedText) return null;
+
+    // Try to parse enhanced response as JSON
+    try {
+      const parsed = JSON.parse(enhancedText);
+      return {
+        ...ruleBasedResponse,
+        ...parsed,
+        generationType: 'ai-enhanced' as const,
+      };
+    } catch {
+      // Use enhanced text for initial reaction only
+      return {
+        ...ruleBasedResponse,
+        initialReaction: enhancedText.trim().substring(0, 300),
+        generationType: 'ai-enhanced' as const,
+      };
+    }
+  } catch (error) {
+    console.debug('WebLLM enhancement failed:', error);
+    return null;
   }
 }
 
@@ -217,10 +377,11 @@ async function enhanceWithCloudAPI(
 /**
  * Main function: Attempt to enhance response with AI, or return rule-based response
  *
- * Tries in order:
- * 1. Ollama (local LLM)
- * 2. Cloud API (if configured)
- * 3. Rule-based response (guaranteed fallback)
+ * NEW PRIORITY ORDER:
+ * 1. WebLLM (browser-based) - Best for participants, works offline after first load
+ * 2. Ollama (local server) - Best for facilitators
+ * 3. Cloud API (if configured) - Optional fallback
+ * 4. Rule-based response - Guaranteed fallback (always works)
  *
  * NEVER throws errors. NEVER shows loading states.
  */
@@ -231,12 +392,24 @@ export async function maybeEnhanceWithAI(
   derivedMetrics: DerivedMetrics,
   config: AIConfig = DEFAULT_AI_CONFIG
 ): Promise<StakeholderResponse> {
-  // Check if online (basic check)
-  if (!navigator.onLine) {
-    return ruleBasedResponse; // Offline - skip enhancement
+  // 1. Try WebLLM first (browser-based, zero installation)
+  // Note: WebLLM works offline after first model load
+  if (config.webLLMEnabled) {
+    const webllmResult = await enhanceWithWebLLM(
+      ruleBasedResponse,
+      stakeholder,
+      scenario,
+      derivedMetrics,
+      config
+    );
+
+    if (webllmResult) {
+      console.debug('✅ Response enhanced with WebLLM');
+      return webllmResult;
+    }
   }
 
-  // Try Ollama first (local LLM)
+  // 2. Try Ollama (local server LLM)
   if (config.ollamaEnabled) {
     const ollamaResult = await enhanceWithOllama(
       ruleBasedResponse,
@@ -252,7 +425,7 @@ export async function maybeEnhanceWithAI(
     }
   }
 
-  // Try cloud API fallback
+  // 3. Try cloud API fallback
   if (config.cloudEnabled) {
     const cloudResult = await enhanceWithCloudAPI(
       ruleBasedResponse,
@@ -268,7 +441,7 @@ export async function maybeEnhanceWithAI(
     }
   }
 
-  // All AI methods failed - return rule-based response silently
+  // 4. All AI methods failed - return rule-based response silently
   console.debug('ℹ️ Using rule-based response (AI enhancement unavailable)');
   return ruleBasedResponse;
 }
@@ -278,9 +451,30 @@ export async function maybeEnhanceWithAI(
  */
 export async function getAIStatus(config: AIConfig = DEFAULT_AI_CONFIG): Promise<{
   available: boolean;
-  method: 'ollama' | 'cloud' | 'none';
+  method: 'webllm' | 'ollama' | 'cloud' | 'none';
   model?: string;
+  loading?: boolean;
 }> {
+  // Check WebLLM first (highest priority)
+  if (config.webLLMEnabled && isWebLLMSupported()) {
+    if (webLLMEngine && webLLMInitialized) {
+      return {
+        available: true,
+        method: 'webllm',
+        model: config.webLLMModel,
+      };
+    }
+    // WebLLM is loading
+    if (webLLMInitPromise) {
+      return {
+        available: false,
+        method: 'webllm',
+        model: config.webLLMModel,
+        loading: true,
+      };
+    }
+  }
+
   // Check Ollama
   if (config.ollamaEnabled) {
     const ollamaAvailable = await checkOllamaAvailability(config);
