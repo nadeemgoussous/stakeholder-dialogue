@@ -386,7 +386,7 @@
         "On click/hover: show positive and negative factors",
         "Implement calculateSentimentChanges per CLAUDE.md"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F026",

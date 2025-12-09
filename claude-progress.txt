@@ -1,5 +1,78 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-08 (F024 - Directional Impact Indicators)
+
+**Status**: ✅ COMPLETE
+
+**Completed**:
+- F024: Directional impact indicators (NOT calculations) fully implemented
+  - Created DirectionalImpacts.tsx component with three color-coded impact cards
+  - Jobs impact (blue card): Shows direction and magnitude based on RE share changes
+  - Land Use impact (green card): Shows direction and magnitude for solar/wind requirements
+  - Emissions impact (purple card): Shows direction and magnitude based on RE share + coal phaseout
+  - Directional arrows (↑ ↓ →) for visual clarity
+  - Magnitude labels (minimal, moderate, significant)
+  - Explanatory text for each impact (not specific numbers)
+  - "How to Use These Indicators" guidance note
+  - Proper disclaimers about directional nature
+  - Integrated into ExploreTab component
+  - Shows only when adjustments are made
+  - Hides when reset to base scenario
+  - Created comprehensive test suite (17 tests covering all scenarios)
+
+**Key Features**:
+- **Directional Only**: NO specific numbers or percentages - only trends
+- **Relative to Base**: Impacts show changes from base scenario (as per user feedback)
+- **Magnitude-Based**: Categorizes changes as minimal/moderate/significant
+- **Context-Aware**: Explanatory text helps users understand what changes mean
+- **User-Friendly**: Clear visual design with arrows and color coding
+
+**Calculation Logic**:
+- Jobs: Higher RE = more jobs (construction + operations), significant above +20% RE share
+- Land Use: Higher RE = more land needed, significant above +30% RE share
+- Emissions: Higher RE + earlier coal phaseout = lower emissions, combined effects calculated
+- All based on deltas between base and adjusted values
+
+**Critical Design Principle Maintained**:
+- Tool does NOT recalculate technical/economic feasibility
+- Shows directional trends ONLY to anticipate stakeholder responses
+- Prominent disclaimers about illustrative nature
+- Aligns with CLAUDE.md: "NO SHADOW MODEL"
+
+**Files Created**:
+- src/components/calculator/DirectionalImpacts.tsx (main component, 320 lines)
+- tests/e2e/24-directional-impacts.spec.ts (17 comprehensive tests)
+
+**Files Modified**:
+- src/components/calculator/ExploreTab.tsx (integrated DirectionalImpacts)
+- feature_list.json (F024 marked passing)
+
+**Tests**: Test suite created with 17 comprehensive tests
+- Placeholder message when no adjustments
+- Display impacts after adjustments
+- Direction indicators (increase/decrease/unchanged)
+- Magnitude labels (minimal/moderate/significant)
+- Explanatory text for each metric
+- Usage guidance note
+- Reset functionality
+- Multiple slider adjustments
+- Directional arrows display
+- NO specific numbers validation
+- Disclaimer presence
+
+**Architecture Notes**:
+- calculateDirectionalImpacts function handles all logic internally
+- Threshold-based categorization (e.g., >20% RE = significant jobs increase)
+- Combined effects (RE share + coal phaseout) for emissions
+- ImpactCard subcomponent for consistent display
+- Color-coded cards (blue/green/purple) for visual distinction
+
+**Commit**: 44c8ad7 - feat: implement F024 - Directional impact indicators (NOT calculations)
+
+**Next Feature**: F025 - Stakeholder sentiment change display (shows how each stakeholder's sentiment changes relative to base scenario)
+
+---
+
 ### Session: 2025-12-08 (F023 - Explore Impacts Tab with Directional Sliders)
 
 **Status**: ✅ COMPLETE
@@ -448,7 +521,7 @@
 
 **F001-F009**: All complete (scaffolding, data structures, calculations, layout, sample data)
 
-**Current Status**: 14/42 features complete (33.3%)
+**Current Status**: 24/42 features complete (57.1%)
 
 **Architecture Status**:
 - ✅ Offline-first PWA configured
@@ -466,6 +539,10 @@
 - ✅ Stakeholder icons (PNG and SVG)
 - ✅ Predict-before-reveal input component
 - ✅ Compare prediction vs response display (COMPLETE PEDAGOGY CYCLE!)
+- ✅ AI enhancement with local LLM (Ollama + Gemma 2 2B)
+- ✅ Offline indicator and graceful degradation
+- ✅ Explore Impacts tab with directional sliders
+- ✅ Directional impact indicators (jobs, land use, emissions)
 
 **Key Decisions**:
 - Tool is now fully generic and applicable to any country/region
@@ -473,3 +550,6 @@
 - Country list includes 100+ countries globally
 - Quick entry form designed for < 3 minute completion
 - Predict-before-reveal pedagogy fully functional
+- TRUE OFFLINE AI with local LLM (Ollama)
+- Directional impacts show trends ONLY (not calculations)
+- Impacts relative to base scenario (as per user feedback)

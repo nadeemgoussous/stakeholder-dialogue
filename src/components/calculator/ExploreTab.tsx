@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
 import DirectionalImpacts from './DirectionalImpacts';
+import SentimentChanges from './SentimentChanges';
 
 /**
  * ExploreTab Component - F023
@@ -283,19 +284,23 @@ export default function ExploreTab() {
 
       {/* Directional Impacts (F024) */}
       {hasAdjustments && currentValues ? (
-        <DirectionalImpacts
-          baseValues={baseValues}
-          adjustedValues={currentValues}
-        />
+        <>
+          <DirectionalImpacts
+            baseValues={baseValues}
+            adjustedValues={currentValues}
+          />
+          {/* Stakeholder Sentiment Changes (F025) */}
+          <SentimentChanges
+            baseValues={baseValues}
+            adjustedValues={currentValues}
+          />
+        </>
       ) : (
         <div className="card bg-gray-50">
           <h3 className="text-xl font-semibold mb-4 text-gray-800">Directional Impacts</h3>
           <p className="text-gray-600 mb-4">
-            Adjust parameters above to see directional impacts on jobs, land use, and emissions.
+            Adjust parameters above to see directional impacts on jobs, land use, emissions, and stakeholder sentiment.
           </p>
-          <div className="text-gray-500 text-sm">
-            <em>Note: Stakeholder sentiment changes coming in F025</em>
-          </div>
         </div>
       )}
     </div>
