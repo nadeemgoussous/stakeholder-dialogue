@@ -393,6 +393,7 @@
       "category": "calculator",
       "priority": 26,
       "description": "Calculator disclaimer component",
+      "status": "REDUNDANT - Disclaimers already prominently displayed in ExploreTab and SentimentChanges components. Can extract reusable component later if needed for exports.",
       "steps": [
         "Create components/common/CalculatorDisclaimer.tsx",
         "Display prominent warning box",
@@ -400,7 +401,7 @@
         "Style with warning colors but not alarming",
         "Display on Explore tab AND in any exports"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F027",
