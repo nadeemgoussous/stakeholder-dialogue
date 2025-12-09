@@ -43,18 +43,41 @@ mlc_llm compile \
   --output /path/to/compiled-model
 ```
 
-#### 2. Host Your Model
+#### 2. Package Model with PWA (Recommended for Workshops)
 
-**Option A: Self-Hosted Server**
+**Why Package the Model?**
+- ✅ No internet required during workshops
+- ✅ Instant loading (no download wait)
+- ✅ Works in air-gapped environments
+- ✅ Can distribute on USB drives
+- ✅ More reliable than online loading
+
+**Steps to Package Model:**
+
+```bash
+# 1. Create models directory in public/
+mkdir -p public/models
+
+# 2. Copy your compiled model files
+cp -r /path/to/compiled-model/* public/models/gemma-2-2b-it-q4f16_1-MLC/
+
+# 3. Verify model files are present
+ls -lh public/models/gemma-2-2b-it-q4f16_1-MLC/
+# Should see: model weights, tokenizer, config files
+
+# 4. Build PWA with bundled model
+npm run build
+
+# 5. Test the build
+npm run preview
+```
+
+**Alternative: Self-Hosted Server** (for development/testing only)
 ```bash
 # Serve your model files
 # Make sure CORS is configured correctly
 python -m http.server 8080 --directory /path/to/compiled-model
 ```
-
-**Option B: Include in PWA Bundle**
-- Copy model files to `public/models/custom/`
-- Model will be bundled with the PWA
 
 #### 3. Update Configuration
 
@@ -62,17 +85,24 @@ Edit `src/utils/stakeholder-ai.ts`:
 
 ```typescript
 export const DEFAULT_AI_CONFIG: AIConfig = {
+  // Enable WebLLM (disabled by default)
   webLLMEnabled: true,
-  // Option A: Use hosted model
-  webLLMModel: 'https://your-server.com/models/your-model-name-q4f16_1-MLC',
 
-  // Option B: Use bundled model
-  // webLLMModel: '/models/custom/your-model-name-q4f16_1-MLC',
+  // For packaged model (recommended):
+  webLLMModel: '/models/gemma-2-2b-it-q4f16_1-MLC',
+
+  // For hosted model (development only):
+  // webLLMModel: 'https://your-server.com/models/your-model-name-q4f16_1-MLC',
+
+  // For custom fine-tuned model:
+  // webLLMModel: '/models/custom/your-fine-tuned-model-q4f16_1-MLC',
 
   webLLMTimeout: 5000,
   // ... rest of config
 };
 ```
+
+**IMPORTANT**: WebLLM is disabled by default to prevent UI blocking during model download. Only enable it after packaging the model or in production builds.
 
 #### 4. Test Your Model
 

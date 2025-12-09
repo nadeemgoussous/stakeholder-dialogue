@@ -39,12 +39,20 @@ export interface AIConfig {
 
 /**
  * Default AI configuration
- * Prioritizes WebLLM for workshop participants (zero installation)
+ *
+ * IMPORTANT: WebLLM is DISABLED by default to prevent blocking the UI while downloading model.
+ * Enable it after packaging the model with the PWA or when users have fast internet.
+ *
+ * For workshop deployment:
+ * 1. Package model with PWA (see docs/CUSTOM-MODELS.md)
+ * 2. Set webLLMEnabled: true
+ * 3. Test that model loads correctly
  */
 export const DEFAULT_AI_CONFIG: AIConfig = {
   // WebLLM for participants (browser-based, zero setup)
-  webLLMEnabled: true,
-  webLLMModel: 'gemma-2-2b-it-q4f16_1-MLC', // Gemma 2 2B - lightweight and fast
+  // DISABLED by default - enable after packaging model
+  webLLMEnabled: false, // Set to true when model is packaged with PWA
+  webLLMModel: 'gemma-2-2b-it-q4f16_1-MLC', // Or path to bundled model: '/models/gemma-2-2b-it-q4f16_1-MLC'
   webLLMTimeout: 5000,
 
   // Ollama for facilitators (better performance)
