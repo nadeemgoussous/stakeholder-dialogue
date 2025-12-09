@@ -21,7 +21,7 @@ import type { DerivedMetrics } from '../types/derived-metrics';
 export interface AIConfig {
   // WebLLM settings (browser-based LLM) - NEW
   webLLMEnabled: boolean;
-  webLLMModel: string; // Default: Phi-3.5-mini-instruct-q4f16_1-MLC
+  webLLMModel: string; // Default: gemma-2-2b-it-q4f16_1-MLC (can be customized or fine-tuned)
   webLLMTimeout: number; // Default: 5000ms (browser inference)
 
   // Ollama settings (local server LLM)
@@ -44,7 +44,7 @@ export interface AIConfig {
 export const DEFAULT_AI_CONFIG: AIConfig = {
   // WebLLM for participants (browser-based, zero setup)
   webLLMEnabled: true,
-  webLLMModel: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
+  webLLMModel: 'gemma-2-2b-it-q4f16_1-MLC', // Gemma 2 2B - lightweight and fast
   webLLMTimeout: 5000,
 
   // Ollama for facilitators (better performance)

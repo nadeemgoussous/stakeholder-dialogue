@@ -645,7 +645,8 @@
         "Test air-gapped environment (USB drive distribution)"
       ],
       "technicalNotes": [
-        "Model: Phi-3.5-mini-instruct-q4f16_1-MLC (~800MB)",
+        "Model: gemma-2-2b-it-q4f16_1-MLC (~1.4GB) - matches Ollama gemma2:2b",
+        "Custom Models: Supports fine-tuned models by updating webLLMModel config",
         "Browser: Requires WebGPU support (Chrome 113+)",
         "Performance: 2-4 seconds inference on modern hardware",
         "Caching: Model stored in browser IndexedDB (one-time download)",

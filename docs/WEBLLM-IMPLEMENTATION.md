@@ -36,17 +36,26 @@ This document outlines the implementation plan for adding **WebLLM** (browser-ba
 
 ## Recommended Model
 
-**Model**: `Phi-3.5-mini-instruct-q4f16_1-MLC`
+**Model**: `gemma-2-2b-it-q4f16_1-MLC`
 
 **Why this model?**
-- Size: ~800MB (smaller than Gemma 2B for Ollama)
-- Quality: Good instruction-following for text enhancement
+- Size: ~1.4GB (compact for a 2B model)
+- Quality: Excellent instruction-following from Google
 - Speed: Fast inference on WebGPU
-- License: MIT (permissive for commercial use)
+- License: Gemma Terms of Use (permissive for most uses)
+- Consistency: Matches Ollama gemma2:2b model used by facilitators
 
 **Alternative Models:**
 - `TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC` (~600MB, faster but lower quality)
-- `Qwen2.5-1.5B-Instruct-q4f16_1-MLC` (~900MB, better quality)
+- `Qwen2.5-1.5B-Instruct-q4f16_1-MLC` (~900MB, good quality)
+- `Phi-3.5-mini-instruct-q4f16_1-MLC` (~800MB, Microsoft's model)
+
+**Custom/Fine-Tuned Models:**
+You can use your own fine-tuned models by:
+1. Converting your model to MLC format
+2. Hosting it on your server or including in PWA bundle
+3. Updating `webLLMModel` in AIConfig to your model's URL/name
+4. The tool will automatically use your custom model
 
 ---
 
@@ -79,7 +88,7 @@ export interface AIConfig {
 export const DEFAULT_AI_CONFIG: AIConfig = {
   // Prioritize WebLLM for workshop participants
   webLLMEnabled: true,
-  webLLMModel: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
+  webLLMModel: 'gemma-2-2b-it-q4f16_1-MLC', // Can be replaced with custom fine-tuned model
   webLLMTimeout: 5000,
 
   // Ollama for facilitators (better performance)
