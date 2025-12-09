@@ -1,5 +1,102 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-09 (F025 - Stakeholder Sentiment Change Display)
+
+**Status**: ✅ COMPLETE
+
+**Completed**:
+- F025: Stakeholder sentiment change display fully implemented
+  - Created SentimentChanges.tsx component with 9-stakeholder grid
+  - Each stakeholder shows sentiment arrow (↗ ↘ →) and magnitude
+  - Click to view detailed positive/negative factors for each stakeholder
+  - Created sentiment-calculator.ts with stakeholder-specific evaluation logic
+  - Integrated into ExploreTab below DirectionalImpacts component
+  - Shows only when adjustments are made
+  - Hides when reset to base scenario
+  - Created comprehensive test suite (20 tests)
+
+**Key Features**:
+- **Visual Sentiment Indicators**: Color-coded arrows showing positive (↗ green), negative (↘ red), or neutral (→ gray)
+- **Magnitude Levels**: Significant, moderate, or minor changes based on net score
+- **Interactive Details**: Click any stakeholder to see what they appreciate and what concerns them
+- **Stakeholder-Specific Logic**: Each group evaluated based on their unique priorities
+- **Context-Aware Factors**: Shows specific reasons for sentiment changes (RE targets, coal phaseout, etc.)
+- **User-Friendly**: Help text, selection toggles, prominent disclaimers
+
+**Stakeholder Evaluation Logic**:
+- **Policy Makers**: Balance climate goals with feasibility (higher RE = positive for NDCs, but very high = feasibility concerns)
+- **Grid Operators**: Concerned about reliability (rapid RE = grid strain, later coal phaseout = more prep time)
+- **Industry**: Want reliable, affordable power (higher RE = supply chain opportunities but cost concerns)
+- **Public**: Clean air priority (higher RE + earlier coal = very positive for health)
+- **CSOs/NGOs**: Strong climate advocacy (any RE increase = positive, coal delay = very negative)
+- **Scientific**: Evidence-based (moderate RE = positive, very high = needs validation)
+- **Finance**: Bankability focus (rapid changes = execution risk, gradual = certainty)
+- **Regional Bodies**: Regional cooperation (higher RE = trade opportunities)
+- **Development Partners**: Climate finance (ambitious targets unlock funding, but debt sustainability matters)
+
+**Sentiment Calculation**:
+- Net score from -10 to +10 based on RE share and coal phaseout changes
+- Direction: positive (>1), negative (<-1), neutral (-1 to 1)
+- Magnitude: significant (≥5 or ≤-5), moderate (≥3 or ≤-3), minor (else)
+- Factors dynamically generated based on what changed in the scenario
+- Combined effects (e.g., higher RE + earlier coal phaseout for CSOs)
+
+**Components**:
+- **Grid Display**: 3-column grid showing all 9 stakeholders with icons
+- **Sentiment Cards**: Arrow, magnitude label, selection indicator
+- **Details Panel**: Expanded view showing positive factors (✓) and concerns (⚠)
+- **Tip Section**: Guidance on using insights for stakeholder engagement
+- **Disclaimer**: Prominent note that sentiments are illustrative only
+
+**Files Created**:
+- src/utils/sentiment-calculator.ts (sentiment logic, 650 lines)
+- src/components/calculator/SentimentChanges.tsx (UI component, 260 lines)
+- tests/e2e/25-sentiment-changes.spec.ts (test suite, 20 tests)
+
+**Files Modified**:
+- src/components/calculator/ExploreTab.tsx (integrated SentimentChanges)
+- feature_list.json (F025 marked passing)
+
+**Tests**: Test suite created with 20 comprehensive tests
+- Grid display with all 9 stakeholders
+- Sentiment arrows and magnitude labels
+- Click to show details (positive/negative factors)
+- Selection toggles and switching
+- Help text and disclaimer presence
+- Reset functionality
+- Icons display correctly
+- Multiple adjustments reflected
+
+**Bug Fixes**:
+- Fixed StakeholderIcon import (changed from default to named export)
+- Updated to pass full stakeholder profile object instead of just ID
+
+**Architecture Notes**:
+- calculateSentimentChanges generates array of sentiment data for all stakeholders
+- Each stakeholder evaluated independently based on their profile
+- Net score determines direction and magnitude
+- Factors array populated dynamically based on scenario changes
+- IIFE pattern in JSX to get profile for selected stakeholder
+
+**Critical Design Principle Maintained**:
+- Sentiments are ILLUSTRATIVE ONLY - help anticipate responses
+- Do NOT represent precise stakeholder analysis
+- Must be validated through direct stakeholder consultation
+- Prominent disclaimers emphasize this limitation
+
+**Manual Testing**: User confirmed feature works correctly in browser
+- All stakeholders display with icons
+- Sentiment arrows show correctly
+- Click to expand details works
+- Factors display appropriately
+- Reset functionality works
+
+**Commit**: d6ca739 - feat: implement F025 - Stakeholder sentiment change display
+
+**Next Feature**: F026 - Calculator disclaimer component (may be redundant as disclaimers already present throughout)
+
+---
+
 ### Session: 2025-12-08 (F024 - Directional Impact Indicators)
 
 **Status**: ✅ COMPLETE
