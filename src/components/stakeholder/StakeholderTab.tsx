@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { stakeholderProfiles } from '../../data/stakeholder-profiles';
-import type { StakeholderProfile } from '../../types/stakeholder';
+import type { StakeholderProfile, DevelopmentContext, StakeholderVariant } from '../../types/stakeholder';
 import type { StakeholderResponse } from '../../types/response';
 import { StakeholderIcon } from './StakeholderIcon';
 import PredictionInput from '../prediction/PredictionInput';
 import CompareView from '../prediction/CompareView';
 import { useScenario } from '../../context/ScenarioContext';
-import { generateRuleBasedResponse } from '../../utils/stakeholder-rules';
+import { generateEnhancedResponse, getContextDescription } from '../../utils/stakeholder-rules';
 import { maybeEnhanceWithAI, DEFAULT_AI_CONFIG } from '../../utils/stakeholder-ai';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
 
@@ -21,6 +21,10 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
   const [showPrediction, setShowPrediction] = useState(false);
   const [userPrediction, setUserPrediction] = useState<string>('');
   const [stakeholderResponse, setStakeholderResponse] = useState<StakeholderResponse | null>(null);
+
+  // Enhanced framework controls
+  const [developmentContext, setDevelopmentContext] = useState<DevelopmentContext>('emerging');
+  const [stakeholderVariant, setStakeholderVariant] = useState<StakeholderVariant>('pragmatic');
 
   const handleStakeholderClick = (stakeholder: StakeholderProfile) => {
     setSelectedStakeholder(stakeholder);
@@ -37,26 +41,37 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
   const handleRevealResponse = async (prediction: string) => {
     setUserPrediction(prediction);
 
-    // Generate stakeholder response with AI enhancement
+    // Generate stakeholder response with enhanced framework
     if (scenario && derivedMetrics && selectedStakeholder) {
       console.log('Generating response for:', selectedStakeholder.name);
+      console.log('Context:', developmentContext, 'Variant:', stakeholderVariant);
       console.log('Scenario loaded:', !!scenario);
       console.log('Derived metrics loaded:', !!derivedMetrics);
 
-      // Generate rule-based response first (always works)
-      const ruleBasedResponse = generateRuleBasedResponse(scenario, derivedMetrics, selectedStakeholder);
+      // Generate enhanced response with context and variant
+      const enhancedResponse = generateEnhancedResponse(
+        scenario,
+        derivedMetrics,
+        selectedStakeholder,
+        {
+          context: developmentContext,
+          variant: stakeholderVariant,
+          includeInteractionTriggers: true
+        }
+      );
 
-      // Try to enhance with AI (silent failover if unavailable)
-      const enhancedResponse = await maybeEnhanceWithAI(
-        ruleBasedResponse,
+      // Try to enhance with AI on top (silent failover if unavailable)
+      const aiEnhancedResponse = await maybeEnhanceWithAI(
+        enhancedResponse,
         selectedStakeholder,
         scenario,
         derivedMetrics,
         DEFAULT_AI_CONFIG
       );
 
-      console.log('Response generated:', enhancedResponse.generationType);
-      setStakeholderResponse(enhancedResponse);
+      console.log('Response generated:', aiEnhancedResponse.generationType);
+      console.log('Interaction triggers:', aiEnhancedResponse.metadata?.interactionTriggersCount || 0);
+      setStakeholderResponse(aiEnhancedResponse);
     } else {
       console.error('Missing data for response generation:');
       console.error('- Scenario:', !!scenario);
@@ -121,6 +136,71 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
             <span>Working offline - responses use rule-based generation</span>
           </div>
         )}
+      </div>
+
+      {/* Enhanced Framework Controls */}
+      <div className="card mb-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800 flex items-center gap-2">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/>
+          </svg>
+          Response Settings
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Development Context Selector */}
+          <div>
+            <label htmlFor="context" className="block text-sm font-medium text-gray-700 mb-2">
+              Country Development Context
+            </label>
+            <select
+              id="context"
+              value={developmentContext}
+              onChange={(e) => setDevelopmentContext(e.target.value as DevelopmentContext)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="least-developed">Least-Developed Countries</option>
+              <option value="emerging">Emerging Economies</option>
+              <option value="developed">Developed Countries</option>
+            </select>
+            <p className="mt-2 text-xs text-gray-600">
+              {getContextDescription(developmentContext)}
+            </p>
+          </div>
+
+          {/* Stakeholder Variant Selector */}
+          <div>
+            <label htmlFor="variant" className="block text-sm font-medium text-gray-700 mb-2">
+              Stakeholder Perspective
+            </label>
+            <select
+              id="variant"
+              value={stakeholderVariant}
+              onChange={(e) => setStakeholderVariant(e.target.value as StakeholderVariant)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="conservative">Conservative - Cautious on change, risk-averse</option>
+              <option value="pragmatic">Pragmatic - Balanced, seeks feasible solutions</option>
+              <option value="progressive">Progressive - Ambitious, embracing transition</option>
+            </select>
+            <p className="mt-2 text-xs text-gray-600">
+              {stakeholderVariant === 'conservative' && 'Prioritizes security and stability, cautious on rapid transitions'}
+              {stakeholderVariant === 'pragmatic' && 'Balances multiple objectives, focuses on practical implementation'}
+              {stakeholderVariant === 'progressive' && 'Champions ambitious goals, willing to accept managed risk'}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 p-3 bg-white rounded-lg border border-blue-200">
+          <p className="text-sm text-gray-700 flex items-start gap-2">
+            <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            <span>
+              These settings adjust stakeholder response thresholds and tone to better reflect your country's development stage and the personality of the stakeholder representative.
+            </span>
+          </p>
+        </div>
       </div>
 
       {/* Stakeholder Icon Grid */}

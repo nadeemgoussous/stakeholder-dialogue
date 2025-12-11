@@ -16,7 +16,15 @@ export interface StakeholderResponse {
   engagementAdvice: string[];           // Tips for engaging this stakeholder (2-3)
 
   generatedAt: string;                  // ISO 8601 timestamp
-  generationType: 'rule-based' | 'ai-enhanced';
+  generationType: 'rule-based' | 'ai-enhanced' | 'enhanced-rule-based';
+
+  // Optional metadata for enhanced responses
+  metadata?: {
+    context?: string;                   // Development context (LDC, emerging, developed)
+    variant?: string;                   // Stakeholder variant (conservative, progressive, pragmatic)
+    interactionTriggersCount?: number;  // Number of multi-metric triggers activated
+    [key: string]: any;                 // Allow additional metadata
+  };
 }
 
 export interface Concern {

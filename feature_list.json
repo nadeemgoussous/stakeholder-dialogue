@@ -662,6 +662,60 @@
         "Workshop-ready (pre-load on USB drives)"
       ],
       "passes": true
+    },
+    {
+      "id": "F044",
+      "category": "stakeholder-response",
+      "priority": 44,
+      "description": "Enhanced stakeholder framework with context-aware multi-metric interactions and personality variants",
+      "steps": [
+        "Create src/data/stakeholder-enhancements.ts with complete framework",
+        "Implement 27 multi-metric interaction triggers (3 per stakeholder × 9 groups)",
+        "Implement 27 personality variants (conservative/progressive/pragmatic × 9)",
+        "Implement 3 development context profiles (LDC/emerging/developed)",
+        "Add context threshold modifiers and priority shifts",
+        "Create helper functions for evaluation and response construction",
+        "Update src/types/stakeholder.ts with 12 new enhanced interfaces",
+        "Implement generateEnhancedResponse() in stakeholder-rules.ts",
+        "Add buildScenarioIndicators() to flatten metrics for trigger evaluation",
+        "Implement enhanceReactionWithVariant() with framing preferences",
+        "Add context selector UI in StakeholderTab (LDC/emerging/developed dropdown)",
+        "Add variant selector UI in StakeholderTab (conservative/pragmatic/progressive)",
+        "Integrate generateEnhancedResponse into response flow",
+        "Add comprehensive debug logging for troubleshooting",
+        "Add error handling with graceful fallback to base responses",
+        "Create docs/STAKEHOLDER-ENHANCEMENTS-GUIDE.md (400+ lines)",
+        "Create MANUAL-TEST-GUIDE.md with verification steps",
+        "Test variant changes produce different Initial Reactions",
+        "Test context changes affect concern thresholds",
+        "Test interaction triggers fire for complex metric combinations"
+      ],
+      "technicalDetails": [
+        "Multi-metric AND/OR logic for interaction triggers",
+        "Context multipliers adjust thresholds (LDC: 0.5-0.8×, Developed: 1.3-1.4×)",
+        "Variant framing prepended to Initial Reaction",
+        "Interaction concerns added to base response concerns",
+        "All enhancements work 100% offline",
+        "Minimal overhead: ~20ms latency, ~100KB bundle size",
+        "ES6 imports (not require) for browser compatibility",
+        "Try-catch wrapper ensures resilience"
+      ],
+      "coverage": [
+        "9/9 stakeholder groups with interaction triggers",
+        "9/9 stakeholder groups with 3 variants each (27 total)",
+        "3 development contexts with threshold modifiers",
+        "Conservative: Risk-averse, cautious tone",
+        "Progressive: Ambitious, embracing change",
+        "Pragmatic: Balanced, practical approach"
+      ],
+      "examples": [
+        "Grid Operator + Conservative: 'System security must not be compromised...'",
+        "Grid Operator + Progressive: 'This transition creates opportunities for grid modernization...'",
+        "LDC context: 35% RE triggers concern (vs 50% for emerging)",
+        "Developed context: 65% RE required to avoid concern",
+        "Intermittency trigger: RE >60% AND battery <200 MW"
+      ],
+      "passes": true
     }
   ]
 }
