@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { calculateSentimentChanges, type AdjustmentState, type SentimentChange } from '../../utils/sentiment-calculator';
+import { calculateSentimentChanges, type AdjustmentState } from '../../utils/sentiment-calculator';
 import { StakeholderIcon } from '../stakeholder/StakeholderIcon';
 import { stakeholderProfiles } from '../../data/stakeholder-profiles';
 

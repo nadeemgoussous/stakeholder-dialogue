@@ -26,55 +26,42 @@ export default function ExploreTab() {
   const baseValues = useMemo(() => {
     if (!scenario) return null;
 
-    const capacity = scenario.supply.capacity;
+    // Get milestone years from new schema
+    const milestoneYears = scenario.milestones.map(m => m.year);
 
-    // Calculate RE share for 2030
-    const totalCapacity2030 = Object.entries(capacity).reduce((sum, [tech, years]) => {
-      if (tech === 'interconnector') return sum; // Don't count interconnector
-      return sum + (years[2030] || 0);
-    }, 0);
+    // Find milestones closest to 2030 and 2040 for sliders
+    const milestone2030 = scenario.milestones.find(m => m.year === 2030) ||
+                          scenario.milestones.find(m => m.year >= 2030) ||
+                          scenario.milestones[Math.floor(scenario.milestones.length / 2)]; // midpoint if no 2030
 
-    const renewableCapacity2030 = (
-      (capacity.hydro[2030] || 0) +
-      (capacity.solarPV[2030] || 0) +
-      (capacity.wind[2030] || 0) +
-      (capacity.geothermal[2030] || 0) +
-      (capacity.biomass[2030] || 0)
-    );
+    const milestone2040 = scenario.milestones.find(m => m.year === 2040) ||
+                          scenario.milestones.find(m => m.year >= 2040) ||
+                          scenario.milestones[scenario.milestones.length - 1]; // last if no 2040
 
-    const reShare2030 = totalCapacity2030 > 0
-      ? Math.round((renewableCapacity2030 / totalCapacity2030) * 100)
-      : 0;
+    // Get RE share from milestones (already calculated)
+    const reShare2030 = milestone2030 ? Math.round(milestone2030.reShare) : 0;
+    const reShare2040 = milestone2040 ? Math.round(milestone2040.reShare) : 0;
 
-    // Calculate RE share for 2040
-    const totalCapacity2040 = Object.entries(capacity).reduce((sum, [tech, years]) => {
-      if (tech === 'interconnector') return sum;
-      return sum + (years[2040] || 0);
-    }, 0);
-
-    const renewableCapacity2040 = (
-      (capacity.hydro[2040] || 0) +
-      (capacity.solarPV[2040] || 0) +
-      (capacity.wind[2040] || 0) +
-      (capacity.geothermal[2040] || 0) +
-      (capacity.biomass[2040] || 0)
-    );
-
-    const reShare2040 = totalCapacity2040 > 0
-      ? Math.round((renewableCapacity2040 / totalCapacity2040) * 100)
-      : 0;
-
-    // Estimate coal phaseout year (year when coal capacity reaches near-zero)
+    // Estimate coal phaseout year based on fossil capacity decline
+    // In new schema, we only have aggregated fossil (coal + gas + diesel + HFO)
+    // So we estimate based on when fossil capacity becomes minimal
     const coalPhaseout = (() => {
-      const milestoneYears = scenario.milestoneYears;
+      // Look for significant drop in fossil capacity share
       for (let i = milestoneYears.length - 1; i >= 0; i--) {
-        const year = milestoneYears[i];
-        if ((capacity.coal[year] || 0) > 10) { // More than 10 MW = still significant
-          // Coal phased out sometime after this year
-          return year < 2050 ? year + 5 : 2050;
+        const milestone = scenario.milestones[i];
+        const totalCapacity = milestone.capacity.total.renewables +
+                             milestone.capacity.total.fossil +
+                             (milestone.capacity.total.storage || 0) +
+                             (milestone.capacity.total.other || 0);
+
+        const fossilShare = totalCapacity > 0 ? (milestone.capacity.total.fossil / totalCapacity) * 100 : 0;
+
+        // If fossil still >10% of capacity, coal likely still present
+        if (fossilShare > 10) {
+          return milestone.year < 2050 ? milestone.year + 5 : 2050;
         }
       }
-      // Coal already gone by first year
+      // Fossil minimal from first year
       return milestoneYears[0];
     })();
 
