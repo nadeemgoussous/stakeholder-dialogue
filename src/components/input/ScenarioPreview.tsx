@@ -1,5 +1,6 @@
 import { ScenarioInput } from '../../types/scenario';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { smartFormatPower, smartFormatEnergy, smartFormatMoney } from '../../utils/unit-conversions';
 
 interface ScenarioPreviewProps {
   scenario: ScenarioInput;
@@ -8,71 +9,35 @@ interface ScenarioPreviewProps {
 }
 
 export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }: ScenarioPreviewProps) {
-  // Calculate key metrics
-  const calculateREShare = (year: number): number => {
-    const capacity = scenario.supply.capacity;
-    const renewableCapacity =
-      (capacity.hydro[year] || 0) +
-      (capacity.solarPV[year] || 0) +
-      (capacity.wind[year] || 0) +
-      (capacity.geothermal[year] || 0) +
-      (capacity.biomass[year] || 0);
-
-    const totalCapacity =
-      renewableCapacity +
-      (capacity.coal[year] || 0) +
-      (capacity.naturalGas[year] || 0) +
-      (capacity.diesel[year] || 0) +
-      (capacity.hfo[year] || 0) +
-      (capacity.nuclear[year] || 0) +
-      (capacity.battery[year] || 0);
-
-    return totalCapacity > 0 ? (renewableCapacity / totalCapacity) * 100 : 0;
-  };
+  // Get total investment from last milestone
+  const lastMilestone = scenario.milestones[scenario.milestones.length - 1];
+  const totalInvestment = lastMilestone.investment.cumulative;
+  const investmentUnit = lastMilestone.investment.unit;
 
   // Calculate emissions reduction
   const calculateEmissionsReduction = (): number => {
-    const emissions = scenario.supply.emissions;
-    const years = Object.keys(emissions).map(Number).sort((a, b) => a - b);
-    if (years.length < 2) return 0;
+    if (scenario.milestones.length < 2) return 0;
 
-    const baseline = emissions[years[0]];
-    const target = emissions[years[years.length - 1]];
+    const firstEmissions = scenario.milestones[0].emissions.total;
+    const lastEmissions = lastMilestone.emissions.total;
 
-    return baseline > 0 ? ((baseline - target) / baseline) * 100 : 0;
+    return firstEmissions > 0 ? ((firstEmissions - lastEmissions) / firstEmissions) * 100 : 0;
   };
 
-  // Prepare data for capacity mix chart (2030 and 2040)
-  const prepareCapacityData = () => {
-    const capacity = scenario.supply.capacity;
-    const years = [2030, 2040];
+  const emissionsReduction = calculateEmissionsReduction();
 
-    return years.map(year => ({
-      year: year.toString(),
-      Hydro: capacity.hydro[year] || 0,
-      'Solar PV': capacity.solarPV[year] || 0,
-      Wind: capacity.wind[year] || 0,
-      Geothermal: capacity.geothermal[year] || 0,
-      Biomass: capacity.biomass[year] || 0,
-      Battery: capacity.battery[year] || 0,
-      Coal: capacity.coal[year] || 0,
-      'Natural Gas': capacity.naturalGas[year] || 0,
-      Diesel: capacity.diesel[year] || 0,
-      Nuclear: capacity.nuclear[year] || 0,
+  // Prepare data for capacity mix chart
+  const prepareCapacityData = () => {
+    return scenario.milestones.map(m => ({
+      year: m.year.toString(),
+      Renewables: m.capacity.total.renewables,
+      Fossil: m.capacity.total.fossil,
+      Storage: m.capacity.total.storage || 0,
+      Other: m.capacity.total.other || 0,
     }));
   };
 
   const capacityData = prepareCapacityData();
-  const reShare2030 = calculateREShare(2030);
-  const reShare2040 = calculateREShare(2040);
-  const emissionsReduction = calculateEmissionsReduction();
-
-  // Get total investment (cumulative 2050)
-  const totalInvestment = scenario.supply.investment.cumulative[2050] ||
-                          scenario.supply.investment.cumulative[2040] ||
-                          Object.values(scenario.supply.investment.cumulative)[
-                            Object.values(scenario.supply.investment.cumulative).length - 1
-                          ] || 0;
 
   return (
     <div className="card" data-testid="scenario-preview">
@@ -110,28 +75,23 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
           </p>
         </div>
 
-        {/* RE Share */}
-        <div className="bg-green-50 p-4 rounded-lg">
-          <p className="text-xs text-gray-600 mb-1">RE SHARE 2030</p>
-          <p className="font-bold text-2xl text-green-700" data-testid="preview-re-2030">
-            {reShare2030.toFixed(0)}%
-          </p>
-        </div>
-
-        <div className="bg-green-50 p-4 rounded-lg">
-          <p className="text-xs text-gray-600 mb-1">RE SHARE 2040</p>
-          <p className="font-bold text-2xl text-green-700" data-testid="preview-re-2040">
-            {reShare2040.toFixed(0)}%
-          </p>
-        </div>
+        {/* RE Share for Each Milestone */}
+        {scenario.milestones.slice(0, 3).map((milestone) => (
+          <div key={milestone.year} className="bg-green-50 p-4 rounded-lg">
+            <p className="text-xs text-gray-600 mb-1">RE SHARE {milestone.year}</p>
+            <p className="font-bold text-2xl text-green-700" data-testid={`preview-re-${milestone.year}`}>
+              {milestone.reShare.toFixed(1)}%
+            </p>
+          </div>
+        ))}
 
         {/* Investment */}
         <div className="bg-purple-50 p-4 rounded-lg">
           <p className="text-xs text-gray-600 mb-1">TOTAL INVESTMENT</p>
           <p className="font-bold text-2xl text-purple-700" data-testid="preview-investment">
-            ${(totalInvestment / 1000).toFixed(1)}B
+            {smartFormatMoney(totalInvestment, investmentUnit)}
           </p>
-          <p className="text-xs text-gray-500">Cumulative to 2050</p>
+          <p className="text-xs text-gray-500">Cumulative to {lastMilestone.year}</p>
         </div>
 
         {/* Emissions Reduction */}
@@ -140,39 +100,47 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
           <p className="font-bold text-2xl" style={{ color: 'var(--color-irena-orange)' }} data-testid="preview-emissions">
             {emissionsReduction > 0 ? `-${emissionsReduction.toFixed(0)}%` : 'N/A'}
           </p>
-          <p className="text-xs text-gray-500">From baseline to 2050</p>
+          <p className="text-xs text-gray-500">From {scenario.milestones[0].year} to {lastMilestone.year}</p>
         </div>
       </div>
 
       {/* Capacity Mix Chart */}
       <div className="mb-6">
         <h4 className="text-lg font-semibold mb-3" style={{ color: 'var(--color-irena-blue)' }}>
-          Capacity Mix by Technology
+          Capacity Mix by Technology Category
         </h4>
         <div className="bg-gray-50 p-4 rounded-lg" data-testid="capacity-mix-chart">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={capacityData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
-              <YAxis label={{ value: 'Capacity (MW)', angle: -90, position: 'insideLeft' }} />
+              <YAxis label={{ value: `Capacity (${scenario.milestones[0].capacity.unit})`, angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
-              {/* Renewable Technologies */}
-              <Bar dataKey="Hydro" stackId="a" fill="#1e88e5" />
-              <Bar dataKey="Solar PV" stackId="a" fill="#ffa726" />
-              <Bar dataKey="Wind" stackId="a" fill="#66bb6a" />
-              <Bar dataKey="Geothermal" stackId="a" fill="#ab47bc" />
-              <Bar dataKey="Biomass" stackId="a" fill="#8d6e63" />
-              <Bar dataKey="Battery" stackId="a" fill="#26c6da" />
-              {/* Fossil Technologies */}
-              <Bar dataKey="Coal" stackId="a" fill="#424242" />
-              <Bar dataKey="Natural Gas" stackId="a" fill="#78909c" />
-              <Bar dataKey="Diesel" stackId="a" fill="#bdbdbd" />
-              <Bar dataKey="Nuclear" stackId="a" fill="#ff7043" />
+              <Bar dataKey="Renewables" stackId="a" fill="#66bb6a" />
+              <Bar dataKey="Fossil" stackId="a" fill="#424242" />
+              <Bar dataKey="Storage" stackId="a" fill="#26c6da" />
+              <Bar dataKey="Other" stackId="a" fill="#ff7043" />
             </BarChart>
           </ResponsiveContainer>
         </div>
+        <div className="mt-2 text-xs text-gray-500 text-center">
+          Milestone years: {scenario.milestones.map(m => m.year).join(', ')}
+        </div>
       </div>
+
+      {/* Detailed Tech Info (if available) */}
+      {scenario.detailedTech && (
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="text-sm font-semibold mb-2 text-gray-700">
+            ℹ️ Detailed Technology Data Available
+          </h4>
+          <p className="text-xs text-gray-600">
+            This scenario includes detailed technology breakdowns for:{' '}
+            {Object.keys(scenario.detailedTech).join(', ')}
+          </p>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-4">

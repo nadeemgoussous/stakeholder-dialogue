@@ -3,8 +3,9 @@ import { useScenario } from '../../context/ScenarioContext';
 import { ScenarioInput } from '../../types/scenario';
 import QuickEntryForm from './QuickEntryForm';
 import ScenarioPreview from './ScenarioPreview';
+import CSVUploader from './CSVUploader';
 
-type InputMethod = 'example' | 'paste' | 'quick' | null;
+type InputMethod = 'example' | 'paste' | 'quick' | 'csv' | null;
 
 interface InputTabProps {
   onProceedToDialogue?: () => void;
@@ -46,6 +47,11 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
     setError(null);
   };
 
+  const handleCSVUpload = () => {
+    setSelectedMethod('csv');
+    setError(null);
+  };
+
   const handleLoadDifferent = () => {
     clearScenario();
     setSelectedMethod(null);
@@ -67,8 +73,8 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         </p>
       </div>
 
-      {/* Three Input Options */}
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
+      {/* Four Input Options */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Option 1: Load Example */}
         <button
           onClick={handleLoadExample}
@@ -123,12 +129,33 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
           </div>
           <h3 className="text-xl font-semibold mb-2">Quick Entry</h3>
           <p className="text-gray-600 text-sm mb-4">
-            Enter 15 essential metrics manually
+            Enter 7-10 essential metrics manually
           </p>
           <div className="text-xs text-gray-500">
             ✓ Fast manual entry<br />
-            ✓ 15 key fields only<br />
+            ✓ Simplified fields<br />
             ✓ Validation included
+          </div>
+        </button>
+
+        {/* Option 4: Upload CSV */}
+        <button
+          onClick={handleCSVUpload}
+          disabled={loading}
+          className="card text-left hover:shadow-lg transition-shadow duration-200 border-2 border-transparent hover:border-purple-500"
+          data-testid="csv-upload-button"
+        >
+          <div className="text-4xl mb-3 text-purple-600">
+            📄
+          </div>
+          <h3 className="text-xl font-semibold mb-2">Upload CSV</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            Import from SPLAT, MESSAGE, or other models
+          </p>
+          <div className="text-xs text-gray-500">
+            ✓ Auto-detect format<br />
+            ✓ Flexible milestones<br />
+            ✓ Technology mapping
           </div>
         </button>
       </div>
@@ -188,6 +215,13 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         <QuickEntryForm
           onCancel={() => setSelectedMethod(null)}
           onSubmit={() => setSelectedMethod(null)}
+        />
+      )}
+
+      {selectedMethod === 'csv' && (
+        <CSVUploader
+          onCancel={() => setSelectedMethod(null)}
+          onSuccess={() => setSelectedMethod(null)}
         />
       )}
     </div>
