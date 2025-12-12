@@ -217,22 +217,27 @@ function findMatchingTemplate(
   scenario: ScenarioInput,
   templates: ResponseTemplate[]
 ): ResponseTemplate | null {
+  // Get final milestone for long-term investment check
+  const finalMilestone = scenario.milestones[scenario.milestones.length - 1];
+  if (!finalMilestone) return null;
+
   // Simple condition matching - can be expanded
   for (const template of templates) {
     if (template.condition === 'highInvestment') {
-      const totalInvestment = scenario.supply.investment.cumulative[2050];
+      const totalInvestment = finalMilestone.investment.cumulative;
       if (totalInvestment && totalInvestment > 5000) return template;
     }
     if (template.condition === 'lowInvestment') {
-      const totalInvestment = scenario.supply.investment.cumulative[2050];
+      const totalInvestment = finalMilestone.investment.cumulative;
       if (totalInvestment && totalInvestment < 1000) return template;
     }
     if (template.condition === 'highRenewable') {
-      // Would need to calculate RE share from capacity - skip for now
-      // Will be available in derived metrics
+      // Use RE share from milestone
+      if (finalMilestone.reShare > 70) return template;
     }
     if (template.condition === 'highFossil') {
-      // Similar - would use derived metrics
+      // Use RE share to infer fossil dependence
+      if (finalMilestone.reShare < 30) return template;
     }
   }
   return null;
@@ -411,6 +416,7 @@ export function generateEnhancedResponse(
 
 /**
  * Build flat indicator object for interaction trigger evaluation
+ * Updated for simplified milestone-based schema
  */
 function buildScenarioIndicators(
   scenario: ScenarioInput,
@@ -418,69 +424,80 @@ function buildScenarioIndicators(
 ): Record<string, number> {
   const indicators: Record<string, number> = {};
 
-  // Add renewable share for key years
-  if (derivedMetrics.renewableShare) {
-    for (const [year, value] of Object.entries(derivedMetrics.renewableShare)) {
-      indicators[`renewableShare.${year}`] = value;
+  // Loop through each milestone and add indicators
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
+
+    // Add renewable share (from milestone or derived metrics)
+    indicators[`renewableShare.${year}`] = milestone.reShare;
+
+    // Add emissions data
+    indicators[`emissions.${year}`] = milestone.emissions.total;
+
+    // Add emissions reduction percent (from derived metrics)
+    if (derivedMetrics.emissions?.reductionPercent?.[year]) {
+      indicators[`emissions.reductionPercent${year}`] = derivedMetrics.emissions.reductionPercent[year];
+    }
+
+    // Add investment data
+    indicators[`investment.cumulative.${year}`] = milestone.investment.cumulative;
+
+    // Add capacity data for aggregated categories
+    indicators[`supply.capacity.renewables.${year}`] = milestone.capacity.total.renewables;
+    indicators[`supply.capacity.fossil.${year}`] = milestone.capacity.total.fossil;
+    if (milestone.capacity.total.storage !== undefined) {
+      indicators[`supply.capacity.battery.${year}`] = milestone.capacity.total.storage;
+      indicators[`supply.capacity.storage.${year}`] = milestone.capacity.total.storage;
+    }
+    if (milestone.capacity.total.other !== undefined) {
+      indicators[`supply.capacity.other.${year}`] = milestone.capacity.total.other;
+    }
+
+    // Add total capacity
+    const totalCapacity = milestone.capacity.total.renewables +
+                          milestone.capacity.total.fossil +
+                          (milestone.capacity.total.storage || 0) +
+                          (milestone.capacity.total.other || 0);
+    indicators[`supply.capacity.total.${year}`] = totalCapacity;
+
+    // Add generation data
+    indicators[`supply.generation.renewables.${year}`] = milestone.generation.output.renewables;
+    indicators[`supply.generation.fossil.${year}`] = milestone.generation.output.fossil;
+
+    // Add peak demand
+    indicators[`demand.peak.${year}`] = milestone.peakDemand.value;
+
+    // Add optional advanced fields if present
+    if (milestone.capacityAdditions) {
+      indicators[`capacityAdditions.renewables.${year}`] = milestone.capacityAdditions.additions.renewables;
+      indicators[`capacityAdditions.fossil.${year}`] = milestone.capacityAdditions.additions.fossil;
+    }
+
+    if (milestone.curtailment) {
+      indicators[`curtailment.${year}`] = milestone.curtailment.value;
+    }
+
+    if (milestone.annualOMCosts) {
+      indicators[`om.annual.${year}`] = milestone.annualOMCosts.value;
+    }
+
+    if (milestone.imports) {
+      indicators[`imports.${year}`] = milestone.imports.value;
     }
   }
 
-  // Add emissions data
-  if (scenario.supply.emissions) {
-    for (const [year, value] of Object.entries(scenario.supply.emissions)) {
-      indicators[`emissions.${year}`] = value;
-    }
-  }
-
-  // Add emissions reduction percent
-  if (derivedMetrics.emissions?.reductionPercent) {
-    for (const [year, value] of Object.entries(derivedMetrics.emissions.reductionPercent)) {
-      indicators[`emissions.reductionPercent${year}`] = value;
-    }
-  }
-
-  // Add investment data
-  if (scenario.supply.investment?.cumulative) {
-    for (const [year, value] of Object.entries(scenario.supply.investment.cumulative)) {
-      indicators[`investment.cumulative.${year}`] = value;
-    }
-  }
-
-  // Add capacity data for key technologies
-  const technologies = ['coal', 'gas', 'solarPV', 'wind', 'hydro', 'battery', 'interconnector'];
-  for (const tech of technologies) {
-    const capacity = scenario.supply.capacity[tech as keyof typeof scenario.supply.capacity];
-    if (capacity && typeof capacity === 'object') {
-      for (const [year, value] of Object.entries(capacity)) {
-        if (typeof value === 'number') {
-          indicators[`supply.capacity.${tech}.${year}`] = value;
-        }
-      }
-    }
-  }
-
-  // Add total capacity
-  if (derivedMetrics.capacity?.totalInstalled) {
-    for (const [year, value] of Object.entries(derivedMetrics.capacity.totalInstalled)) {
-      indicators[`supply.capacity.total.${year}`] = value;
-    }
-  }
-
-  // Add jobs data
+  // Add jobs data from derived metrics (still calculated externally)
   if (derivedMetrics.jobs) {
-    // Add total jobs by year
     if (derivedMetrics.jobs.total) {
       for (const [year, value] of Object.entries(derivedMetrics.jobs.total)) {
         indicators[`jobs.total.${year}`] = value;
       }
     }
-    // Add construction jobs by year
     if (derivedMetrics.jobs.construction) {
       for (const [year, value] of Object.entries(derivedMetrics.jobs.construction)) {
         indicators[`jobs.construction.${year}`] = value;
       }
     }
-    // Add operations jobs by year
     if (derivedMetrics.jobs.operations) {
       for (const [year, value] of Object.entries(derivedMetrics.jobs.operations)) {
         indicators[`jobs.operations.${year}`] = value;
@@ -488,7 +505,7 @@ function buildScenarioIndicators(
     }
   }
 
-  // Add land use data
+  // Add land use data from derived metrics (still calculated externally)
   if (derivedMetrics.landUse?.totalNewLand) {
     for (const [year, value] of Object.entries(derivedMetrics.landUse.totalNewLand)) {
       indicators[`land.total.${year}`] = value;
