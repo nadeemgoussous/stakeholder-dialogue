@@ -1,32 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
-import { ScenarioInput } from '../../types/scenario';
-
-interface QuickScenarioInput {
-  country: string;
-  scenarioName: string;
-
-  // Capacity 2030 (MW)
-  renewableCapacity2030: number;
-  fossilCapacity2030: number;
-  batteryCapacity2030: number;
-
-  // Capacity 2040 (MW)
-  renewableCapacity2040: number;
-  fossilCapacity2040: number;
-  batteryCapacity2040: number;
-
-  // Key metrics
-  totalInvestment2030: number;      // USD millions cumulative
-  totalInvestment2050: number;
-  emissions2025: number;            // Mt CO2
-  emissions2030: number;
-  emissions2050: number;
-
-  // Demand
-  peakDemand2030: number;           // MW
-  peakDemand2040: number;
-}
+import { QuickScenarioInput } from '../../types/scenario';
+import { convertQuickEntryToFullScenario } from '../../utils/quick-entry-converter';
 
 // Global country list for dropdown
 const COUNTRIES = [
@@ -278,7 +253,7 @@ export default function QuickEntryForm({ onCancel, onSubmit }: QuickEntryFormPro
       return;
     }
 
-    const fullScenario = convertToFullScenario(formData);
+    const fullScenario = convertQuickEntryToFullScenario(formData);
     loadScenario(fullScenario);
     // Notify parent that form was submitted successfully
     if (onSubmit) {
