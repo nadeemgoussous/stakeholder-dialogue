@@ -5,40 +5,122 @@
 import type { ScenarioInput } from '../types/scenario';
 import type { DerivedMetrics } from '../types/derived-metrics';
 import { getJobFactor, getLandFactor, getEmissionFactor } from '../data/technology-factors';
+import { normalizeCapacity, normalizeGeneration } from './unit-conversions';
+
+/**
+ * Estimate technology breakdown from aggregated renewables capacity
+ * Uses typical distribution if detailed tech data not available
+ */
+function estimateRenewableMix(totalRenewablesMW: number): {
+  hydro: number;
+  solarPV: number;
+  wind: number;
+  geothermal: number;
+  biomass: number;
+} {
+  // Typical distribution based on global averages
+  // Users can override by providing detailedTech data
+  return {
+    hydro: totalRenewablesMW * 0.40,      // 40% hydro (base load)
+    solarPV: totalRenewablesMW * 0.30,    // 30% solar
+    wind: totalRenewablesMW * 0.20,       // 20% wind
+    geothermal: totalRenewablesMW * 0.05, // 5% geothermal
+    biomass: totalRenewablesMW * 0.05     // 5% biomass
+  };
+}
+
+/**
+ * Estimate technology breakdown from aggregated fossil capacity
+ */
+function estimateFossilMix(totalFossilMW: number): {
+  coal: number;
+  naturalGas: number;
+  diesel: number;
+  hfo: number;
+} {
+  // Typical distribution
+  return {
+    coal: totalFossilMW * 0.20,       // 20% coal
+    naturalGas: totalFossilMW * 0.50, // 50% natural gas (efficient)
+    diesel: totalFossilMW * 0.15,     // 15% diesel (peaking)
+    hfo: totalFossilMW * 0.15         // 15% HFO (base load)
+  };
+}
 
 /**
  * Calculate employment impacts (construction and operations)
  * Uses IRENA job factor studies
  */
 export function calculateJobs(scenario: ScenarioInput): DerivedMetrics['jobs'] {
-  const { capacity } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const jobs = {
     construction: {} as Record<number, number>,
     operations: {} as Record<number, number>,
     total: {} as Record<number, number>
   };
 
-  for (const year of milestoneYears) {
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
     let constructionJobs = 0;
     let operationsJobs = 0;
 
-    // Calculate construction jobs from NEW capacity in this year
-    // For simplicity, we assume all capacity in year X was built leading up to year X
-    const technologies = [
-      'hydro', 'solarPV', 'wind', 'battery', 'geothermal', 'biomass',
-      'coal', 'diesel', 'hfo', 'naturalGas', 'nuclear', 'interconnector'
-    ] as const;
+    // Normalize capacity to MW
+    const renewablesMW = normalizeCapacity(milestone.capacity.total.renewables, milestone.capacity.unit);
+    const fossilMW = normalizeCapacity(milestone.capacity.total.fossil, milestone.capacity.unit);
+    const storageMW = normalizeCapacity(milestone.capacity.total.storage || 0, milestone.capacity.unit);
+    const otherMW = normalizeCapacity(milestone.capacity.total.other || 0, milestone.capacity.unit);
 
-    for (const tech of technologies) {
-      const capacityMW = capacity[tech]?.[year] || 0;
+    // Use detailed tech data if available, otherwise estimate
+    const detailedForYear = scenario.detailedTech?.[year];
 
-      // Construction jobs (job-years per MW)
-      constructionJobs += capacityMW * getJobFactor(tech, 'construction');
+    if (detailedForYear) {
+      // Use actual technology breakdown
+      const techList = [
+        'hydro', 'solarPV', 'wind', 'geothermal', 'biomass',
+        'coal', 'naturalGas', 'diesel', 'hfo',
+        'battery', 'nuclear', 'interconnector'
+      ] as const;
 
-      // Operations jobs (permanent jobs per MW)
-      operationsJobs += capacityMW * getJobFactor(tech, 'operations');
+      for (const tech of techList) {
+        const capacityMW = detailedForYear[tech] || 0;
+        constructionJobs += capacityMW * getJobFactor(tech, 'construction');
+        operationsJobs += capacityMW * getJobFactor(tech, 'operations');
+      }
+    } else {
+      // Estimate from aggregated categories
+      const reMix = estimateRenewableMix(renewablesMW);
+      const fossilMix = estimateFossilMix(fossilMW);
+
+      // Renewables
+      constructionJobs += reMix.hydro * getJobFactor('hydro', 'construction');
+      constructionJobs += reMix.solarPV * getJobFactor('solarPV', 'construction');
+      constructionJobs += reMix.wind * getJobFactor('wind', 'construction');
+      constructionJobs += reMix.geothermal * getJobFactor('geothermal', 'construction');
+      constructionJobs += reMix.biomass * getJobFactor('biomass', 'construction');
+
+      operationsJobs += reMix.hydro * getJobFactor('hydro', 'operations');
+      operationsJobs += reMix.solarPV * getJobFactor('solarPV', 'operations');
+      operationsJobs += reMix.wind * getJobFactor('wind', 'operations');
+      operationsJobs += reMix.geothermal * getJobFactor('geothermal', 'operations');
+      operationsJobs += reMix.biomass * getJobFactor('biomass', 'operations');
+
+      // Fossil
+      constructionJobs += fossilMix.coal * getJobFactor('coal', 'construction');
+      constructionJobs += fossilMix.naturalGas * getJobFactor('naturalGas', 'construction');
+      constructionJobs += fossilMix.diesel * getJobFactor('diesel', 'construction');
+      constructionJobs += fossilMix.hfo * getJobFactor('hfo', 'construction');
+
+      operationsJobs += fossilMix.coal * getJobFactor('coal', 'operations');
+      operationsJobs += fossilMix.naturalGas * getJobFactor('naturalGas', 'operations');
+      operationsJobs += fossilMix.diesel * getJobFactor('diesel', 'operations');
+      operationsJobs += fossilMix.hfo * getJobFactor('hfo', 'operations');
+
+      // Storage (treat all as battery for job factors)
+      constructionJobs += storageMW * getJobFactor('battery', 'construction');
+      operationsJobs += storageMW * getJobFactor('battery', 'operations');
+
+      // Other (treat as nuclear for conservative estimate)
+      constructionJobs += otherMW * getJobFactor('nuclear', 'construction');
+      operationsJobs += otherMW * getJobFactor('nuclear', 'operations');
     }
 
     jobs.construction[year] = Math.round(constructionJobs);
@@ -54,9 +136,6 @@ export function calculateJobs(scenario: ScenarioInput): DerivedMetrics['jobs'] {
  * Only for solar PV, wind, and battery (other technologies too site-specific)
  */
 export function calculateLandUse(scenario: ScenarioInput): DerivedMetrics['landUse'] {
-  const { capacity } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const landUse = {
     totalNewLand: {} as Record<number, number>,
     byTechnology: {
@@ -66,10 +145,30 @@ export function calculateLandUse(scenario: ScenarioInput): DerivedMetrics['landU
     }
   };
 
-  for (const year of milestoneYears) {
-    const solarMW = capacity.solarPV?.[year] || 0;
-    const windMW = capacity.wind?.[year] || 0;
-    const batteryMW = capacity.battery?.[year] || 0;
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
+
+    // Normalize to MW
+    const renewablesMW = normalizeCapacity(milestone.capacity.total.renewables, milestone.capacity.unit);
+    const storageMW = normalizeCapacity(milestone.capacity.total.storage || 0, milestone.capacity.unit);
+
+    // Use detailed tech data if available
+    const detailedForYear = scenario.detailedTech?.[year];
+
+    let solarMW = 0;
+    let windMW = 0;
+    let batteryMW = storageMW;
+
+    if (detailedForYear) {
+      solarMW = detailedForYear.solarPV || 0;
+      windMW = detailedForYear.wind || 0;
+      batteryMW = detailedForYear.battery || storageMW;
+    } else {
+      // Estimate from renewables mix
+      const reMix = estimateRenewableMix(renewablesMW);
+      solarMW = reMix.solarPV;
+      windMW = reMix.wind;
+    }
 
     const solarLand = solarMW * getLandFactor('solarPV');
     const windLand = windMW * getLandFactor('wind');
@@ -90,40 +189,25 @@ export function calculateLandUse(scenario: ScenarioInput): DerivedMetrics['landU
  * Returns absolute emissions and reduction percentages
  */
 export function calculateEmissions(scenario: ScenarioInput): DerivedMetrics['emissions'] {
-  const { generation, emissions: scenarioEmissions } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const emissions = {
     absolute: {} as Record<number, number>,
     reductionPercent: {} as Record<number, number>
   };
 
-  // If the scenario provides emissions directly, use those (preferred)
-  if (scenarioEmissions && Object.keys(scenarioEmissions).length > 0) {
-    for (const year of milestoneYears) {
-      emissions.absolute[year] = scenarioEmissions[year] || 0;
-    }
-  } else {
-    // Otherwise estimate from generation using emission factors
-    for (const year of milestoneYears) {
-      let totalEmissions = 0;
+  // Use emissions data directly from milestones (preferred - comes from model)
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
 
-      const fossilTechs = ['coal', 'naturalGas', 'gas', 'diesel', 'hfo'];
-      for (const tech of fossilTechs) {
-        const generationGWh = generation[tech]?.[year] || 0;
-        const emissionFactor = getEmissionFactor(tech);
-        totalEmissions += (generationGWh * emissionFactor) / 1000; // Convert tCO2 to Mt CO2
-      }
-
-      emissions.absolute[year] = Math.round(totalEmissions * 100) / 100; // Round to 2 decimals
-    }
+    // Emissions already in Mt CO2 in the milestone data
+    emissions.absolute[year] = milestone.emissions.total;
   }
 
-  // Calculate reduction percentage vs baseline (first year)
-  const baselineYear = milestoneYears[0];
+  // Calculate reduction percentage vs baseline (first milestone)
+  const baselineYear = scenario.milestones[0].year;
   const baselineEmissions = emissions.absolute[baselineYear] || 0;
 
-  for (const year of milestoneYears) {
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
     if (baselineEmissions > 0) {
       const reduction = ((baselineEmissions - emissions.absolute[year]) / baselineEmissions) * 100;
       emissions.reductionPercent[year] = Math.round(reduction * 10) / 10; // Round to 1 decimal
@@ -142,44 +226,26 @@ export function calculateEnergyShares(scenario: ScenarioInput): {
   renewableShare: Record<number, number>;
   fossilShare: Record<number, number>;
 } {
-  const { capacity } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const renewableShare = {} as Record<number, number>;
   const fossilShare = {} as Record<number, number>;
 
-  const renewableTechs = ['hydro', 'solarPV', 'wind', 'geothermal', 'biomass'];
-  const fossilTechs = ['coal', 'naturalGas', 'diesel', 'hfo'];
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
 
-  for (const year of milestoneYears) {
-    let totalRenewable = 0;
-    let totalFossil = 0;
-    let totalCapacity = 0;
+    // RE share is already calculated in the milestone
+    renewableShare[year] = Math.round(milestone.reShare * 10) / 10; // Round to 1 decimal
 
-    // Sum renewable capacity
-    for (const tech of renewableTechs) {
-      const cap = capacity[tech as keyof typeof capacity]?.[year] || 0;
-      totalRenewable += cap;
-      totalCapacity += cap;
-    }
+    // Calculate fossil share from capacity
+    const renewablesMW = normalizeCapacity(milestone.capacity.total.renewables, milestone.capacity.unit);
+    const fossilMW = normalizeCapacity(milestone.capacity.total.fossil, milestone.capacity.unit);
+    const storageMW = normalizeCapacity(milestone.capacity.total.storage || 0, milestone.capacity.unit);
+    const otherMW = normalizeCapacity(milestone.capacity.total.other || 0, milestone.capacity.unit);
 
-    // Sum fossil capacity
-    for (const tech of fossilTechs) {
-      const cap = capacity[tech as keyof typeof capacity]?.[year] || 0;
-      totalFossil += cap;
-      totalCapacity += cap;
-    }
-
-    // Also include other technologies in total
-    totalCapacity += capacity.battery?.[year] || 0;
-    totalCapacity += capacity.nuclear?.[year] || 0;
-    totalCapacity += capacity.interconnector?.[year] || 0;
+    const totalCapacity = renewablesMW + fossilMW + storageMW + otherMW;
 
     if (totalCapacity > 0) {
-      renewableShare[year] = Math.round((totalRenewable / totalCapacity) * 1000) / 10; // Round to 1 decimal
-      fossilShare[year] = Math.round((totalFossil / totalCapacity) * 1000) / 10;
+      fossilShare[year] = Math.round((fossilMW / totalCapacity) * 1000) / 10;
     } else {
-      renewableShare[year] = 0;
       fossilShare[year] = 0;
     }
   }
@@ -191,34 +257,33 @@ export function calculateEnergyShares(scenario: ScenarioInput): {
  * Calculate capacity metrics
  */
 export function calculateCapacityMetrics(scenario: ScenarioInput): DerivedMetrics['capacity'] {
-  const { capacity } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const capacityMetrics = {
     totalInstalled: {} as Record<number, number>,
     variableRenewableShare: {} as Record<number, number>
   };
 
-  for (const year of milestoneYears) {
-    let totalCapacity = 0;
-    let vreCapacity = 0;
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
 
-    const allTechs = [
-      'hydro', 'solarPV', 'wind', 'battery', 'geothermal', 'biomass',
-      'coal', 'diesel', 'hfo', 'naturalGas', 'nuclear', 'interconnector'
-    ] as const;
+    // Normalize all to MW
+    const renewablesMW = normalizeCapacity(milestone.capacity.total.renewables, milestone.capacity.unit);
+    const fossilMW = normalizeCapacity(milestone.capacity.total.fossil, milestone.capacity.unit);
+    const storageMW = normalizeCapacity(milestone.capacity.total.storage || 0, milestone.capacity.unit);
+    const otherMW = normalizeCapacity(milestone.capacity.total.other || 0, milestone.capacity.unit);
 
-    for (const tech of allTechs) {
-      const cap = capacity[tech]?.[year] || 0;
-      totalCapacity += cap;
-
-      // VRE = solar + wind
-      if (tech === 'solarPV' || tech === 'wind') {
-        vreCapacity += cap;
-      }
-    }
-
+    const totalCapacity = renewablesMW + fossilMW + storageMW + otherMW;
     capacityMetrics.totalInstalled[year] = Math.round(totalCapacity);
+
+    // VRE = solar + wind (estimate from renewables if detailed not available)
+    let vreCapacity = 0;
+    const detailedForYear = scenario.detailedTech?.[year];
+
+    if (detailedForYear) {
+      vreCapacity = (detailedForYear.solarPV || 0) + (detailedForYear.wind || 0);
+    } else {
+      // Estimate: solar + wind is about 50% of total renewables (typical)
+      vreCapacity = renewablesMW * 0.50;
+    }
 
     if (totalCapacity > 0) {
       capacityMetrics.variableRenewableShare[year] = Math.round((vreCapacity / totalCapacity) * 1000) / 10;
@@ -234,22 +299,33 @@ export function calculateCapacityMetrics(scenario: ScenarioInput): DerivedMetric
  * Calculate investment metrics
  */
 export function calculateInvestmentMetrics(scenario: ScenarioInput): DerivedMetrics['investment'] {
-  const { investment } = scenario.supply;
-  const { milestoneYears } = scenario;
-
   const investmentMetrics = {
     totalCumulative: {} as Record<number, number>,
     annualPeak: 0,
     averageAnnual: 0
   };
 
-  // Cumulative investment
-  for (const year of milestoneYears) {
-    investmentMetrics.totalCumulative[year] = investment.cumulative?.[year] || 0;
+  // Cumulative investment from milestones
+  for (const milestone of scenario.milestones) {
+    const year = milestone.year;
+    investmentMetrics.totalCumulative[year] = milestone.investment.cumulative;
   }
 
-  // Find annual peak from annual investment data
-  const annualInvestments = Object.values(investment.annual || {});
+  // Estimate annual peak and average from capacity additions (if available)
+  const annualInvestments: number[] = [];
+
+  for (const milestone of scenario.milestones) {
+    if (milestone.capacityAdditions) {
+      // Rough estimate: assume $1.5M per MW for renewables, $1M for fossil
+      const reAdditions = normalizeCapacity(milestone.capacityAdditions.additions.renewables, milestone.capacityAdditions.unit);
+      const fossilAdditions = normalizeCapacity(milestone.capacityAdditions.additions.fossil, milestone.capacityAdditions.unit);
+      const storageAdditions = normalizeCapacity(milestone.capacityAdditions.additions.storage || 0, milestone.capacityAdditions.unit);
+
+      const annualInv = (reAdditions * 1.5) + (fossilAdditions * 1.0) + (storageAdditions * 2.0);
+      annualInvestments.push(annualInv);
+    }
+  }
+
   if (annualInvestments.length > 0) {
     investmentMetrics.annualPeak = Math.max(...annualInvestments);
     investmentMetrics.averageAnnual = Math.round(
