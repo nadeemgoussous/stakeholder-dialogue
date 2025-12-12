@@ -1,6 +1,6 @@
 import { ScenarioInput } from '../../types/scenario';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { smartFormatPower, smartFormatEnergy, smartFormatMoney } from '../../utils/unit-conversions';
+import { smartFormatMoney } from '../../utils/unit-conversions';
 
 interface ScenarioPreviewProps {
   scenario: ScenarioInput;
