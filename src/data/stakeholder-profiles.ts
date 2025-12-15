@@ -17,7 +17,7 @@ import type { StakeholderProfile } from '../types/stakeholder';
 export const policyMakers: StakeholderProfile = {
   id: 'policy-makers',
   name: 'Policy Makers & Regulators',
-  icon: '/icons/policy-makers.svg',
+  icon: 'icons/policy-makers.svg',
   color: '#c94f4f',
 
   description: 'Government officials responsible for laws, policies and regulations across energy, transport, industry, environment, and climate-focused departments.',
@@ -117,7 +117,7 @@ export const policyMakers: StakeholderProfile = {
 export const gridOperators: StakeholderProfile = {
   id: 'grid-operators',
   name: 'Grid Operators',
-  icon: '/icons/grid-operators.svg',
+  icon: 'icons/grid-operators.svg',
   color: '#4a90a4',
 
   description: 'Entities responsible for operating and developing power networks (transmission and distribution).',
@@ -198,7 +198,7 @@ export const gridOperators: StakeholderProfile = {
 export const industry: StakeholderProfile = {
   id: 'industry',
   name: 'Industry & Business',
-  icon: '/icons/industry.svg',
+  icon: 'icons/industry.svg',
   color: '#7b8a3e',
 
   description: 'Energy-intensive industries, manufacturers, SMEs, renewable energy developers, and energy service providers.',
@@ -272,7 +272,7 @@ export const industry: StakeholderProfile = {
 export const publicCommunities: StakeholderProfile = {
   id: 'public',
   name: 'Public & Communities',
-  icon: '/icons/public.svg',
+  icon: 'icons/public.svg',
   color: '#e8a54b',
 
   description: 'General public, local communities affected by infrastructure, indigenous communities, and vulnerable households.',
@@ -346,7 +346,7 @@ export const publicCommunities: StakeholderProfile = {
 export const csosNgos: StakeholderProfile = {
   id: 'csos-ngos',
   name: 'CSOs & NGOs',
-  icon: '/icons/csos-ngos.svg',
+  icon: 'icons/csos-ngos.svg',
   color: '#6b4c9a',
 
   description: 'Trade unions, environmental groups, humanitarian organizations, charities, and think tanks working on energy, climate, and development.',
@@ -428,7 +428,7 @@ export const csosNgos: StakeholderProfile = {
 export const scientificInstitutions: StakeholderProfile = {
   id: 'scientific',
   name: 'Scientific Institutions',
-  icon: '/icons/scientific.svg',
+  icon: 'icons/scientific.svg',
   color: '#3d7ea6',
 
   description: 'Universities, research institutions, energy experts, economists, and social scientists.',
@@ -496,7 +496,7 @@ export const scientificInstitutions: StakeholderProfile = {
 export const financialInstitutions: StakeholderProfile = {
   id: 'finance',
   name: 'Financial Institutions',
-  icon: '/icons/finance.svg',
+  icon: 'icons/finance.svg',
   color: '#2e5a3a',
 
   description: 'Banks, DFIs, MDBs, climate funds, private equity, and institutional investors.',
@@ -565,7 +565,7 @@ export const financialInstitutions: StakeholderProfile = {
 export const regionalBodies: StakeholderProfile = {
   id: 'regional-bodies',
   name: 'Regional Bodies',
-  icon: '/icons/regional-bodies.svg',
+  icon: 'icons/regional-bodies.svg',
   color: '#1a5276',
 
   description: 'Regional power pools, economic communities, regional development banks, and integration bodies coordinating cross-border energy cooperation.',
@@ -639,7 +639,7 @@ export const regionalBodies: StakeholderProfile = {
 export const developmentPartners: StakeholderProfile = {
   id: 'development-partners',
   name: 'Development Partners',
-  icon: '/icons/development-partners.svg',
+  icon: 'icons/development-partners.svg',
   color: '#117a65',
 
   description: 'Bilateral agencies, multilateral development banks, climate funds, and technical assistance providers supporting energy transitions.',

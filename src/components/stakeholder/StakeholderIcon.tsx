@@ -23,7 +23,7 @@ export const StakeholderIcon: React.FC<StakeholderIconProps> = ({
   };
 
   // Map stakeholder IDs to icon file names
-  const iconPath = `/icons/${stakeholder.id}.${stakeholder.id === 'regional-bodies' || stakeholder.id === 'development-partners' ? 'svg' : 'png'}`;
+  const iconPath = `${import.meta.env.BASE_URL}icons/${stakeholder.id}.${stakeholder.id === 'regional-bodies' || stakeholder.id === 'development-partners' ? 'svg' : 'png'}`;
 
   return (
     <div
