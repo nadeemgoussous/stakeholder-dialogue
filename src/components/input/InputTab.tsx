@@ -23,7 +23,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
     setSelectedMethod(null); // Clear any selected method to show preview
     try {
       // Load the Rwanda baseline scenario (bundled with the app - works offline)
-      const response = await fetch('/sample-data/rwanda-baseline.json');
+      const response = await fetch(`${import.meta.env.BASE_URL}sample-data/rwanda-baseline.json`);
       if (!response.ok) {
         throw new Error('Failed to load example scenario');
       }
