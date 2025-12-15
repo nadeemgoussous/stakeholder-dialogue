@@ -89,7 +89,7 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
         <div className="bg-purple-50 p-4 rounded-lg">
           <p className="text-xs text-gray-600 mb-1">TOTAL INVESTMENT</p>
           <p className="font-bold text-2xl text-purple-700" data-testid="preview-investment">
-            {smartFormatMoney(totalInvestment, investmentUnit)}
+            {smartFormatMoney(totalInvestment)}
           </p>
           <p className="text-xs text-gray-500">Cumulative to {lastMilestone.year}</p>
         </div>

@@ -4,7 +4,7 @@
 
 import type { ScenarioInput } from '../types/scenario';
 import type { DerivedMetrics } from '../types/derived-metrics';
-import { getJobFactor, getLandFactor, getEmissionFactor } from '../data/technology-factors';
+import { getJobFactor, getLandFactor } from '../data/technology-factors';
 import { normalizeCapacity, normalizeGeneration } from './unit-conversions';
 
 /**

@@ -20,16 +20,14 @@ import type {
   InteractionTrigger,
   DevelopmentContext,
   ContextProfile,
-  ExpandedResponseTemplate,
   StakeholderVariant,
   VariantProfile,
-  ThresholdModifier,
-  PriorityShift,
-  ConditionalSupport,
-  BroaderContext,
-  NextStep,
-  QuantitativeAnchor,
 } from '../types/stakeholder';
+
+// NOTE: These types are defined but not yet implemented:
+// ExpandedResponseTemplate, ThresholdModifier, PriorityShift,
+// ConditionalSupport, BroaderContext, NextStep, QuantitativeAnchor
+// They remain in types/stakeholder.ts for future enhancement features
 
 // ============================================================================
 // 1. INTERACTION TRIGGERS (Multi-metric conditions)

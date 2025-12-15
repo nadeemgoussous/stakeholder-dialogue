@@ -109,7 +109,7 @@ export default function PredictionInput({
               className="w-full h-40 px-4 py-3 border border-gray-300 rounded-lg
                        focus:ring-2 focus:ring-offset-2 resize-none"
               style={{
-                focusRing: stakeholder.color,
+                ['--tw-ring-color' as string]: stakeholder.color,
               }}
               placeholder="Type your prediction here... What will they appreciate? What concerns will they raise? What questions will they ask?"
               aria-describedby="character-count prediction-help"
