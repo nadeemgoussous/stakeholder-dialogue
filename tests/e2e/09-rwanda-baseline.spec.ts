@@ -5,15 +5,15 @@ test.describe('F009: Rwanda Baseline Scenario Data', () => {
   let rwandaData: ScenarioInput;
 
   test.beforeAll(async () => {
-    // Load the Rwanda baseline JSON file
-    const response = await fetch('http://localhost:5173/sample-data/rwanda-baseline.json');
+    // Load the Rwanda baseline JSON file (note: base path is /stakeholder-dialogue/ in vite.config)
+    const response = await fetch('http://localhost:5173/stakeholder-dialogue/sample-data/rwanda-baseline.json');
     expect(response.ok).toBeTruthy();
     rwandaData = await response.json();
   });
 
   test('rwanda-baseline.json file exists and loads', async ({ page }) => {
-    await page.goto('/');
-    const response = await page.request.get('/sample-data/rwanda-baseline.json');
+    await page.goto('/stakeholder-dialogue/');
+    const response = await page.request.get('/stakeholder-dialogue/sample-data/rwanda-baseline.json');
     expect(response.ok()).toBeTruthy();
     const data = await response.json();
     expect(data).toBeTruthy();
@@ -28,169 +28,169 @@ test.describe('F009: Rwanda Baseline Scenario Data', () => {
   });
 
   test('has all required milestone years: 2025, 2030, 2040, 2050', () => {
-    expect(rwandaData.milestoneYears).toEqual([2025, 2030, 2040, 2050]);
+    const years = rwandaData.milestones.map(m => m.year);
+    expect(years).toEqual([2025, 2030, 2040, 2050]);
   });
 
-  test('has complete capacity data for all technology categories', () => {
-    const capacityTechs = [
-      'hydro', 'solarPV', 'wind', 'battery', 'geothermal', 'biomass',
-      'coal', 'diesel', 'hfo', 'naturalGas', 'nuclear', 'interconnector'
-    ];
+  test('has complete capacity data for all milestones', () => {
+    // New schema uses aggregated categories: renewables, fossil, storage, other
+    expect(rwandaData.milestones.length).toBeGreaterThan(0);
 
-    capacityTechs.forEach(tech => {
-      expect(rwandaData.supply.capacity[tech]).toBeDefined();
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.capacity).toBeDefined();
+      expect(milestone.capacity.total).toBeDefined();
+      expect(milestone.capacity.unit).toBeDefined();
 
-      // Each tech should have data for all milestone years
-      rwandaData.milestoneYears.forEach(year => {
-        expect(rwandaData.supply.capacity[tech][year]).toBeDefined();
-        expect(typeof rwandaData.supply.capacity[tech][year]).toBe('number');
-        expect(rwandaData.supply.capacity[tech][year]).toBeGreaterThanOrEqual(0);
-      });
+      // Check aggregated categories
+      expect(typeof milestone.capacity.total.renewables).toBe('number');
+      expect(milestone.capacity.total.renewables).toBeGreaterThanOrEqual(0);
+
+      expect(typeof milestone.capacity.total.fossil).toBe('number');
+      expect(milestone.capacity.total.fossil).toBeGreaterThanOrEqual(0);
+
+      // Storage and other are optional
+      if (milestone.capacity.total.storage !== undefined) {
+        expect(milestone.capacity.total.storage).toBeGreaterThanOrEqual(0);
+      }
+      if (milestone.capacity.total.other !== undefined) {
+        expect(milestone.capacity.total.other).toBeGreaterThanOrEqual(0);
+      }
     });
   });
 
-  test('has complete generation data for all technologies', () => {
-    const generationTechs = [
-      'hydro', 'solarPV', 'wind', 'battery', 'geothermal', 'biomass',
-      'coal', 'diesel', 'hfo', 'naturalGas', 'nuclear', 'interconnector'
-    ];
+  test('has complete generation data for all milestones', () => {
+    // New schema uses aggregated categories: renewables, fossil, storage, other
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.generation).toBeDefined();
+      expect(milestone.generation.output).toBeDefined();
+      expect(milestone.generation.unit).toBeDefined();
 
-    generationTechs.forEach(tech => {
-      expect(rwandaData.supply.generation[tech]).toBeDefined();
+      // Check aggregated categories
+      expect(typeof milestone.generation.output.renewables).toBe('number');
+      expect(milestone.generation.output.renewables).toBeGreaterThanOrEqual(0);
 
-      // Each tech should have data for all milestone years
-      rwandaData.milestoneYears.forEach(year => {
-        expect(rwandaData.supply.generation[tech][year]).toBeDefined();
-        expect(typeof rwandaData.supply.generation[tech][year]).toBe('number');
-        expect(rwandaData.supply.generation[tech][year]).toBeGreaterThanOrEqual(0);
-      });
+      expect(typeof milestone.generation.output.fossil).toBe('number');
+      expect(milestone.generation.output.fossil).toBeGreaterThanOrEqual(0);
+
+      // Storage and other are optional
+      if (milestone.generation.output.storage !== undefined) {
+        expect(milestone.generation.output.storage).toBeGreaterThanOrEqual(0);
+      }
+      if (milestone.generation.output.other !== undefined) {
+        expect(milestone.generation.output.other).toBeGreaterThanOrEqual(0);
+      }
     });
   });
 
   test('has emissions data for all milestone years', () => {
-    expect(rwandaData.supply.emissions).toBeDefined();
-
-    rwandaData.milestoneYears.forEach(year => {
-      expect(rwandaData.supply.emissions[year]).toBeDefined();
-      expect(typeof rwandaData.supply.emissions[year]).toBe('number');
-      expect(rwandaData.supply.emissions[year]).toBeGreaterThanOrEqual(0);
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.emissions).toBeDefined();
+      expect(typeof milestone.emissions.total).toBe('number');
+      expect(milestone.emissions.total).toBeGreaterThanOrEqual(0);
+      expect(milestone.emissions.unit).toBeDefined();
     });
 
     // Baseline scenario should show emissions (fossil fuel dependent)
-    expect(rwandaData.supply.emissions[2025]).toBeGreaterThan(0);
-    expect(rwandaData.supply.emissions[2030]).toBeGreaterThan(0);
+    const milestone2025 = rwandaData.milestones.find(m => m.year === 2025);
+    const milestone2030 = rwandaData.milestones.find(m => m.year === 2030);
+
+    expect(milestone2025?.emissions.total).toBeGreaterThan(0);
+    expect(milestone2030?.emissions.total).toBeGreaterThan(0);
   });
 
-  test('has investment data (annual and cumulative)', () => {
-    expect(rwandaData.supply.investment).toBeDefined();
-    expect(rwandaData.supply.investment.annual).toBeDefined();
-    expect(rwandaData.supply.investment.cumulative).toBeDefined();
-
-    rwandaData.milestoneYears.forEach(year => {
-      // Annual investment
-      expect(rwandaData.supply.investment.annual[year]).toBeDefined();
-      expect(typeof rwandaData.supply.investment.annual[year]).toBe('number');
-      expect(rwandaData.supply.investment.annual[year]).toBeGreaterThanOrEqual(0);
-
-      // Cumulative investment
-      expect(rwandaData.supply.investment.cumulative[year]).toBeDefined();
-      expect(typeof rwandaData.supply.investment.cumulative[year]).toBe('number');
-      expect(rwandaData.supply.investment.cumulative[year]).toBeGreaterThanOrEqual(0);
+  test('has investment data (cumulative)', () => {
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.investment).toBeDefined();
+      expect(typeof milestone.investment.cumulative).toBe('number');
+      expect(milestone.investment.cumulative).toBeGreaterThanOrEqual(0);
+      expect(milestone.investment.unit).toBeDefined();
     });
 
     // Cumulative investment should be monotonically increasing
-    expect(rwandaData.supply.investment.cumulative[2030]).toBeGreaterThanOrEqual(
-      rwandaData.supply.investment.cumulative[2025]
+    const milestone2025 = rwandaData.milestones.find(m => m.year === 2025);
+    const milestone2030 = rwandaData.milestones.find(m => m.year === 2030);
+    const milestone2040 = rwandaData.milestones.find(m => m.year === 2040);
+    const milestone2050 = rwandaData.milestones.find(m => m.year === 2050);
+
+    expect(milestone2030?.investment.cumulative).toBeGreaterThanOrEqual(
+      milestone2025?.investment.cumulative || 0
     );
-    expect(rwandaData.supply.investment.cumulative[2040]).toBeGreaterThanOrEqual(
-      rwandaData.supply.investment.cumulative[2030]
+    expect(milestone2040?.investment.cumulative).toBeGreaterThanOrEqual(
+      milestone2030?.investment.cumulative || 0
     );
-    expect(rwandaData.supply.investment.cumulative[2050]).toBeGreaterThanOrEqual(
-      rwandaData.supply.investment.cumulative[2040]
+    expect(milestone2050?.investment.cumulative).toBeGreaterThanOrEqual(
+      milestone2040?.investment.cumulative || 0
     );
   });
 
   test('has complete demand data structure', () => {
-    expect(rwandaData.demand).toBeDefined();
-    expect(rwandaData.demand.total).toBeDefined();
-    expect(rwandaData.demand.peak).toBeDefined();
-    expect(rwandaData.demand.bySector).toBeDefined();
-
-    rwandaData.milestoneYears.forEach(year => {
-      // Total demand
-      expect(rwandaData.demand.total[year]).toBeDefined();
-      expect(typeof rwandaData.demand.total[year]).toBe('number');
-      expect(rwandaData.demand.total[year]).toBeGreaterThan(0);
-
-      // Peak demand
-      expect(rwandaData.demand.peak[year]).toBeDefined();
-      expect(typeof rwandaData.demand.peak[year]).toBe('number');
-      expect(rwandaData.demand.peak[year]).toBeGreaterThan(0);
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.peakDemand).toBeDefined();
+      expect(typeof milestone.peakDemand.value).toBe('number');
+      expect(milestone.peakDemand.value).toBeGreaterThan(0);
+      expect(milestone.peakDemand.unit).toBeDefined();
     });
 
-    // Demand should grow over time
-    expect(rwandaData.demand.total[2050]).toBeGreaterThan(rwandaData.demand.total[2025]);
+    // Peak demand should grow over time
+    const milestone2025 = rwandaData.milestones.find(m => m.year === 2025);
+    const milestone2050 = rwandaData.milestones.find(m => m.year === 2050);
+
+    expect(milestone2050?.peakDemand.value).toBeGreaterThan(
+      milestone2025?.peakDemand.value || 0
+    );
   });
 
-  test('has sectoral demand breakdown', () => {
-    const sectors = ['residential', 'commercial', 'industrial', 'transport'];
-
-    sectors.forEach(sector => {
-      expect(rwandaData.demand.bySector[sector]).toBeDefined();
-
-      rwandaData.milestoneYears.forEach(year => {
-        expect(rwandaData.demand.bySector[sector][year]).toBeDefined();
-        expect(typeof rwandaData.demand.bySector[sector][year]).toBe('number');
-        expect(rwandaData.demand.bySector[sector][year]).toBeGreaterThan(0);
-      });
+  test('has RE share calculated for all milestones', () => {
+    // New simplified schema includes RE share as a core indicator
+    rwandaData.milestones.forEach(milestone => {
+      expect(typeof milestone.reShare).toBe('number');
+      expect(milestone.reShare).toBeGreaterThanOrEqual(0);
+      expect(milestone.reShare).toBeLessThanOrEqual(100);
     });
 
-    // Sectoral demands should roughly sum to total (allowing for rounding)
-    rwandaData.milestoneYears.forEach(year => {
-      const sectoralSum =
-        rwandaData.demand.bySector.residential[year] +
-        rwandaData.demand.bySector.commercial[year] +
-        rwandaData.demand.bySector.industrial[year] +
-        rwandaData.demand.bySector.transport[year];
+    // RE share should be consistent with generation data (more accurate than capacity)
+    rwandaData.milestones.forEach(milestone => {
+      const totalGeneration = milestone.generation.output.renewables +
+                             milestone.generation.output.fossil +
+                             (milestone.generation.output.other || 0);
 
-      const totalDemand = rwandaData.demand.total[year];
-      const difference = Math.abs(sectoralSum - totalDemand);
-      const percentDifference = (difference / totalDemand) * 100;
-
-      // Allow up to 5% difference for rounding/losses
-      expect(percentDifference).toBeLessThan(5);
+      if (totalGeneration > 0) {
+        const calculatedREShare = (milestone.generation.output.renewables / totalGeneration) * 100;
+        const difference = Math.abs(calculatedREShare - milestone.reShare);
+        // Allow up to 2% difference for rounding
+        expect(difference).toBeLessThan(2);
+      }
     });
   });
 
   test('represents realistic Rwanda baseline scenario characteristics', () => {
-    // Rwanda has good hydro resources (should be significant)
-    expect(rwandaData.supply.capacity.hydro[2025]).toBeGreaterThan(100);
+    const milestone2025 = rwandaData.milestones.find(m => m.year === 2025);
+    const milestone2050 = rwandaData.milestones.find(m => m.year === 2050);
 
-    // Baseline should show fossil fuel dependence
-    const fossil2025 =
-      rwandaData.supply.capacity.diesel[2025] +
-      rwandaData.supply.capacity.hfo[2025] +
-      rwandaData.supply.capacity.naturalGas[2025];
-    expect(fossil2025).toBeGreaterThan(0);
+    expect(milestone2025).toBeDefined();
+    expect(milestone2050).toBeDefined();
+
+    // Rwanda baseline should show some renewable capacity (hydro)
+    expect(milestone2025!.capacity.total.renewables).toBeGreaterThan(0);
+
+    // Baseline should show fossil fuel dependence in 2025
+    expect(milestone2025!.capacity.total.fossil).toBeGreaterThan(0);
 
     // Renewable capacity should grow over time in baseline
-    const renewable2025 =
-      rwandaData.supply.capacity.hydro[2025] +
-      rwandaData.supply.capacity.solarPV[2025] +
-      rwandaData.supply.capacity.wind[2025] +
-      rwandaData.supply.capacity.geothermal[2025];
+    expect(milestone2050!.capacity.total.renewables).toBeGreaterThan(
+      milestone2025!.capacity.total.renewables
+    );
 
-    const renewable2050 =
-      rwandaData.supply.capacity.hydro[2050] +
-      rwandaData.supply.capacity.solarPV[2050] +
-      rwandaData.supply.capacity.wind[2050] +
-      rwandaData.supply.capacity.geothermal[2050];
+    // RE share should increase over time
+    expect(milestone2050!.reShare).toBeGreaterThan(milestone2025!.reShare);
 
-    expect(renewable2050).toBeGreaterThan(renewable2025);
-
-    // No coal (Rwanda doesn't use coal)
-    expect(rwandaData.supply.capacity.coal[2025]).toBe(0);
-    expect(rwandaData.supply.capacity.coal[2050]).toBe(0);
+    // If detailed tech data is available, verify no coal
+    if (rwandaData.detailedTech) {
+      const coal2025 = rwandaData.detailedTech[2025]?.coal || 0;
+      const coal2050 = rwandaData.detailedTech[2050]?.coal || 0;
+      expect(coal2025).toBe(0);
+      expect(coal2050).toBe(0);
+    }
   });
 
   test('data can be used with calculateDerivedMetrics function', async () => {
@@ -217,19 +217,22 @@ test.describe('F009: Rwanda Baseline Scenario Data', () => {
 
     // Verify all required fields are present for response generation
     expect(rwandaData.metadata).toBeDefined();
-    expect(rwandaData.milestoneYears).toBeDefined();
-    expect(rwandaData.supply).toBeDefined();
-    expect(rwandaData.supply.capacity).toBeDefined();
-    expect(rwandaData.supply.generation).toBeDefined();
-    expect(rwandaData.supply.emissions).toBeDefined();
-    expect(rwandaData.supply.investment).toBeDefined();
-    expect(rwandaData.demand).toBeDefined();
+    expect(rwandaData.milestones).toBeDefined();
+    expect(Array.isArray(rwandaData.milestones)).toBe(true);
 
     // Verify structure matches what response generator expects
     expect(typeof rwandaData.metadata.country).toBe('string');
     expect(typeof rwandaData.metadata.scenarioName).toBe('string');
-    expect(Array.isArray(rwandaData.milestoneYears)).toBe(true);
-    expect(typeof rwandaData.supply.capacity).toBe('object');
-    expect(typeof rwandaData.supply.generation).toBe('object');
+
+    // Each milestone should have all required fields
+    rwandaData.milestones.forEach(milestone => {
+      expect(milestone.year).toBeDefined();
+      expect(milestone.capacity).toBeDefined();
+      expect(milestone.generation).toBeDefined();
+      expect(milestone.emissions).toBeDefined();
+      expect(milestone.investment).toBeDefined();
+      expect(milestone.peakDemand).toBeDefined();
+      expect(milestone.reShare).toBeDefined();
+    });
   });
 });
