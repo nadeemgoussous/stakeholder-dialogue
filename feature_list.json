@@ -420,7 +420,7 @@
         "Style with stakeholder-specific colors",
         "Add buttons to navigate to demo tools (calculator, comparison, templates)"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F028",

@@ -5,6 +5,7 @@ import TabNavigation from './components/layout/TabNavigation'
 import InputTab from './components/input/InputTab'
 import StakeholderTab from './components/stakeholder/StakeholderTab'
 import ExploreTab from './components/calculator/ExploreTab'
+import CommunicateTab from './components/output/CommunicateTab'
 import { ScenarioProvider } from './context/ScenarioContext'
 
 function App() {
@@ -34,17 +35,7 @@ function App() {
           )}
 
           {activeTab === 'communicate' && (
-            <div className="card max-w-4xl mx-auto text-center" id="communicate-panel" role="tabpanel">
-              <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
-                Communicate
-              </h2>
-              <p className="text-gray-600">
-                Generate audience-specific framings of your scenario for effective communication.
-              </p>
-              <div className="mt-6 text-gray-500">
-                <em>Coming soon: Audience selector and communication output generator</em>
-              </div>
-            </div>
+            <CommunicateTab />
           )}
 
           {/* Important Disclaimer - shown on all tabs */}
