@@ -1,5 +1,95 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-26 (F027 - Communication Tab Implementation)
+
+**Status**: ✅ F027 COMPLETE - Communication Tab with Dissemination Strategy Recommender
+
+**Progress Summary**:
+
+Implemented the Communication tab with comprehensive dissemination strategies for all 9 stakeholder groups, based on IRENA's Participatory Processes Toolkit Section 4.3. This educational tool teaches energy planners which communication formats work best for different audiences.
+
+**✅ Completed**:
+1. **dissemination-strategies.ts** - Created comprehensive data file (900+ lines)
+   - Strategies for all 9 stakeholder groups
+   - Primary/Secondary/Tertiary dissemination formats
+   - Technical level, time availability, decision influence indicators
+   - Format descriptions with effort levels and examples
+   - Key messages templates (populated with scenario data)
+   - What to avoid guidance
+   - Narrative framing recommendations
+   - IRENA toolkit method references
+
+2. **CommunicateTab.tsx** - Main tab component
+   - Stakeholder selector with 9 buttons
+   - Stakeholder-specific color coding
+   - Scenario data extraction for message population
+   - Educational focus banner
+   - Toolkit reference footer
+   - Responsive grid layout
+
+3. **DisseminationStrategyDisplay.tsx** - Strategy presentation component
+   - "Why This Matters" context section with indicators
+   - Recommended formats with level badges (primary/secondary/tertiary)
+   - Effort indicators (low/medium/high)
+   - Format examples for each approach
+   - Key messages populated with scenario data
+   - Copy-to-clipboard button for messages
+   - Narrative framing guidance
+   - What to avoid warnings
+   - Toolkit methods referenced
+   - Placeholder buttons for demo tools (F028-F030)
+
+4. **App.tsx Integration** - Replaced placeholder with CommunicateTab
+
+5. **Test Suite** - Created 27-communication-tab.spec.ts with 14 comprehensive tests
+
+**Key Achievement**: **EDUCATIONAL DISSEMINATION TOOL!**
+- Teaches practitioners which formats resonate with different audiences
+- Provides customizable templates and guidance (not automated outputs)
+- Aligns with IRENA toolkit best practices
+- Covers all 9 stakeholder groups with unique strategies
+- Scenario-aware key messages
+
+**Stakeholder Coverage** (all 9 groups implemented):
+- **Policy Makers**: Policy briefs, dashboards, briefing decks
+- **Grid Operators**: Technical appendices, integration studies, operations dashboards
+- **Industry**: Investment briefings, business cases, market outlooks
+- **Public**: Community calculators, infographics, town halls
+- **CSOs/NGOs**: Climate narratives, scenario comparisons, advocacy toolkits
+- **Scientific**: Technical reports, papers, open data repositories
+- **Finance**: Investment prospectuses, risk assessments, financial models
+- **Regional Bodies**: Integration reports, cross-border analyses, coordination plans
+- **Development Partners**: Programmatic briefings, alignment assessments, capacity plans
+
+**Files Created**:
+- `src/data/dissemination-strategies.ts` (916 lines)
+- `src/components/output/CommunicateTab.tsx` (159 lines)
+- `src/components/output/DisseminationStrategyDisplay.tsx` (221 lines)
+- `tests/e2e/27-communication-tab.spec.ts` (168 lines)
+
+**Files Modified**:
+- `src/App.tsx` (integrated CommunicateTab)
+- `feature_list.json` (F027 marked passing)
+
+**Git Commits**:
+- `e9d725b` - feat: implement F027 - Communication tab with Dissemination Strategy Recommender
+
+**Design Principles Applied**:
+- Educational focus (teach, don't automate)
+- Toolkit alignment (IRENA Section 4.3)
+- Customizable templates (not production-ready outputs)
+- Stakeholder-specific strategies
+- Context-aware recommendations
+
+**Next Features**: F028-F032 (Communication tab enhancements)
+- F028: Dissemination Format Template Library
+- F029: Community Impact Calculator (demo)
+- F030: Scenario Comparison Tool (demo)
+- F031: Export Guidance
+- F032: Dissemination Tips
+
+---
+
 ### Session: 2025-12-26 (Test Updates for Simplified Schema)
 
 **Status**: ✅ Rwanda Baseline Tests Fixed | ⏳ Other tests deferred
