@@ -407,12 +407,18 @@
       "id": "F027",
       "category": "communicate",
       "priority": 27,
-      "description": "Communicate tab with audience selector",
+      "description": "Dissemination Strategy Recommender (EDUCATIONAL - aligned with IRENA toolkit)",
+      "note": "Focus on teaching practitioners which dissemination formats work best for each stakeholder, based on toolkit Section 4.3",
       "steps": [
-        "Create components/output/CommunicateTab.tsx",
-        "Add audience buttons for each of the 9 stakeholder groups",
-        "Implement selection state",
-        "Show placeholder for selected audience output"
+        "Create components/output/CommunicateTab.tsx with stakeholder selector",
+        "Create data/dissemination-strategies.ts with strategies for all 9 stakeholders",
+        "For each stakeholder, define: Primary/Secondary/Tertiary formats",
+        "Include 'Why this matters' context for each stakeholder",
+        "List recommended approaches (interactive calculator, policy brief, infographic, etc.)",
+        "Generate key messages to emphasize (using scenario data)",
+        "Add 'What to avoid' guidance for each stakeholder",
+        "Style with stakeholder-specific colors",
+        "Add buttons to navigate to demo tools (calculator, comparison, templates)"
       ],
       "passes": false
     },
@@ -420,13 +426,17 @@
       "id": "F028",
       "category": "communicate",
       "priority": 28,
-      "description": "Audience-specific framing generator",
+      "description": "Dissemination Format Template Library (TEXT-BASED)",
+      "note": "Provide template structures and guidance, not full document generation. Educational focus.",
       "steps": [
-        "Create data/audience-framings.ts",
-        "Define framings for all audiences",
-        "Include headline, keyMessages, dataToEmphasize",
-        "Create generateAudienceFraming function",
-        "Insert actual scenario numbers into templates"
+        "Create components/output/DisseminationTemplates.tsx",
+        "Create template structures for: Policy Brief, Infographic, Investment Briefing, Climate Narrative",
+        "Each template shows: sections to include, key data points, structure",
+        "Display templates as text/outlines that users copy and customize",
+        "Add 'How to use this template' instructions",
+        "Include placeholder text with [scenario data] merge fields",
+        "Add copy-to-clipboard functionality for each template",
+        "Reference toolkit dissemination methods"
       ],
       "passes": false
     },
@@ -434,13 +444,17 @@
       "id": "F029",
       "category": "communicate",
       "priority": 29,
-      "description": "Communication output display",
+      "description": "Demo: Community Impact Calculator (INTERACTIVE EXAMPLE)",
+      "note": "Build ONE working calculator as teaching example of how to make scenarios personal for communities",
       "steps": [
-        "Create components/output/CommunicationOutput.tsx",
-        "Display headline prominently",
-        "Display key messages as list",
-        "Show recommended chart type",
-        "Style with audience-appropriate colors"
+        "Create components/output/CommunityImpactCalculator.tsx",
+        "Add inputs: household size, region dropdown, current bill estimate",
+        "Calculate outputs using scenario data: bill change estimate, jobs in region, air quality",
+        "Use jobs/emissions from derived metrics, distribute by region",
+        "Add prominent note: 'This is a demo - you can build your own calculator'",
+        "Include directional estimates only (not precise predictions)",
+        "Add 'Export Calculator Template' button with HTML/instructions",
+        "Show this calculator when 'Public & Communities' stakeholder selected"
       ],
       "passes": false
     },
@@ -448,13 +462,17 @@
       "id": "F030",
       "category": "communicate",
       "priority": 30,
-      "description": "Simple chart components",
+      "description": "Demo: Scenario Comparison Tool (FOR CSOs/SCIENTIFIC)",
+      "note": "Show how to compare scenario against benchmarks to communicate ambition level",
       "steps": [
-        "Create components/charts/CapacityMixChart.tsx",
-        "Create components/charts/EmissionsChart.tsx",
-        "Create components/charts/JobsChart.tsx",
-        "Use Recharts with IRENA colors",
-        "Keep charts simple and clear"
+        "Create components/output/ScenarioComparison.tsx",
+        "Build comparison table: Business as Usual vs User's Scenario vs High Ambition",
+        "Compare metrics: RE Share, Emissions, Jobs, Investment",
+        "Auto-populate 'User's Scenario' column from loaded data",
+        "Use reasonable assumptions for BAU and High Ambition benchmarks",
+        "Generate narrative interpretation for selected stakeholder",
+        "Add 'Export Comparison Table' functionality (CSV or image)",
+        "Show when CSOs/NGOs or Scientific stakeholders selected"
       ],
       "passes": false
     },
@@ -462,13 +480,17 @@
       "id": "F031",
       "category": "communicate",
       "priority": 31,
-      "description": "Export stakeholder brief as text",
+      "description": "Export Guidance (INSTRUCTIONS, not file generation)",
+      "note": "Teach users how to create their own materials, provide starter data/templates",
       "steps": [
-        "Add 'Export Brief' button to stakeholder response",
-        "Generate markdown summary of response",
-        "Include user's prediction for reflection",
-        "Download as .md or .txt file",
-        "Include disclaimer about illustrative nature"
+        "Create components/output/ExportGuidance.tsx",
+        "Show step-by-step instructions for creating materials",
+        "Add 'Copy Key Data' button (scenario metrics as text)",
+        "Provide download links for: PowerPoint outline, Word template, Infographic structure",
+        "Templates are simple text/markdown files with instructions",
+        "Add guidance on customizing for local context",
+        "Include reminders about adding branding, local policy references",
+        "Link to toolkit resources"
       ],
       "passes": false
     },
@@ -476,12 +498,17 @@
       "id": "F032",
       "category": "communicate",
       "priority": 32,
-      "description": "Copy chart data to clipboard",
+      "description": "Dissemination Tips (EDUCATIONAL CONTENT from toolkit)",
+      "note": "Teach best practices from IRENA Participatory Processes Toolkit Section 4.3",
       "steps": [
-        "Add 'Copy Data' button to charts",
-        "Format as tab-separated values for Excel",
-        "Copy to clipboard",
-        "Show brief success notification"
+        "Create components/output/DisseminationTips.tsx",
+        "Extract key guidance from toolkit: match format to audience, use interactive tools, consider gamification, layer communication, tell stories",
+        "Create expandable tip cards for each principle",
+        "Include examples from toolkit case studies (Belgium, Kenya, UAE, etc.)",
+        "Add links to toolkit sections for deeper reading",
+        "Style as educational sidebar or collapsible panel",
+        "Make tips contextual to selected stakeholder when possible",
+        "Add references to toolkit sections (will be filled in later)"
       ],
       "passes": false
     },

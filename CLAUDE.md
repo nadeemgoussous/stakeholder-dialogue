@@ -342,9 +342,64 @@ The tool uses a four-tab layout:
 1. **Input** - Data import (5 minutes max)
 2. **Stakeholder Dialogue** - Predict-before-reveal learning
 3. **Explore Impacts** - Directional sensitivity (soft metrics only)
-4. **Communicate** - Audience-specific outputs
+4. **Communicate** - Dissemination strategy guidance (aligned with IRENA toolkit)
 
 For complete design specifications, mockups, and component patterns, see **[docs/UI-DESIGN.md](docs/UI-DESIGN.md)**.
+
+### Communication Tab: Dissemination Strategy Recommender
+
+The Communication tab teaches energy planners how to effectively disseminate scenario results to different stakeholders, based on **IRENA's Participatory Processes Toolkit Section 4.3** on dissemination techniques.
+
+**Design Philosophy: Educational, Not Automated**
+- **Primary Goal**: Teach practitioners which dissemination formats resonate with different audiences
+- **Approach**: Provide templates, examples, and guidance rather than fully automated outputs
+- **Focus**: Enable users to create their own materials customized to local context
+
+**Key Features:**
+
+**1. Dissemination Strategy Recommendations**
+For each stakeholder group, the tool suggests:
+- **Recommended formats** (policy briefs, interactive calculators, infographics, dashboards, etc.)
+- **Why this format works** for this audience
+- **Key messages to emphasize** (auto-populated from scenario data)
+- **What to avoid** when communicating to this group
+
+**2. Format Template Library**
+Text-based templates for common dissemination formats:
+- Policy briefs (for Policy Makers, Development Partners)
+- Infographics (for Public & Communities)
+- Investment briefings (for Financial Institutions)
+- Climate impact narratives (for CSOs & NGOs)
+- Technical appendices (for Scientific Institutions)
+
+**3. Interactive Demonstration Tools**
+Working examples showing communication concepts:
+- **Community Impact Calculator** - Demonstrates how to make scenarios personal (household bill impact, local jobs, air quality)
+- **Scenario Comparison Tool** - Shows how to compare ambition levels for climate-focused audiences
+- These are teaching tools users can adapt, not production-ready applications
+
+**4. Toolkit-Aligned Guidance**
+Educational content on:
+- Matching format to audience technical level
+- Using interactive visualizations effectively
+- Gamification approaches for broad engagement
+- Layering communication (headlines → details)
+- Storytelling with data
+
+**What This Tab Does NOT Do:**
+- ❌ Generate publication-ready documents (users customize templates themselves)
+- ❌ Create complex visualizations (users export data for their tools)
+- ❌ Build full interactive dashboards (provides demo examples only)
+
+**Toolkit Dissemination Methods Referenced:**
+- Public presentations and reports
+- Policy briefs
+- Interactive calculators (Belgium "My2050", Kenya energy calculator)
+- Simulations and games (IEA climate game, UAE board game)
+- Data visualization tools (Tableau, PowerBI, R)
+- Business intelligence dashboards
+
+This approach ensures workshop participants learn **how to think about dissemination** and gain **starter materials** they can refine for their specific contexts.
 
 ### Design Principles
 
