@@ -1,5 +1,37 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-26 (Test Updates for Simplified Schema)
+
+**Status**: ✅ Rwanda Baseline Tests Fixed | ⏳ Other tests deferred
+
+**Progress Summary**:
+
+Fixed the Rwanda baseline tests to work with the new simplified milestone-based schema after npm dependency reinstall.
+
+**✅ Completed**:
+1. **Fixed npm/vite installation issues** - Reinstalled dependencies to resolve Rollup native module errors
+2. **Updated 09-rwanda-baseline.spec.ts** - All 12 tests now passing (was 2/12)
+   - Updated `milestoneYears` → `milestones.map(m => m.year)`
+   - Updated capacity/generation to use aggregated categories
+   - Updated emissions/investment/demand to use milestone structure
+   - Fixed fetch URLs to include `/stakeholder-dialogue/` base path
+   - Changed RE share validation to use generation data (more accurate)
+3. **Committed test updates** - Commit `8330343`
+
+**Test Results**:
+- Rwanda Baseline Tests: ✅ **12/12 passing** (100%)
+- Response Generator Tests: 6 failing (deferred - not blocking features)
+- Other tests: Not checked (deferred)
+
+**Decision**: Move forward with feature development, fix remaining tests later
+
+**Git Commits**:
+- `8330343` - test: update Rwanda baseline tests for simplified schema
+
+**Next Steps**: Implement Communication tab features (F027-F032)
+
+---
+
 ### Session: 2025-12-12 (Schema Redesign - Phase 2: CSV Integration & Component Updates)
 
 **Status**: ✅ ALL CORE COMPONENTS MIGRATED! | ⏳ Test Updates Remaining
