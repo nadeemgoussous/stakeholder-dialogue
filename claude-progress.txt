@@ -1,5 +1,93 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-28 (F028 - Dissemination Format Template Library)
+
+**Status**: ✅ F028 COMPLETE - Template Library with 4 Communication Formats
+
+**Progress Summary**:
+
+Implemented a comprehensive template library providing text-based structures for four key dissemination formats. This educational tool teaches energy planners how to create communication materials customized to different stakeholder audiences, aligned with IRENA's Participatory Processes Toolkit Section 4.3.
+
+**✅ Completed**:
+
+1. **dissemination-templates.ts** - Created comprehensive template data (900+ lines)
+   - 4 complete format templates (Policy Brief, Infographic, Investment Briefing, Climate Narrative)
+   - Each template includes: name, description, characteristics, best-for audiences
+   - "How to use" instructions (7-8 tips per template)
+   - Template sections with key points and scenario data fields
+   - Full example text with merge field placeholders
+   - IRENA toolkit references for each format
+
+2. **DisseminationTemplates.tsx** - Template library component (200+ lines)
+   - Template card grid view with characteristics display
+   - Template detail view with section-by-section breakdown
+   - Copy-to-clipboard functionality for sections and full templates
+   - Back navigation between list and detail views
+   - Educational focus with "How to use" guidance
+   - Stakeholder-aware filtering (optional)
+
+3. **CommunicateTab.tsx** - Enhanced with view switcher
+   - Added tab navigation between "Strategies" and "Templates"
+   - Preserves stakeholder selection when switching views
+   - Clean integration with existing strategy display
+
+4. **Test Suite** - Created 28-dissemination-templates.spec.ts
+   - 16 comprehensive tests covering all functionality
+   - Template card display and navigation
+   - Detail view sections and copy buttons
+   - View switcher and state persistence
+   - All 16 tests passing ✅
+
+**Key Achievement**: **EDUCATIONAL TEMPLATE LIBRARY!**
+- Provides complete template structures for 4 key communication formats
+- Teaches "how to create" rather than auto-generating documents
+- Copy-to-clipboard for easy customization
+- Aligned with IRENA toolkit dissemination best practices
+
+**Template Formats Implemented**:
+1. **Policy Brief** (2-4 pages, formal, for Policy Makers/Development Partners)
+   - Executive Summary, Context, Key Findings, Implementation, Risks, Recommendations
+   - Medium effort, action-oriented tone
+
+2. **Infographic** (1 page visual, for Public & Communities/CSOs)
+   - Headline, Key Numbers, Visual Comparison, Personal Relevance, Call to Action
+   - High effort, accessible tone
+
+3. **Investment Briefing** (4-8 pages technical, for Financial Institutions/Industry)
+   - Investment Overview, Market Fundamentals, Pipeline, Revenue Model, Risks, Financial Structure
+   - High effort, risk-focused professional tone
+
+4. **Climate Impact Narrative** (3-6 pages story-driven, for CSOs/NGOs/Communities)
+   - Climate Imperative, Vision, Paris Alignment, Just Transition, Gaps, Call to Action
+   - Medium effort, engaging mission-driven tone
+
+**Files Created**:
+- `src/data/dissemination-templates.ts` (900+ lines)
+- `src/components/output/DisseminationTemplates.tsx` (200+ lines)
+- `tests/e2e/28-dissemination-templates.spec.ts` (220 lines, 16 tests)
+
+**Files Modified**:
+- `src/components/output/CommunicateTab.tsx` (added view switcher)
+- `feature_list.json` (F028 marked passing)
+
+**Git Commits**:
+- `c7a0bdb` - feat: implement F028 - Dissemination Format Template Library
+
+**Design Principles Applied**:
+- Educational focus (teach, don't automate)
+- Copy-to-clipboard for easy customization
+- Clear template structure with sections and data fields
+- "How to use" instructions for each format
+- IRENA toolkit alignment and references
+
+**Next Features**: F029-F032 (Communication tab enhancements)
+- F029: Community Impact Calculator (demo)
+- F030: Scenario Comparison Tool (demo)
+- F031: Export Guidance
+- F032: Dissemination Tips
+
+---
+
 ### Session: 2025-12-26 (F027 - Communication Tab Implementation)
 
 **Status**: ✅ F027 COMPLETE - Communication Tab with Dissemination Strategy Recommender
