@@ -39,18 +39,18 @@ export default function TabNavigation({ activeTab, onTabChange }: TabNavigationP
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
                 className={`
-                  px-6 py-4 text-sm font-medium transition-colors duration-200
-                  border-b-2 hover:bg-gray-50
+                  px-6 py-4 text-sm font-medium transition-all duration-200
+                  border-b-3 rounded-t-lg
                   ${
                     isActive
-                      ? 'border-b-2 text-white'
-                      : 'border-transparent text-gray-600 hover:text-gray-800'
+                      ? 'text-white shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100 bg-gray-50 border-gray-200'
                   }
                 `}
                 style={
                   isActive
-                    ? { backgroundColor: 'var(--color-irena-blue)', borderColor: 'var(--color-irena-orange)' }
-                    : undefined
+                    ? { backgroundColor: 'var(--color-irena-blue)', borderBottomColor: 'var(--color-irena-orange)', borderBottomWidth: '3px' }
+                    : { borderBottomWidth: '3px', borderBottomColor: 'transparent' }
                 }
                 role="tab"
                 aria-selected={isActive}

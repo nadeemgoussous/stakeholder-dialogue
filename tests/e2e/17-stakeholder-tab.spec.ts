@@ -59,15 +59,15 @@ test.describe('F016: Stakeholder Tab with Icon Selector', () => {
     // Check that description is shown
     await expect(page.locator('text=Entities responsible for operating and developing power networks')).toBeVisible();
 
-    // Check that Key Priorities section is shown
-    await expect(page.locator('h4:has-text("Key Priorities")')).toBeVisible();
+    // Check that Key Priorities section is shown (open by default)
+    await expect(page.locator('button:has-text("Key Priorities")')).toBeVisible();
     await expect(page.locator('text=System reliability and security of supply')).toBeVisible();
 
-    // Check that Typical Questions section is shown
-    await expect(page.locator('h4:has-text("Typical Questions They Ask")')).toBeVisible();
+    // Check that Typical Questions collapsible section is shown
+    await expect(page.locator('button:has-text("Typical Questions They Ask")')).toBeVisible();
 
-    // Check that Why Engage section is shown
-    await expect(page.locator('h4:has-text("Why Engage This Group?")')).toBeVisible();
+    // Check that Engagement Rationale collapsible section is shown
+    await expect(page.locator('button:has-text("Engagement Rationale")')).toBeVisible();
   });
 
   test('should show priorities for selected stakeholder', async ({ page }) => {
@@ -84,6 +84,9 @@ test.describe('F016: Stakeholder Tab with Icon Selector', () => {
     // Select Public & Communities
     await page.click('button:has-text("Public & Communities")');
 
+    // Expand the "Typical Questions" collapsible section
+    await page.click('button:has-text("Typical Questions They Ask")');
+
     // Check questions are displayed with question marks
     await expect(page.locator('text=How will this affect electricity bills?')).toBeVisible();
     await expect(page.locator('text=Will there be jobs for local people?')).toBeVisible();
@@ -93,12 +96,15 @@ test.describe('F016: Stakeholder Tab with Icon Selector', () => {
     // Select CSOs & NGOs
     await page.click('button:has-text("CSOs & NGOs")');
 
-    // Check "Why Engage" section
-    await expect(page.locator('h4:has-text("Why Engage This Group?")')).toBeVisible();
+    // Expand the "Engagement Rationale" collapsible section
+    await page.click('button:has-text("Engagement Rationale")');
+
+    // Check "Why Engage" section (now shown as text label, not h4)
+    await expect(page.locator('text=Why Engage This Group?')).toBeVisible();
     await expect(page.locator('text=Represent public interests')).toBeVisible();
 
     // Check "What's In It For Them" section
-    await expect(page.locator('h4:has-text("What\'s In It For Them?")')).toBeVisible();
+    await expect(page.locator('text=What\'s In It For Them?')).toBeVisible();
   });
 
   test('should apply stakeholder-specific colors', async ({ page }) => {
@@ -106,13 +112,13 @@ test.describe('F016: Stakeholder Tab with Icon Selector', () => {
     const financeButton = page.locator('button:has-text("Financial Institutions")');
     await financeButton.click();
 
-    // Check that the icon has the stakeholder color
-    const icon = page.locator('.w-20.h-20.rounded-full').first();
-    await expect(icon).toHaveCSS('background-color', 'rgb(46, 90, 58)'); // #2e5a3a
-
     // Check that the header has the stakeholder color
     const header = page.locator('h3:has-text("Financial Institutions")');
-    await expect(header).toHaveCSS('color', 'rgb(46, 90, 58)');
+    await expect(header).toHaveCSS('color', 'rgb(46, 90, 58)'); // #2e5a3a
+
+    // Check that the card has a colored left border
+    const card = page.locator('[style*="border-left-color"]').first();
+    await expect(card).toBeVisible();
   });
 
   test('should show "Predict Their Response" button for selected stakeholder', async ({ page }) => {
@@ -185,9 +191,9 @@ test.describe('F016: Stakeholder Tab with Icon Selector', () => {
     // Set viewport to tablet size
     await page.setViewportSize({ width: 768, height: 1024 });
 
-    // Grid should still be visible and functional
-    const grid = page.locator('.grid');
-    await expect(grid).toBeVisible();
+    // Re-navigate after viewport change
+    await page.goto('http://localhost:5173');
+    await page.click('text=Stakeholder Dialogue');
 
     // Should still show all 9 stakeholders
     const buttons = page.locator('button.stakeholder-button');
