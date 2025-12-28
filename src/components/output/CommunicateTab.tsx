@@ -65,6 +65,60 @@ export default function CommunicateTab() {
   const selectedStrategy = selectedStakeholder ? getDisseminationStrategy(selectedStakeholder) : null;
   const selectedProfile = selectedStakeholder ? stakeholderProfiles.find(p => p.id === selectedStakeholder) : null;
 
+  // If no scenario loaded, show prompt to load one
+  if (!scenario) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-4" style={{ color: 'var(--color-irena-blue)' }}>
+            Communication Strategies
+          </h1>
+        </div>
+
+        {/* No Scenario Loaded Message */}
+        <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-8 text-center">
+          <div className="text-6xl mb-4">📊</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Load a Scenario to Get Started
+          </h2>
+          <p className="text-lg text-gray-700 mb-6">
+            Communication strategies and templates are customized based on your scenario data.
+            Please load a scenario first to access this tab.
+          </p>
+          <div className="bg-white border border-gray-300 rounded-lg p-6 text-left max-w-md mx-auto">
+            <p className="text-sm font-semibold text-gray-800 mb-3">To load a scenario:</p>
+            <ol className="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+              <li>Go to the <strong>Input</strong> tab</li>
+              <li>Click <strong>"Load Rwanda Example"</strong> for a quick start</li>
+              <li>Or upload your own scenario data (JSON or Excel template)</li>
+              <li>Return here to generate communication materials</li>
+            </ol>
+          </div>
+          <div className="mt-6">
+            <p className="text-sm text-gray-600">
+              💡 <em>This ensures your dissemination strategies and templates include actual metrics
+              from your energy scenario (renewable share, investment needs, emissions, jobs, etc.)</em>
+            </p>
+          </div>
+        </div>
+
+        {/* Toolkit Reference */}
+        <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+          <h3 className="text-lg font-semibold mb-3 text-gray-800">
+            About This Tool
+          </h3>
+          <p className="text-sm text-gray-700 mb-3">
+            This Communication tab is based on <strong>IRENA's Participatory Processes for Strategic
+            Energy Planning toolkit, Section 4.3: Knowledge Dissemination</strong>.
+          </p>
+          <p className="text-sm text-gray-700">
+            It helps you create stakeholder-specific communication materials using your scenario data.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
@@ -167,7 +221,12 @@ export default function CommunicateTab() {
           )}
         </>
       ) : (
-        <DisseminationTemplates selectedStakeholderId={selectedStakeholder ?? undefined} />
+        <DisseminationTemplates
+          selectedStakeholderId={selectedStakeholder ?? undefined}
+          scenarioData={getScenarioData()}
+          scenarioName={scenario?.metadata?.name || 'Your Scenario'}
+          country={scenario?.metadata?.country || 'Your Country'}
+        />
       )}
 
       {/* Toolkit Reference */}

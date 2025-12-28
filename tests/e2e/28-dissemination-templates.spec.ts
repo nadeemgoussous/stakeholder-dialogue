@@ -2,15 +2,37 @@ import { test, expect } from '@playwright/test';
 
 test.describe('F028: Dissemination Format Template Library', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/stakeholder-dialogue/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Navigate directly to Communication tab (templates can be viewed without loaded scenario)
-    const communicateTab = page.locator('button:has-text("Communicate")');
-    if (await communicateTab.isVisible()) {
-      await communicateTab.click();
-      await page.waitForTimeout(500);
-    }
+    // Load example scenario first (required for Communication tab)
+    await page.click('text=Load Example Scenario');
+    await page.waitForSelector('text=Rwanda');
+    await page.waitForTimeout(500);
+
+    // Navigate to Communication tab
+    await page.click('button:has-text("Communicate")');
+    await page.waitForTimeout(500);
+  });
+
+  test('should require scenario to be loaded', async ({ page }) => {
+    // Navigate to fresh page without loading scenario
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // Click Communication tab without loading scenario
+    await page.click('button:has-text("Communicate")');
+    await page.waitForTimeout(500);
+
+    // Should show "Load Scenario" message
+    await expect(page.locator('text=Load a Scenario to Get Started')).toBeVisible();
+    await expect(page.locator('text=Please load a scenario first')).toBeVisible();
+  });
+
+  test('should show scenario context banner when scenario loaded', async ({ page }) => {
+    // Should show scenario context
+    await expect(page.locator('text=Using Scenario:')).toBeVisible();
+    await expect(page.locator('text=Rwanda').first()).toBeVisible();
   });
 
   test('should show view switcher with Strategies and Templates tabs', async ({ page }) => {

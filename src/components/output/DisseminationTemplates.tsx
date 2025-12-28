@@ -3,9 +3,17 @@ import { disseminationTemplates, DisseminationTemplate, TemplateSection } from '
 
 interface DisseminationTemplatesProps {
   selectedStakeholderId?: string;
+  scenarioData: Record<string, string | number>;
+  scenarioName: string;
+  country: string;
 }
 
-const DisseminationTemplates: React.FC<DisseminationTemplatesProps> = ({ selectedStakeholderId }) => {
+const DisseminationTemplates: React.FC<DisseminationTemplatesProps> = ({
+  selectedStakeholderId,
+  scenarioData,
+  scenarioName,
+  country
+}) => {
   const [selectedTemplate, setSelectedTemplate] = useState<DisseminationTemplate | null>(null);
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
@@ -34,6 +42,22 @@ const DisseminationTemplates: React.FC<DisseminationTemplatesProps> = ({ selecte
   if (!selectedTemplate) {
     return (
       <div className="space-y-6">
+        {/* Scenario Context Banner */}
+        <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-300 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <div className="text-3xl">✅</div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900">
+                Using Scenario: <span className="text-green-700">{scenarioName}</span>
+              </p>
+              <p className="text-xs text-gray-700">
+                Country: {country} • Renewable Share 2050: {scenarioData.reShare2050}% •
+                Investment: ${scenarioData.investment2050}M • Emissions Reduction: {scenarioData.emissionsReduction}%
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
