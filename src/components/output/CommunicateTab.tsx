@@ -13,10 +13,14 @@ import { stakeholderProfiles } from '../../data/stakeholder-profiles';
 import { getDisseminationStrategy } from '../../data/dissemination-strategies';
 import type { StakeholderId } from '../../types/stakeholder';
 import DisseminationStrategyDisplay from './DisseminationStrategyDisplay';
+import DisseminationTemplates from './DisseminationTemplates';
+
+type CommunicateView = 'strategies' | 'templates';
 
 export default function CommunicateTab() {
   const { scenario } = useScenario();
   const [selectedStakeholder, setSelectedStakeholder] = useState<StakeholderId | null>(null);
+  const [currentView, setCurrentView] = useState<CommunicateView>('strategies');
 
   // Prepare scenario data for populating key messages
   const getScenarioData = (): Record<string, string | number> => {
@@ -80,57 +84,90 @@ export default function CommunicateTab() {
         </div>
       </div>
 
-      {/* Stakeholder Selector */}
+      {/* View Switcher */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">
-          Select Stakeholder Audience
-        </h2>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {stakeholderProfiles.map((profile) => (
-            <button
-              key={profile.id}
-              onClick={() => setSelectedStakeholder(profile.id as StakeholderId)}
-              className={`stakeholder-selector-btn p-4 rounded-lg border-2 transition-all ${
-                selectedStakeholder === profile.id
-                  ? 'border-current shadow-lg transform scale-105'
-                  : 'border-gray-300 hover:border-gray-400 hover:shadow-md'
-              }`}
-              style={{
-                borderColor: selectedStakeholder === profile.id ? profile.color : undefined,
-                backgroundColor: selectedStakeholder === profile.id ? `${profile.color}15` : 'white',
-              }}
-              aria-pressed={selectedStakeholder === profile.id}
-            >
-              <div className="flex flex-col items-center text-center">
-                {/* Icon placeholder - would use actual SVG */}
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mb-2"
-                  style={{ backgroundColor: `${profile.color}30` }}
-                >
-                  <span className="text-2xl" role="img" aria-label={profile.name}>
-                    {getStakeholderEmoji(profile.id as StakeholderId)}
-                  </span>
-                </div>
-                <span className="text-sm font-medium text-gray-800">{profile.name}</span>
-              </div>
-            </button>
-          ))}
+        <div className="flex gap-4 border-b border-gray-300">
+          <button
+            onClick={() => setCurrentView('strategies')}
+            className={`px-6 py-3 font-semibold transition-colors ${
+              currentView === 'strategies'
+                ? 'text-irena-blue border-b-2 border-irena-blue'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            📊 Dissemination Strategies
+          </button>
+          <button
+            onClick={() => setCurrentView('templates')}
+            className={`px-6 py-3 font-semibold transition-colors ${
+              currentView === 'templates'
+                ? 'text-irena-blue border-b-2 border-irena-blue'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            📝 Format Templates
+          </button>
         </div>
       </div>
 
-      {/* Strategy Display */}
-      {selectedStrategy && selectedProfile && scenario ? (
-        <DisseminationStrategyDisplay
-          strategy={selectedStrategy}
-          profile={selectedProfile}
-          scenarioData={getScenarioData()}
-        />
+      {/* Conditional View: Strategies or Templates */}
+      {currentView === 'strategies' ? (
+        <>
+          {/* Stakeholder Selector */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
+              Select Stakeholder Audience
+            </h2>
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {stakeholderProfiles.map((profile) => (
+                <button
+                  key={profile.id}
+                  onClick={() => setSelectedStakeholder(profile.id as StakeholderId)}
+                  className={`stakeholder-selector-btn p-4 rounded-lg border-2 transition-all ${
+                    selectedStakeholder === profile.id
+                      ? 'border-current shadow-lg transform scale-105'
+                      : 'border-gray-300 hover:border-gray-400 hover:shadow-md'
+                  }`}
+                  style={{
+                    borderColor: selectedStakeholder === profile.id ? profile.color : undefined,
+                    backgroundColor: selectedStakeholder === profile.id ? `${profile.color}15` : 'white',
+                  }}
+                  aria-pressed={selectedStakeholder === profile.id}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    {/* Icon placeholder - would use actual SVG */}
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center mb-2"
+                      style={{ backgroundColor: `${profile.color}30` }}
+                    >
+                      <span className="text-2xl" role="img" aria-label={profile.name}>
+                        {getStakeholderEmoji(profile.id as StakeholderId)}
+                      </span>
+                    </div>
+                    <span className="text-sm font-medium text-gray-800">{profile.name}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Strategy Display */}
+          {selectedStrategy && selectedProfile && scenario ? (
+            <DisseminationStrategyDisplay
+              strategy={selectedStrategy}
+              profile={selectedProfile}
+              scenarioData={getScenarioData()}
+            />
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-500 text-lg">
+                Select a stakeholder group above to see recommended communication strategies
+              </p>
+            </div>
+          )}
+        </>
       ) : (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500 text-lg">
-            Select a stakeholder group above to see recommended communication strategies
-          </p>
-        </div>
+        <DisseminationTemplates selectedStakeholderId={selectedStakeholder ?? undefined} />
       )}
 
       {/* Toolkit Reference */}

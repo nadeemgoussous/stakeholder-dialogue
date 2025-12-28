@@ -438,7 +438,7 @@
         "Add copy-to-clipboard functionality for each template",
         "Reference toolkit dissemination methods"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F029",
