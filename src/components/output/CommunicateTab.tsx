@@ -14,8 +14,9 @@ import { getDisseminationStrategy } from '../../data/dissemination-strategies';
 import type { StakeholderId } from '../../types/stakeholder';
 import DisseminationStrategyDisplay from './DisseminationStrategyDisplay';
 import DisseminationTemplates from './DisseminationTemplates';
+import CommunityImpactCalculator from './CommunityImpactCalculator';
 
-type CommunicateView = 'strategies' | 'templates';
+type CommunicateView = 'strategies' | 'templates' | 'community-calculator';
 
 export default function CommunicateTab() {
   const { scenario } = useScenario();
@@ -164,8 +165,13 @@ export default function CommunicateTab() {
         </div>
       </div>
 
-      {/* Conditional View: Strategies or Templates */}
-      {currentView === 'strategies' ? (
+      {/* Conditional View: Strategies, Templates, or Community Calculator */}
+      {currentView === 'community-calculator' ? (
+        <CommunityImpactCalculator
+          scenario={scenario}
+          onBack={() => setCurrentView('strategies')}
+        />
+      ) : currentView === 'strategies' ? (
         <>
           {/* Stakeholder Selector */}
           <div className="mb-8">
@@ -204,6 +210,31 @@ export default function CommunicateTab() {
               ))}
             </div>
           </div>
+
+          {/* Demo Tool Button (Public & Communities only) */}
+          {selectedStakeholder === 'public' && (
+            <div className="mb-6 bg-green-50 border-2 border-green-400 rounded-lg p-6">
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">🏡</div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                    Try the Interactive Demo: Community Impact Calculator
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    See a working example of how to translate your scenario into personal impacts
+                    (bills, jobs, air quality) that communities care about. Based on successful examples
+                    from Belgium and Kenya.
+                  </p>
+                  <button
+                    onClick={() => setCurrentView('community-calculator')}
+                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded font-semibold transition-colors"
+                  >
+                    Launch Community Calculator Demo →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Strategy Display */}
           {selectedStrategy && selectedProfile && scenario ? (

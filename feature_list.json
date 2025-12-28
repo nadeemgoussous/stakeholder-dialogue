@@ -456,7 +456,7 @@
         "Add 'Export Calculator Template' button with HTML/instructions",
         "Show this calculator when 'Public & Communities' stakeholder selected"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F030",
