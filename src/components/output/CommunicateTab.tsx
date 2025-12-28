@@ -15,8 +15,9 @@ import type { StakeholderId } from '../../types/stakeholder';
 import DisseminationStrategyDisplay from './DisseminationStrategyDisplay';
 import DisseminationTemplates from './DisseminationTemplates';
 import CommunityImpactCalculator from './CommunityImpactCalculator';
+import ScenarioComparison from './ScenarioComparison';
 
-type CommunicateView = 'strategies' | 'templates' | 'community-calculator';
+type CommunicateView = 'strategies' | 'templates' | 'community-calculator' | 'scenario-comparison';
 
 export default function CommunicateTab() {
   const { scenario } = useScenario();
@@ -169,10 +170,16 @@ export default function CommunicateTab() {
         </div>
       </div>
 
-      {/* Conditional View: Strategies, Templates, or Community Calculator */}
+      {/* Conditional View: Strategies, Templates, Community Calculator, or Scenario Comparison */}
       {currentView === 'community-calculator' ? (
         <CommunityImpactCalculator
           scenario={scenario}
+          onBack={() => setCurrentView('strategies')}
+        />
+      ) : currentView === 'scenario-comparison' ? (
+        <ScenarioComparison
+          scenario={scenario}
+          selectedStakeholder={selectedStakeholder ?? undefined}
           onBack={() => setCurrentView('strategies')}
         />
       ) : currentView === 'strategies' ? (
@@ -240,6 +247,31 @@ export default function CommunicateTab() {
             </div>
           )}
 
+          {/* Demo Tool Button (CSOs/NGOs or Scientific only) */}
+          {(selectedStakeholder === 'csos-ngos' || selectedStakeholder === 'scientific') && (
+            <div className="mb-6 bg-purple-50 border-2 border-purple-400 rounded-lg p-6">
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">📊</div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                    Try the Interactive Demo: Scenario Comparison Tool
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    Compare your scenario against Business as Usual and High Ambition benchmarks
+                    to communicate ambition level and identify gaps. Includes stakeholder-specific
+                    narrative interpretation.
+                  </p>
+                  <button
+                    onClick={() => setCurrentView('scenario-comparison')}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded font-semibold transition-colors"
+                  >
+                    Launch Scenario Comparison Demo →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Strategy Display */}
           {selectedStrategy && selectedProfile && scenario ? (
             <DisseminationStrategyDisplay
@@ -259,7 +291,7 @@ export default function CommunicateTab() {
         <DisseminationTemplates
           selectedStakeholderId={selectedStakeholder ?? undefined}
           scenarioData={getScenarioData()}
-          scenarioName={scenario?.metadata?.name || 'Your Scenario'}
+          scenarioName={scenario?.metadata?.scenarioName || 'Your Scenario'}
           country={scenario?.metadata?.country || 'Your Country'}
         />
       )}

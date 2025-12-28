@@ -474,7 +474,7 @@
         "Add 'Export Comparison Table' functionality (CSV or image)",
         "Show when CSOs/NGOs or Scientific stakeholders selected"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F031",
