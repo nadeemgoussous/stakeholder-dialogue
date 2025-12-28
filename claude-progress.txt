@@ -1,5 +1,113 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-28 (F029 - Community Impact Calculator Demo)
+
+**Status**: ✅ F029 COMPLETE - Interactive Demo Calculator for Community Engagement
+
+**Progress Summary**:
+
+Implemented an interactive demo calculator showing how to make energy scenarios personal and relatable for communities. This educational tool demonstrates best practices from IRENA toolkit examples (Belgium "My2050", Kenya energy calculator) and teaches practitioners how to translate technical scenario data into household-level impacts that communities care about.
+
+**✅ Completed**:
+
+1. **CommunityImpactCalculator.tsx** - Interactive calculator component (340+ lines)
+   - User inputs: household size (1-15), region dropdown (5 demo regions), current monthly bill ($)
+   - Calculated outputs using scenario data:
+     * Bill impact: Directional estimate based on RE share increase and investment intensity
+     * Jobs created: Regional distribution using scenario's total jobs × population share
+     * Air quality: Mapped from emissions reduction (Significant/Moderate/Minor/Minimal)
+   - Scenario context banner showing name, country, key metrics
+   - Real-time recalculation when inputs change
+   - Prominent educational notices: "This is a Teaching Example"
+   - Directional estimates only with clear disclaimers
+   - Export calculator template as standalone HTML file
+   - Back navigation to strategies view
+
+2. **CommunicateTab.tsx Integration**
+   - Added 'community-calculator' to CommunicateView type
+   - Demo tool button appears ONLY when "Public & Communities" stakeholder selected
+   - Green highlighted call-to-action box with demo description
+   - Conditional rendering of calculator view
+   - Passes full scenario data to calculator component
+   - Scenario requirement check enforced (consistent with F027/F028)
+
+3. **Test Suite** - 29-community-calculator.spec.ts (313 lines)
+   - 12 comprehensive tests, **ALL 12 PASSING** ✅
+   - Scenario requirement enforcement
+   - Stakeholder-specific visibility (Public only)
+   - User input controls functionality
+   - Calculated impacts display correctly
+   - Disclaimer visibility
+   - Export template download trigger
+   - Back navigation preserves state
+   - Educational context display
+
+**Key Achievement**: **PERSONAL IMPACT CALCULATOR DEMO!**
+- Scenario-linked: Uses loaded scenario's jobs, emissions, RE share, investment
+- Educational focus: "This is a demo - build your own calculator" messaging throughout
+- Smart calculations: Bill logic based on RE economics, jobs regionally distributed
+- Export ready: Practitioners get HTML template to customize for local context
+- Community-focused: Translates MW and TWh into household bills, local jobs, air quality
+
+**Calculator Logic**:
+```
+Bill Impact (directional):
+- RE share increase >30%: -15% bills (long-term savings)
+- RE share increase >15%: -8% bills (moderate savings)
+- RE share increase <15%: +5% bills (fossil fuel price risk)
+- Adjusted for investment per capita (high investment adds short-term pressure)
+
+Jobs Distribution:
+- Total scenario jobs (from calculateJobs) × regional population share
+- Example: 9,807 jobs nationwide × 5% (Central Region) = 490 jobs
+
+Air Quality:
+- Emissions reduction >50%: Significant improvement
+- Emissions reduction >30%: Moderate improvement
+- Emissions reduction >10%: Minor improvement
+- Emissions reduction <10%: Minimal improvement
+```
+
+**Export Template Features**:
+- Standalone HTML file with embedded CSS and JavaScript
+- Pre-structured calculator interface
+- Placeholder calculation logic for customization
+- Instructions on adapting for local context
+- Can be hosted on ministry websites or shared as file
+
+**Files Created**:
+- `src/components/output/CommunityImpactCalculator.tsx` (340 lines)
+- `tests/e2e/29-community-calculator.spec.ts` (313 lines, 12 tests)
+
+**Files Modified**:
+- `src/components/output/CommunicateTab.tsx` (+30 lines for calculator integration)
+- `feature_list.json` (F029 marked passing)
+
+**Git Commits**:
+- `53c3f73` - feat: implement F029 - Community Impact Calculator demo
+
+**Design Principles Applied**:
+- Educational, not automated (practitioners customize for local context)
+- Scenario-linked (requires loaded scenario, enforced in UI)
+- IRENA toolkit aligned (Belgium My2050, Kenya calculator examples)
+- Directional estimates only (no false precision)
+- Offline-first compatible (all calculations browser-based)
+- Prominent disclaimers about illustrative nature
+
+**IRENA Toolkit References**:
+- Section 4.3: Knowledge Dissemination
+- Belgium "My2050" interactive energy calculator
+- Kenya energy calculator (household-level impacts)
+- Community engagement best practices
+- Making scenarios personal and relatable
+
+**Next Features**: F030-F032 (Communication tab completion)
+- F030: Scenario Comparison Tool (BAU vs User vs High Ambition)
+- F031: Export Guidance (instructions for creating materials)
+- F032: Dissemination Tips (educational content from toolkit)
+
+---
+
 ### Session: 2025-12-28 (F028 - Dissemination Format Template Library)
 
 **Status**: ✅ F028 COMPLETE - Template Library with 4 Communication Formats
