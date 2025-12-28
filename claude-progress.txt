@@ -88,6 +88,69 @@ Implemented a comprehensive template library providing text-based structures for
 
 ---
 
+### Session: 2025-12-28 (Scenario Linking Fix for F027 & F028)
+
+**Status**: ✅ CRITICAL FIX - Communication Tab Now Requires Loaded Scenario
+
+**Issue Identified**:
+User correctly noted that Communication tab (both Dissemination Strategies and Templates) were not linked to the loaded scenario. They could be accessed without any scenario data, which defeated the purpose of generating scenario-specific communication materials.
+
+**Solution Implemented**:
+
+1. **Scenario Requirement Check** (`CommunicateTab.tsx`)
+   - Added early return if `!scenario`
+   - Shows friendly "Load a Scenario to Get Started" message
+   - Provides clear step-by-step instructions to load scenario
+   - Explains why scenario is needed (metrics for dissemination materials)
+
+2. **Scenario Data Integration** (`DisseminationTemplates.tsx`)
+   - Added props: `scenarioData`, `scenarioName`, `country`
+   - Created scenario context banner showing:
+     - Scenario name (e.g., "Rwanda High Renewable")
+     - Country name
+     - Key metrics: Renewable Share 2050, Investment, Emissions Reduction
+   - Banner displays at top of template library view
+
+3. **User Experience Flow**:
+   ```
+   WITHOUT SCENARIO:
+   - Communication tab shows: "Load a Scenario to Get Started"
+   - Icon: 📊
+   - Instructions: Go to Input → Load Rwanda Example → Return here
+   - Explanation: Strategies need actual scenario metrics
+
+   WITH SCENARIO:
+   - Scenario context banner: ✅ "Using Scenario: [Name]"
+   - Shows: Country, RE%, Investment, Emissions
+   - All templates populated with real data
+   - Strategies show scenario-specific recommendations
+   ```
+
+4. **Test Updates**
+   - Modified `28-dissemination-templates.spec.ts` to load scenario first
+   - Added test: "should require scenario to be loaded"
+   - Added test: "should show scenario context banner when scenario loaded"
+   - All tests updated to use proper selectors
+
+**Files Modified**:
+- `src/components/output/CommunicateTab.tsx` - Added scenario check, pass data to templates
+- `src/components/output/DisseminationTemplates.tsx` - Added scenario banner, receive props
+- `tests/e2e/28-dissemination-templates.spec.ts` - Updated test setup
+
+**Git Commits**:
+- `71ddbdd` - fix: link Communication tab (F027 & F028) to loaded scenario
+
+**Impact**:
+- ✅ Communication tab now properly linked to scenario data
+- ✅ Clear user guidance when scenario not loaded
+- ✅ Scenario context visible throughout communication workflows
+- ✅ Ensures all dissemination materials use actual scenario metrics
+- ✅ Better user experience with clear instructions
+
+**Key Learning**: Always ensure feature dependencies (like scenario data) are properly enforced in the UI with helpful guidance for users.
+
+---
+
 ### Session: 2025-12-26 (F027 - Communication Tab Implementation)
 
 **Status**: ✅ F027 COMPLETE - Communication Tab with Dissemination Strategy Recommender
