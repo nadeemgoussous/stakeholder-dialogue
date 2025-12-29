@@ -141,7 +141,7 @@ Choose one of four import methods:
 4. Load scenario
 
 #### Option D: Load Example
-- Click **"Load Example"** to explore with sample data (Rwanda baseline scenario)
+- Click **"Load Example"** to explore with sample data (ScenarioLand baseline scenario)
 
 ### 2. Explore Stakeholder Responses
 

@@ -154,7 +154,7 @@ module.exports = {
 │                                                              │
 │                                                              │
 ├─────────────────────────────────────────────────────────────┤
-│  Status: Rwanda High RE Scenario | Offline Mode ✓           │
+│  Status: ScenarioLand High RE Scenario | Offline Mode ✓           │
 └─────────────────────────────────────────────────────────────┘
 ```
 

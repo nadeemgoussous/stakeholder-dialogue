@@ -11,9 +11,9 @@ test.describe('F027: Communication Tab - Dissemination Strategy Recommender', ()
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
 
-    // Load Rwanda example scenario first
+    // Load ScenarioLand example scenario first
     await page.click('text=Load Example Scenario');
-    await page.waitForSelector('text=Rwanda');
+    await page.waitForSelector('text=ScenarioLand');
 
     // Navigate to Communication tab
     await page.click('button:has-text("Communicate")');

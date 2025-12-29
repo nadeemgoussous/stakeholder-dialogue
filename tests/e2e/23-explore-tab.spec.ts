@@ -24,8 +24,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('displays sliders after loading example scenario', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -42,8 +42,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('displays prominent disclaimer per CLAUDE.md', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -63,8 +63,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('displays base values from loaded scenario', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -81,8 +81,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('allows adjusting RE share 2030 slider', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -108,8 +108,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('allows adjusting RE share 2040 slider', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -127,8 +127,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('allows adjusting coal phaseout year slider', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -146,8 +146,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('shows reset button after making adjustments', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -165,8 +165,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('reset button restores base values', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -195,8 +195,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('displays placeholder for future directional impacts (F024-F025)', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -209,8 +209,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('slider ranges are appropriate (0-100% for RE, 2025-2050 for coal)', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -236,8 +236,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('sliders have proper labels and accessibility attributes', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');
@@ -255,8 +255,8 @@ test.describe('F023: Explore Impacts Tab', () => {
 
   test('multiple adjustments work together', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Explore tab
     await page.click('button[role="tab"]:has-text("Explore Impacts")');

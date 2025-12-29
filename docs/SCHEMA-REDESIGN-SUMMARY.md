@@ -52,7 +52,7 @@ Status: Major architectural improvements implemented
   - Integration with ScenarioContext
 
 ### 5. Sample Data (1 file)
-- ✅ `public/sample-data/rwanda-baseline.json` - **Complete rewrite**
+- ✅ `public/sample-data/scenarioland-baseline.json` - **Complete rewrite**
   - Updated to simplified format
   - 4 milestones (2025, 2030, 2040, 2050)
   - All units explicitly labeled
@@ -313,7 +313,7 @@ function migrateOldSchema(old: OldScenarioInput): ScenarioInput {
 3. **Update ScenarioPreview** ⭐ HIGH
    - Read from new schema
    - Display with units
-   - Test with Rwanda baseline
+   - Test with ScenarioLand baseline
 
 4. **Update calculations.ts** ⭐ MEDIUM
    - Use aggregated capacity data

@@ -23,7 +23,7 @@ test.describe('F010: Input Tab with Three Input Options', () => {
   test('Load Example button shows correct title and description', async ({ page }) => {
     const loadExampleButton = page.getByTestId('load-example-button');
     await expect(loadExampleButton.getByText('Load Example')).toBeVisible();
-    await expect(loadExampleButton.getByText('Rwanda baseline scenario')).toBeVisible();
+    await expect(loadExampleButton.getByText('example scenario')).toBeVisible();
     await expect(loadExampleButton.getByText('Works offline')).toBeVisible();
   });
 
@@ -68,7 +68,7 @@ test.describe('F011: Load Example Scenario Functionality', () => {
     await page.goto('/');
   });
 
-  test('loads Rwanda baseline scenario when Load Example clicked', async ({ page }) => {
+  test('loads example baseline scenario when Load Example clicked', async ({ page }) => {
     await page.getByTestId('load-example-button').click();
 
     // Wait for loading to complete
@@ -79,12 +79,12 @@ test.describe('F011: Load Example Scenario Functionality', () => {
     await expect(page.getByTestId('scenario-preview')).toBeVisible();
   });
 
-  test('displays Rwanda scenario metadata correctly', async ({ page }) => {
+  test('displays ScenarioLand scenario metadata correctly', async ({ page }) => {
     await page.getByTestId('load-example-button').click();
     await expect(page.getByTestId('loading-indicator')).not.toBeVisible({ timeout: 5000 });
 
     // Check metadata
-    await expect(page.getByTestId('scenario-country')).toHaveText('Rwanda');
+    await expect(page.getByTestId('scenario-country')).toHaveText('ScenarioLand');
     await expect(page.getByTestId('scenario-name')).toHaveText('Business as Usual (Baseline)');
     await expect(page.getByTestId('scenario-model')).toHaveText('SPLAT-MESSAGE');
   });
@@ -137,7 +137,7 @@ test.describe('F011: Load Example Scenario Functionality', () => {
     await page.getByTestId('load-example-button').click();
     await expect(page.getByTestId('loading-indicator')).not.toBeVisible({ timeout: 5000 });
     await expect(page.getByTestId('scenario-preview')).toBeVisible();
-    await expect(page.getByTestId('scenario-country')).toHaveText('Rwanda');
+    await expect(page.getByTestId('scenario-country')).toHaveText('ScenarioLand');
   });
 
   test('button is disabled while loading', async ({ page }) => {
@@ -193,6 +193,6 @@ test.describe('F011: Load Example Scenario Functionality', () => {
 
     // Scenario preview should still be visible
     await expect(page.getByTestId('scenario-preview')).toBeVisible();
-    await expect(page.getByTestId('scenario-country')).toHaveText('Rwanda');
+    await expect(page.getByTestId('scenario-country')).toHaveText('ScenarioLand');
   });
 });

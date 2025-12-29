@@ -15,8 +15,8 @@ test.describe('AI Enhancement', () => {
     await page.goto('http://localhost:5173/');
 
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Baseline Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.click('button:has-text("Load ScenarioLand Baseline Example")');
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
   });
 
   test('should generate rule-based response when Ollama unavailable', async ({ page }) => {
@@ -227,8 +227,8 @@ test.describe('AI Enhancement', () => {
 test.describe('AI Enhancement Integration', () => {
   test('should integrate with prediction workflow', async ({ page }) => {
     await page.goto('http://localhost:5173/');
-    await page.click('button:has-text("Load Rwanda Baseline Example")');
-    await page.waitForSelector('text=Rwanda');
+    await page.click('button:has-text("Load ScenarioLand Baseline Example")');
+    await page.waitForSelector('text=ScenarioLand');
 
     // Complete full workflow: select → predict → reveal → compare
     await page.click('button:has-text("Stakeholder Dialogue")');
@@ -253,8 +253,8 @@ test.describe('AI Enhancement Integration', () => {
 
   test('should show reflection prompts regardless of enhancement method', async ({ page }) => {
     await page.goto('http://localhost:5173/');
-    await page.click('button:has-text("Load Rwanda Baseline Example")');
-    await page.waitForSelector('text=Rwanda');
+    await page.click('button:has-text("Load ScenarioLand Baseline Example")');
+    await page.waitForSelector('text=ScenarioLand');
 
     await page.click('button:has-text("Stakeholder Dialogue")');
     await page.click('[data-testid="stakeholder-card-development-partners"]');

@@ -7,7 +7,7 @@ test.describe('F028: Dissemination Format Template Library', () => {
 
     // Load example scenario first (required for Communication tab)
     await page.click('text=Load Example Scenario');
-    await page.waitForSelector('text=Rwanda');
+    await page.waitForSelector('text=ScenarioLand');
     await page.waitForTimeout(500);
 
     // Navigate to Communication tab
@@ -32,7 +32,7 @@ test.describe('F028: Dissemination Format Template Library', () => {
   test('should show scenario context banner when scenario loaded', async ({ page }) => {
     // Should show scenario context
     await expect(page.locator('text=Using Scenario:')).toBeVisible();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
   });
 
   test('should show view switcher with Strategies and Templates tabs', async ({ page }) => {

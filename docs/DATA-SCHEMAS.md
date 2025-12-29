@@ -357,7 +357,7 @@ For users importing from Excel/spreadsheet tools:
 
 ```csv
 # Metadata
-country,Rwanda
+country,ScenarioLand
 scenarioName,High Renewable Ambition
 modelVersion,MESSAGE
 dateCreated,2024-01-15

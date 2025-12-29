@@ -15,7 +15,7 @@ test.describe('Rule-Based Response Generator (F002)', () => {
       // Create test scenario data
       const scenario = {
         metadata: {
-          country: 'Rwanda',
+          country: 'ScenarioLand',
           scenarioName: 'High Renewable',
           modelVersion: 'SPLAT',
           dateCreated: '2025-01-01'
@@ -131,7 +131,7 @@ test.describe('Rule-Based Response Generator (F002)', () => {
       const { getMetricValue } = await import('/src/utils/stakeholder-rules.ts');
 
       const scenario = {
-        metadata: { country: 'Rwanda', scenarioName: 'Test', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
+        metadata: { country: 'ScenarioLand', scenarioName: 'Test', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
         milestoneYears: [2030],
         supply: {
           capacity: { hydro: {}, solarPV: {}, wind: {}, battery: {}, geothermal: {}, biomass: {}, coal: {}, diesel: {}, hfo: {}, naturalGas: {}, nuclear: {}, interconnector: {} },
@@ -186,7 +186,7 @@ test.describe('Rule-Based Response Generator (F002)', () => {
 
       // Create scenario with HIGH investment (should trigger concern for some stakeholders)
       const scenario = {
-        metadata: { country: 'Rwanda', scenarioName: 'High Investment', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
+        metadata: { country: 'ScenarioLand', scenarioName: 'High Investment', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
         milestoneYears: [2030, 2050],
         supply: {
           capacity: {
@@ -249,7 +249,7 @@ test.describe('Rule-Based Response Generator (F002)', () => {
 
       // Create scenario with very HIGH renewable share (should trigger appreciation)
       const scenario = {
-        metadata: { country: 'Rwanda', scenarioName: 'Very High RE', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
+        metadata: { country: 'ScenarioLand', scenarioName: 'Very High RE', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
         milestoneYears: [2030, 2050],
         supply: {
           capacity: {
@@ -311,7 +311,7 @@ test.describe('Rule-Based Response Generator (F002)', () => {
       const { stakeholderProfiles } = await import('/src/data/stakeholder-profiles.ts');
 
       const scenario = {
-        metadata: { country: 'Rwanda', scenarioName: 'Offline Test', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
+        metadata: { country: 'ScenarioLand', scenarioName: 'Offline Test', modelVersion: 'SPLAT', dateCreated: '2025-01-01' },
         milestoneYears: [2030],
         supply: {
           capacity: {

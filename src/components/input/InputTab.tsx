@@ -22,8 +22,8 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
     setError(null);
     setSelectedMethod(null); // Clear any selected method to show preview
     try {
-      // Load the Rwanda baseline scenario (bundled with the app - works offline)
-      const response = await fetch(`${import.meta.env.BASE_URL}sample-data/rwanda-baseline.json`);
+      // Load the example baseline scenario (bundled with the app - works offline)
+      const response = await fetch(`${import.meta.env.BASE_URL}sample-data/scenarioland-baseline.json`);
       if (!response.ok) {
         throw new Error('Failed to load example scenario');
       }
@@ -87,7 +87,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
           </div>
           <h3 className="text-xl font-semibold mb-2">Load Example</h3>
           <p className="text-gray-600 text-sm mb-4">
-            Load the Rwanda baseline scenario to explore the tool's features
+            Load an example scenario to explore the tool's features
           </p>
           <div className="text-xs text-gray-500">
             ✓ Works offline<br />

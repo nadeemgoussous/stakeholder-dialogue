@@ -464,7 +464,7 @@ test.describe('F006: Derived Metrics Calculator (Soft Metrics ONLY)', () => {
 
       const testScenario = {
         metadata: {
-          country: 'Rwanda',
+          country: 'ScenarioLand',
           scenarioName: 'High Renewable',
           modelVersion: 'SPLAT-MESSAGE',
           dateCreated: '2025-01-01'

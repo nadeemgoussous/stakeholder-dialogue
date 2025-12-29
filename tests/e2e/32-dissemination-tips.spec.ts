@@ -11,9 +11,9 @@ test.describe('F032 - Dissemination Tips', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
 
-    // Load Rwanda example scenario first
+    // Load ScenarioLand example scenario first
     await page.click('text=Load Example');
-    await page.waitForSelector('text=Rwanda', { timeout: 10000 });
+    await page.waitForSelector('text=ScenarioLand', { timeout: 10000 });
 
     // Navigate to Communication tab
     await page.click('button:has-text("Communicate")');

@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "country": "Rwanda",
+    "country": "ScenarioLand",
     "scenarioName": "Business as Usual (Baseline)",
     "modelVersion": "SPLAT-MESSAGE",
     "dateCreated": "2025-01-15",
-    "sourceFile": "rwanda_baseline_splat.csv"
+    "sourceFile": "scenarioland_baseline.csv"
   },
   "milestones": [
     {

@@ -59,7 +59,7 @@ test.describe('F012: Quick Entry Form', () => {
     expect(optionsCount).toBeGreaterThan(50); // Should have many countries
 
     // Verify specific countries exist
-    await expect(countrySelect.locator('option:has-text("Rwanda")')).toHaveCount(1);
+    await expect(countrySelect.locator('option:has-text("ScenarioLand")')).toHaveCount(1);
     await expect(countrySelect.locator('option:has-text("Kenya")')).toHaveCount(1);
     await expect(countrySelect.locator('option:has-text("Brazil")')).toHaveCount(1);
     await expect(countrySelect.locator('option:has-text("India")')).toHaveCount(1);
@@ -80,7 +80,7 @@ test.describe('F012: Quick Entry Form', () => {
     await page.click('[data-testid="quick-entry-button"]');
 
     // Fill required fields
-    await page.selectOption('[data-testid="country-select"]', 'Rwanda');
+    await page.selectOption('[data-testid="country-select"]', 'ScenarioLand');
     await page.fill('[data-testid="scenario-name-input"]', 'Test Scenario');
 
     // Try to enter negative value
@@ -153,7 +153,7 @@ test.describe('F012: Quick Entry Form', () => {
     await expect(page.locator('text=Country is required')).toBeVisible();
 
     // Start filling the field
-    await page.selectOption('[data-testid="country-select"]', 'Rwanda');
+    await page.selectOption('[data-testid="country-select"]', 'ScenarioLand');
 
     // Error should disappear
     await expect(page.locator('text=Country is required')).not.toBeVisible();

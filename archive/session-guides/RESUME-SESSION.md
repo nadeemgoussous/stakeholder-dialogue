@@ -24,7 +24,7 @@
    - `src/utils/csv-parser.ts` - Auto-detect SPLAT/generic, aggregate to milestones
    - `src/types/scenario.ts` - New types with helper functions
    - `src/components/input/CSVUploader.tsx` - 3-step upload workflow
-   - `public/sample-data/rwanda-baseline.json` - Updated to new format
+   - `public/sample-data/scenarioland-baseline.json` - Updated to new format
 
 4. **Documentation**
    - `docs/SPLAT-CSV-ANALYSIS.md`
@@ -132,7 +132,7 @@ docs/SCHEMA-REDESIGN-SUMMARY.md ✅
 ### Updated Files (Already Done)
 ```
 src/types/scenario.ts ✅ (complete rewrite)
-public/sample-data/rwanda-baseline.json ✅ (new format)
+public/sample-data/scenarioland-baseline.json ✅ (new format)
 ```
 
 ---
@@ -205,7 +205,7 @@ const formatted = smartFormatPower(15000); // → "15.0 GW"
 
 3. **Test Load Example**
    - Click "Load Example"
-   - Should load rwanda-baseline.json
+   - Should load scenarioland-baseline.json
    - Verify displays correctly with new schema
 
 4. **Fix Broken Components**
@@ -257,7 +257,7 @@ git add src/types/scenario.ts
 git add src/utils/unit-conversions.ts
 git add src/utils/csv-parser.ts
 git add src/components/input/CSVUploader.tsx
-git add public/sample-data/rwanda-baseline.json
+git add public/sample-data/scenarioland-baseline.json
 git add docs/
 
 # Commit with descriptive message
@@ -268,7 +268,7 @@ git commit -m "feat: implement simplified flexible schema with CSV import
 - Implement flexible unit system (MW/GW, GWh/TWh, m$/B$)
 - Create CSV parser for SPLAT and generic formats
 - Add CSVUploader component with 3-step workflow
-- Update rwanda-baseline.json to new format
+- Update scenarioland-baseline.json to new format
 - Add comprehensive documentation
 
 BREAKING CHANGE: Schema structure completely redesigned.

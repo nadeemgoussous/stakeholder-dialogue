@@ -357,7 +357,7 @@ Policy Maker Perspective:
 
 ### Integration Tests Needed
 
-1. **Rwanda Baseline Scenario**
+1. **ScenarioLand Baseline Scenario**
    - Test with LDC context
    - Test with emerging context
    - Verify different variant responses

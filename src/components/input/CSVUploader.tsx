@@ -196,7 +196,7 @@ export default function CSVUploader({ onCancel, onSuccess }: CSVUploaderProps) {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 className="input-field"
-                placeholder="e.g., Rwanda"
+                placeholder="e.g., ScenarioLand"
                 data-testid="csv-country-input"
               />
             </div>

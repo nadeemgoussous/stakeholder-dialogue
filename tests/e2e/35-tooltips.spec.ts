@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('F035 - Tooltips for Technical Terms', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // Load the Rwanda example scenario for testing
-    await page.click('button:has-text("Load Rwanda Example")');
+    // Load the ScenarioLand example scenario for testing
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForSelector('[data-testid="scenario-preview"]');
   });
 

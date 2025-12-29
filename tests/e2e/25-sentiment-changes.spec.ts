@@ -11,7 +11,7 @@ test.describe('F025 - Stakeholder Sentiment Changes', () => {
     await page.goto('http://localhost:5173/');
 
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(500);
 
     // Navigate to Explore Impacts tab

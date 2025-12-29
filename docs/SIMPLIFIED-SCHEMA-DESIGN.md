@@ -420,6 +420,6 @@ function migrateOldSchema(old: OldScenarioInput): ScenarioInput {
 2. Create unit conversion utilities
 3. Build simplified QuickEntryForm (7-10 fields)
 4. Create CSV parser with auto-aggregation
-5. Update rwanda-baseline.json to simplified format
+5. Update scenarioland-baseline.json to simplified format
 6. Update calculations and stakeholder logic
 7. Test with actual SPLAT CSV file

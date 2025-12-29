@@ -18,7 +18,7 @@ test.describe('F030 - Scenario Comparison Tool', () => {
 
     // Load sample scenario first (required for Communication tab)
     await page.click('button:has-text("Load Example")');
-    await page.waitForSelector('text=Rwanda', { timeout: 5000 });
+    await page.waitForSelector('text=ScenarioLand', { timeout: 5000 });
 
     // Navigate to Communication tab
     await page.click('text=Communicate');

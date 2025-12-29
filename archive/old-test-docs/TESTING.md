@@ -144,7 +144,7 @@ test('should failover to rule-based when API fails', async ({ page }) => {
 
 Located in `public/sample-data/`:
 - `example-scenario.json` - For testing scenario loading
-- `rwanda-baseline.json` - Realistic SPLAT output
+- `scenarioland-baseline.json` - Realistic SPLAT output
 
 ### Test Scenarios Should Include
 

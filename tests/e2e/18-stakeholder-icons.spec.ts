@@ -4,7 +4,7 @@ test.describe('F017: Stakeholder Icons', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(500);
     // Navigate to Stakeholder Dialogue tab
     await page.click('button:has-text("Stakeholder Dialogue")');

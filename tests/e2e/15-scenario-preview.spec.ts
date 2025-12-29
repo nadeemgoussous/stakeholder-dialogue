@@ -19,7 +19,7 @@ test.describe('Scenario Preview Panel (F015)', () => {
     // Country
     const country = page.getByTestId('preview-country');
     await expect(country).toBeVisible();
-    await expect(country).toContainText('Rwanda');
+    await expect(country).toContainText('ScenarioLand');
 
     // Scenario name
     const scenarioName = page.getByTestId('preview-scenario-name');
@@ -116,13 +116,13 @@ test.describe('Scenario Preview Panel (F015)', () => {
   // This test is redundant and has been removed to avoid complexity
 
   test('RE share calculation is accurate', async ({ page }) => {
-    // For Rwanda baseline, let's verify the calculation
+    // For ScenarioLand baseline, let's verify the calculation
     // Get the RE share text
     const reShare2030 = page.getByTestId('preview-re-2030');
     const text = await reShare2030.textContent();
     const value = parseInt(text?.replace('%', '') || '0');
 
-    // RE share should be reasonable for Rwanda (high hydro potential)
+    // RE share should be reasonable for ScenarioLand (high hydro potential)
     // We don't hard-code the exact value, but it should be > 0
     expect(value).toBeGreaterThan(0);
   });

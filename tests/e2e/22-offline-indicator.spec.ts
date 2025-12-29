@@ -66,7 +66,7 @@ test.describe('F022: Offline Indicator and Graceful Degradation', () => {
 
   test('stakeholder tab shows offline message when disconnected', async ({ page, context }) => {
     // Load example scenario first
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(1000);
 
     // Navigate to stakeholder tab
@@ -87,7 +87,7 @@ test.describe('F022: Offline Indicator and Graceful Degradation', () => {
 
   test('responses still work offline (rule-based)', async ({ page, context }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(1000);
 
     // Navigate to stakeholder tab
@@ -122,7 +122,7 @@ test.describe('F022: Offline Indicator and Graceful Degradation', () => {
 
   test('responses are instant (no loading spinners)', async ({ page }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(1000);
 
     // Navigate to stakeholder tab
@@ -196,7 +196,7 @@ test.describe('F022: Offline Indicator and Graceful Degradation', () => {
 
   test('no error messages or warnings when offline', async ({ page, context }) => {
     // Load example and navigate
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(1000);
     await page.click('button:has-text("Proceed to Stakeholder Dialogue")');
 
@@ -223,7 +223,7 @@ test.describe('F022: Offline Indicator and Graceful Degradation', () => {
 
   test('generation type indicator shows "rule-based" when offline', async ({ page, context }) => {
     // Load example scenario
-    await page.click('button:has-text("Load Rwanda Example")');
+    await page.click('button:has-text("Load ScenarioLand Example")');
     await page.waitForTimeout(1000);
 
     // Navigate to stakeholder tab

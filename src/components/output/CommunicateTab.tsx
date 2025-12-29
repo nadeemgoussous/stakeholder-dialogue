@@ -97,7 +97,7 @@ export default function CommunicateTab() {
             <p className="text-sm font-semibold text-gray-800 mb-3">To load a scenario:</p>
             <ol className="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>Go to the <strong>Input</strong> tab</li>
-              <li>Click <strong>"Load Rwanda Example"</strong> for a quick start</li>
+              <li>Click <strong>"Load Example Scenario"</strong> for a quick start</li>
               <li>Or upload your own scenario data (JSON or Excel template)</li>
               <li>Return here to generate communication materials</li>
             </ol>

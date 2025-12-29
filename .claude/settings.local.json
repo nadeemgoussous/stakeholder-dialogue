@@ -24,7 +24,8 @@
       "Bash(npx vite:*)",
       "WebFetch(domain:component.gallery)",
       "WebFetch(domain:carbondesignsystem.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

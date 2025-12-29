@@ -97,7 +97,7 @@ from utils.calculations import calculateDerivedMetrics
 # Sample scenarios (create variety)
 scenarios = [
     {
-        "metadata": {"country": "Rwanda", "scenarioName": "High Solar"},
+        "metadata": {"country": "ScenarioLand", "scenarioName": "High Solar"},
         "capacity": {
             "byYear": {
                 "2030": {"solarPV": 300, "windOnshore": 50, "hydro": 200, "gas": 100},

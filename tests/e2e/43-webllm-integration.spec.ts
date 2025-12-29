@@ -42,7 +42,7 @@ test.describe('F043: WebLLM Integration', () => {
 
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Navigate to Stakeholder Dialogue tab
     await page.getByRole('button', { name: /stakeholder dialogue/i }).click();
@@ -69,7 +69,7 @@ test.describe('F043: WebLLM Integration', () => {
   test('should silently failover to rule-based when WebLLM unavailable', async ({ page }) => {
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Navigate to Stakeholder Dialogue tab
     await page.getByRole('button', { name: /stakeholder dialogue/i }).click();
@@ -149,7 +149,7 @@ test.describe('F043: WebLLM Integration', () => {
   test('should generate responses without WebLLM (rule-based fallback)', async ({ page }) => {
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Navigate to Stakeholder Dialogue
     await page.getByRole('button', { name: /stakeholder dialogue/i }).click();
@@ -176,7 +176,7 @@ test.describe('F043: WebLLM Integration', () => {
   test('should not show loading spinners that block user', async ({ page }) => {
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Navigate to Stakeholder Dialogue
     await page.getByRole('button', { name: /stakeholder dialogue/i }).click();
@@ -213,7 +213,7 @@ test.describe('F043: WebLLM Integration', () => {
 
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Go offline
     await context.setOffline(true);
@@ -242,7 +242,7 @@ test.describe('F043: WebLLM Integration', () => {
   test('should generate responses for multiple stakeholders', async ({ page }) => {
     // Load example scenario
     await page.getByRole('button', { name: /load.*example/i }).click();
-    await expect(page.locator('text=Rwanda').first()).toBeVisible();
+    await expect(page.locator('text=ScenarioLand').first()).toBeVisible();
 
     // Navigate to Stakeholder Dialogue
     await page.getByRole('button', { name: /stakeholder dialogue/i }).click();

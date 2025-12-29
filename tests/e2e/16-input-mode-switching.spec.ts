@@ -176,7 +176,7 @@ test.describe('Input Mode Switching (F015 Fix)', () => {
 
     const secondCountry = await page.getByTestId('preview-country').textContent();
 
-    // Should be the same example (Rwanda)
+    // Should be the same example (ScenarioLand)
     expect(firstCountry).toBe(secondCountry);
   });
 

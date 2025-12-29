@@ -5,8 +5,8 @@ test.describe('F024 - Directional Impact Indicators', () => {
     await page.goto('http://localhost:5173');
 
     // Load example scenario
-    await page.getByRole('button', { name: /load.*rwanda.*example/i }).click();
-    await expect(page.getByText(/rwanda/i)).toBeVisible({ timeout: 10000 });
+    await page.getByRole('button', { name: /load.*example/i }).click();
+    await expect(page.getByText(/ScenarioLand/i)).toBeVisible({ timeout: 10000 });
 
     // Navigate to Explore tab
     await page.getByRole('button', { name: /explore impacts/i }).click();
