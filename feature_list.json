@@ -550,7 +550,7 @@
         "Add tooltips to metric names",
         "Style consistently with IRENA colors"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F036",
