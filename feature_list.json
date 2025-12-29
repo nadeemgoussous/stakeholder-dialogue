@@ -492,7 +492,7 @@
         "Include reminders about adding branding, local policy references",
         "Link to toolkit resources"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F032",
