@@ -1,6 +1,7 @@
 import { ScenarioInput } from '../../types/scenario';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, Legend, ResponsiveContainer } from 'recharts';
 import { smartFormatMoney } from '../../utils/unit-conversions';
+import { Tooltip } from '../common/Tooltip';
 
 interface ScenarioPreviewProps {
   scenario: ScenarioInput;
@@ -78,7 +79,11 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
         {/* RE Share for Each Milestone */}
         {scenario.milestones.slice(0, 3).map((milestone) => (
           <div key={milestone.year} className="bg-green-50 p-4 rounded-lg">
-            <p className="text-xs text-gray-600 mb-1">RE SHARE {milestone.year}</p>
+            <p className="text-xs text-gray-600 mb-1">
+              <Tooltip content="renewable_share">
+                <span>RE SHARE {milestone.year}</span>
+              </Tooltip>
+            </p>
             <p className="font-bold text-2xl text-green-700" data-testid={`preview-re-${milestone.year}`}>
               {milestone.reShare.toFixed(1)}%
             </p>
@@ -87,7 +92,11 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
 
         {/* Investment */}
         <div className="bg-purple-50 p-4 rounded-lg">
-          <p className="text-xs text-gray-600 mb-1">TOTAL INVESTMENT</p>
+          <p className="text-xs text-gray-600 mb-1">
+            <Tooltip content="investment">
+              <span>TOTAL INVESTMENT</span>
+            </Tooltip>
+          </p>
           <p className="font-bold text-2xl text-purple-700" data-testid="preview-investment">
             {smartFormatMoney(totalInvestment)}
           </p>
@@ -96,7 +105,11 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
 
         {/* Emissions Reduction */}
         <div className="bg-orange-50 p-4 rounded-lg md:col-span-2 lg:col-span-3">
-          <p className="text-xs text-gray-600 mb-1">EMISSIONS REDUCTION</p>
+          <p className="text-xs text-gray-600 mb-1">
+            <Tooltip content="emissions_reduction">
+              <span>EMISSIONS REDUCTION</span>
+            </Tooltip>
+          </p>
           <p className="font-bold text-2xl" style={{ color: 'var(--color-irena-orange)' }} data-testid="preview-emissions">
             {emissionsReduction > 0 ? `-${emissionsReduction.toFixed(0)}%` : 'N/A'}
           </p>
@@ -115,7 +128,7 @@ export default function ScenarioPreview({ scenario, onProceed, onLoadDifferent }
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
               <YAxis label={{ value: `Capacity (${scenario.milestones[0].capacity.unit})`, angle: -90, position: 'insideLeft' }} />
-              <Tooltip />
+              <ChartTooltip />
               <Legend />
               <Bar dataKey="Renewables" stackId="a" fill="#66bb6a" />
               <Bar dataKey="Fossil" stackId="a" fill="#424242" />

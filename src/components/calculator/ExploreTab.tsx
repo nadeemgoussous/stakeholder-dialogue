@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useScenario } from '../../context/ScenarioContext';
 import DirectionalImpacts from './DirectionalImpacts';
 import SentimentChanges from './SentimentChanges';
+import { Tooltip } from '../common/Tooltip';
 
 /**
  * ExploreTab Component - F023
@@ -163,7 +164,9 @@ export default function ExploreTab() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="re-share-2030" className="font-medium text-gray-700">
-                Renewable Energy Share 2030
+                <Tooltip content="renewable_share">
+                  <span>Renewable Energy Share 2030</span>
+                </Tooltip>
               </label>
               <div className="text-right">
                 <span className="text-sm text-gray-500">Base: {baseValues.reShare2030}%</span>
@@ -195,7 +198,9 @@ export default function ExploreTab() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="re-share-2040" className="font-medium text-gray-700">
-                Renewable Energy Share 2040
+                <Tooltip content="renewable_share">
+                  <span>Renewable Energy Share 2040</span>
+                </Tooltip>
               </label>
               <div className="text-right">
                 <span className="text-sm text-gray-500">Base: {baseValues.reShare2040}%</span>
@@ -227,7 +232,9 @@ export default function ExploreTab() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="coal-phaseout" className="font-medium text-gray-700">
-                Coal Phaseout Year
+                <Tooltip content="coal" isGlossaryKey={true}>
+                  <span>Coal Phaseout Year</span>
+                </Tooltip>
               </label>
               <div className="text-right">
                 <span className="text-sm text-gray-500">Base: {baseValues.coalPhaseout}</span>

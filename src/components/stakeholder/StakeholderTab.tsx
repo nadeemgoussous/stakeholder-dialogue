@@ -9,6 +9,7 @@ import { useScenario } from '../../context/ScenarioContext';
 import { generateEnhancedResponse, getContextDescription } from '../../utils/stakeholder-rules';
 import { maybeEnhanceWithAI, DEFAULT_AI_CONFIG } from '../../utils/stakeholder-ai';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
+import { Tooltip } from '../common/Tooltip';
 
 // Collapsible Section Component
 function CollapsibleSection({
@@ -381,12 +382,22 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
             defaultOpen={true}
           >
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {selectedStakeholder.priorities.map((priority, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-gray-700">
-                  <span className="text-gray-400 mt-1">•</span>
-                  <span>{priority}</span>
-                </li>
-              ))}
+              {selectedStakeholder.priorities.map((priority, idx) => {
+                // Map priority text to glossary keys
+                const priorityKey = priority.toLowerCase()
+                  .replace(/\s+/g, '_')
+                  .replace(/[&/]/g, '')
+                  .replace(/__+/g, '_');
+
+                return (
+                  <li key={idx} className="flex items-start gap-2 text-gray-700">
+                    <span className="text-gray-400 mt-1">•</span>
+                    <Tooltip content={priorityKey} isGlossaryKey={true}>
+                      <span className="cursor-help">{priority}</span>
+                    </Tooltip>
+                  </li>
+                );
+              })}
             </ul>
           </CollapsibleSection>
 

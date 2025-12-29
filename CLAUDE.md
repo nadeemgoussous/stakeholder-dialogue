@@ -140,7 +140,13 @@ scenario-dialogue-tool/
 │   ├── STAKEHOLDER-PROFILES.md  # All 9 stakeholder definitions
 │   ├── TECHNICAL-IMPLEMENTATION.md  # Code examples and algorithms
 │   ├── DATA-SCHEMAS.md          # TypeScript interfaces and constants
-│   └── UI-DESIGN.md             # Design system and mockups
+│   ├── UI-DESIGN.md             # Design system and mockups
+│   └── toolkit/                 # IRENA Participatory Processes Toolkit (source material)
+│       ├── README.md            # Index and quick reference
+│       ├── chapter-3-stakeholders.md      # 7 stakeholder profiles
+│       ├── chapter-4-engagement-tools.md  # Tools: workshops, surveys, etc.
+│       ├── chapter-5-case-studies.md      # 13 country/org case studies
+│       └── ...                  # Full toolkit chapters 1-8 + appendix
 ├── feature_list.json            # Feature tracking for development
 ├── claude-progress.txt          # Session progress log
 ├── init.sh                      # Development server startup
@@ -202,6 +208,26 @@ The project documentation is split into focused files:
 3. **[docs/TECHNICAL-IMPLEMENTATION.md](docs/TECHNICAL-IMPLEMENTATION.md)** - Reference code for response generation, AI enhancement, and calculations
 4. **[docs/DATA-SCHEMAS.md](docs/DATA-SCHEMAS.md)** - TypeScript interfaces, data structures, and reference constants
 5. **[docs/UI-DESIGN.md](docs/UI-DESIGN.md)** - Design system, layouts, and component specifications
+
+### IRENA Toolkit Source Documentation
+
+The **[docs/toolkit/](docs/toolkit/)** folder contains the complete IRENA "Participatory Processes for Strategic Energy Planning" toolkit converted to markdown. This is the authoritative source for:
+
+- **Stakeholder engagement approaches** - See [Chapter 3](docs/toolkit/chapter-3-stakeholders.md) for detailed profiles of 7 stakeholder groups with challenges and good practices
+- **Engagement tools** - See [Chapter 4](docs/toolkit/chapter-4-engagement-tools.md) for knowledge gathering, co-creation, and dissemination methods
+- **Case studies** - See [Chapter 5](docs/toolkit/chapter-5-case-studies.md) for 13 real-world examples (Belgium, Brazil, Canada, Chile, Colombia, Cyprus, Finland, Ghana, Panama, UAE, Kenya, PAC Consortium, World Energy Council)
+- **Dissemination guidance** - Section 4.3 covers public presentations, reports, visualisation tools, games and simulations
+
+**Quick Reference for Implementation:**
+
+| Feature Area | Toolkit Reference |
+|--------------|-------------------|
+| Stakeholder profiles & concerns | [Chapter 3](docs/toolkit/chapter-3-stakeholders.md) |
+| Workshop/survey/interview design | [Chapter 4.1](docs/toolkit/chapter-4-engagement-tools.md#41-knowledge-gathering) |
+| Communication tab content | [Chapter 4.3](docs/toolkit/chapter-4-engagement-tools.md#43-dissemination) |
+| Best practices / case studies | [Chapter 5](docs/toolkit/chapter-5-case-studies.md) |
+| Interactive tools (calculators, games) | [Box 6 in Chapter 4](docs/toolkit/chapter-4-engagement-tools.md#box-6-tools-for-visualising-and-gamifying-energy-scenarios) |
+| External resources & frameworks | [Chapter 7](docs/toolkit/chapter-7-additional-material.md) |
 
 ---
 
