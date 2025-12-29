@@ -524,7 +524,7 @@
         "Load saved scenario on app start",
         "Handle storage errors gracefully"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F034",
