@@ -510,7 +510,7 @@
         "Make tips contextual to selected stakeholder when possible",
         "Add references to toolkit sections (will be filled in later)"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F033",

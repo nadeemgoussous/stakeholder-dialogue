@@ -21,7 +21,10 @@
       "Bash(python extract-icons.py:*)",
       "Bash(git push)",
       "Bash(npx tsc:*)",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "WebFetch(domain:component.gallery)",
+      "WebFetch(domain:carbondesignsystem.com)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

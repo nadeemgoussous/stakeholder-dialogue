@@ -17,8 +17,9 @@ import DisseminationTemplates from './DisseminationTemplates';
 import CommunityImpactCalculator from './CommunityImpactCalculator';
 import ScenarioComparison from './ScenarioComparison';
 import ExportGuidance from './ExportGuidance';
+import DisseminationTips from './DisseminationTips';
 
-type CommunicateView = 'strategies' | 'templates' | 'community-calculator' | 'scenario-comparison' | 'export-guidance';
+type CommunicateView = 'strategies' | 'templates' | 'community-calculator' | 'scenario-comparison' | 'export-guidance' | 'tips';
 
 export default function CommunicateTab() {
   const { scenario } = useScenario();
@@ -178,11 +179,26 @@ export default function CommunicateTab() {
           >
             📤 Export Guidance
           </button>
+          <button
+            onClick={() => setCurrentView('tips')}
+            className={`px-6 py-3 font-semibold transition-colors ${
+              currentView === 'tips'
+                ? 'text-irena-blue border-b-2 border-irena-blue'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            💡 Best Practices
+          </button>
         </div>
       </div>
 
-      {/* Conditional View: Strategies, Templates, Community Calculator, Scenario Comparison, or Export Guidance */}
-      {currentView === 'export-guidance' ? (
+      {/* Conditional View: Strategies, Templates, Community Calculator, Scenario Comparison, Export Guidance, or Tips */}
+      {currentView === 'tips' ? (
+        <DisseminationTips
+          selectedStakeholderId={selectedStakeholder ?? undefined}
+          onBack={() => setCurrentView('strategies')}
+        />
+      ) : currentView === 'export-guidance' ? (
         <ExportGuidance
           scenario={scenario}
           onBack={() => setCurrentView('strategies')}
