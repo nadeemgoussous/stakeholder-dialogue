@@ -386,6 +386,21 @@ Educational content on:
 - Layering communication (headlines → details)
 - Storytelling with data
 
+**5. Best Practices Tab (Dissemination Tips)**
+Educational content directly from IRENA Toolkit Section 4.3, with three sub-tabs:
+
+- **Quick Tips**: 8 expandable cards with key principles (Match Format to Audience, Use Non-Technical Language, Make It Interactive, Consider Gamification, Plan for Feedback, Layer Your Communication, Leverage Online Tools, Provide Educational Context)
+
+- **Toolkit Principles**: Detailed expandable cards for Section 4.3.1 (Public Presentations and Reports) and Section 4.3.2 (Visualisation Tools, Games and Simulations), each showing:
+  - Implementation stages (Framing → Development → Validation → Communication)
+  - Strengths, Challenges, and Limitations
+  - Available tools with examples
+  - Resource requirements
+
+- **Case Studies**: Country examples grouped by flag (Belgium My2050 calculator, Kenya energy calculator, UAE board game, Cyprus policy briefs, Brazil virtual debates, Chile public hearings, IEA climate game)
+
+- **Contextual Tips**: When a stakeholder is selected, shows stakeholder-specific tips with recommended approaches and approaches to avoid
+
 **What This Tab Does NOT Do:**
 - ❌ Generate publication-ready documents (users customize templates themselves)
 - ❌ Create complex visualizations (users export data for their tools)
