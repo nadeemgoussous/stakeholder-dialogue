@@ -100,7 +100,8 @@ export interface InteractionTrigger {
   id: string;
   metrics: MetricCondition[];
   operator: 'AND' | 'OR';
-  concernText: string;
+  type: 'concern' | 'appreciation'; // Distinguishes positive from negative triggers
+  concernText: string; // Will be renamed to 'text' in future, but keeping for compatibility
   explanation: string;
   suggestedResponse: string;
 }

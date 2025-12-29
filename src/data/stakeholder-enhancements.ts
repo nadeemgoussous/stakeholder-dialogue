@@ -45,6 +45,7 @@ export const policyMakersInteractions: InteractionTrigger[] = [
       { metric: 'investment.cumulative.2030', threshold: 5000, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High renewable ambition combined with substantial investment requirements raises affordability and feasibility questions.',
     explanation: 'Policy makers must balance climate leadership with fiscal constraints and consumer affordability.',
     suggestedResponse: 'We support the renewable ambition, but need a clear financing strategy that doesn\'t compromise energy access or burden consumers. What instruments can mobilize private capital to reduce fiscal pressure?'
@@ -56,6 +57,7 @@ export const policyMakersInteractions: InteractionTrigger[] = [
       { metric: 'jobs.renewable.2030', threshold: 5000, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Rapid coal phase-out without corresponding renewable job creation creates political risks.',
     explanation: 'Employment is a key political priority. Fossil fuel job losses must be compensated by clean energy job creation.',
     suggestedResponse: 'The coal phase-out pace concerns us politically. Where is the just transition strategy? We need local content requirements and reskilling programs before accelerating thermal retirements.'
@@ -67,6 +69,7 @@ export const policyMakersInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.coal.2040', threshold: 500, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Modest emissions reduction alongside continued coal expansion jeopardizes NDC compliance and climate commitments.',
     explanation: 'International climate commitments create reputational and financial risks if not met.',
     suggestedResponse: 'This trajectory puts our NDC at risk. We need clarity on how this aligns with Paris commitments and what it means for climate finance access.'
@@ -85,6 +88,7 @@ export const gridOperatorsInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.battery.2040', threshold: 200, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High renewable penetration without adequate storage creates system balancing challenges.',
     explanation: 'Variable generation requires flexibility resources. Without sufficient battery capacity, curtailment increases and reliability risks emerge.',
     suggestedResponse: 'We support the renewable ambition, but the storage deployment timeline needs acceleration. Consider front-loading battery investments or expanding interconnector capacity for regional balancing.'
@@ -96,6 +100,7 @@ export const gridOperatorsInteractions: InteractionTrigger[] = [
       { metric: 'investment.transmission.2035', threshold: 500, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Large solar deployment with limited transmission investment risks stranded capacity.',
     explanation: 'Solar resources are often geographically concentrated. Insufficient grid expansion leads to congestion and curtailment.',
     suggestedResponse: 'The generation buildout is ambitious, but transmission planning appears disconnected. We recommend a coordinated infrastructure roadmap before committing to this solar trajectory.'
@@ -108,6 +113,7 @@ export const gridOperatorsInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.interconnector.2035', threshold: 300, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Rapid thermal retirement without compensating flexibility creates reliability concerns.',
     explanation: 'Dispatchable capacity provides system inertia and reserves. Retirement pace must align with flexibility resource deployment.',
     suggestedResponse: 'We need a clear flexibility roadmap before accelerating coal retirements. Either battery deployment must increase or interconnector expansion must be prioritized.'
@@ -126,6 +132,7 @@ export const industryInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.battery.2030', threshold: 100, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High investment costs without sufficient energy storage could increase tariffs and affect industrial competitiveness.',
     explanation: 'Industry needs predictable, affordable, and reliable power. High tariffs from expensive transition threaten competitiveness.',
     suggestedResponse: 'We need guarantees that tariff increases will be managed. Consider phased implementation and industrial tariff protections during transition.'
@@ -137,6 +144,7 @@ export const industryInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.wind.2040', threshold: 800, direction: 'above' }
     ],
     operator: 'OR',
+    type: 'appreciation', // Business opportunity
     concernText: 'Large renewable deployment creates supply chain and manufacturing opportunities if local content policies are implemented.',
     explanation: 'Significant renewable buildouts can catalyze domestic manufacturing and create high-value jobs.',
     suggestedResponse: 'This renewable trajectory is an opportunity for industrial development. What local content requirements will be mandated? We want to see clear pathways for domestic manufacturing participation.'
@@ -148,6 +156,7 @@ export const industryInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.gas.2030', threshold: 200, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High renewable share with limited dispatchable backup raises concerns about supply reliability for industrial processes.',
     explanation: 'Energy-intensive industries require 24/7 reliable power. VRE growth must be matched with dispatchable capacity or storage.',
     suggestedResponse: 'We support clean energy, but need assurances on power quality and reliability. Our processes cannot tolerate frequent outages or voltage fluctuations.'
@@ -166,6 +175,7 @@ export const publicInteractions: InteractionTrigger[] = [
       { metric: 'renewableShare.2035', threshold: 60, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'appreciation', // Positive health outcomes
     concernText: 'Rapid coal retirement and renewable growth dramatically improves air quality and public health outcomes.',
     explanation: 'Coal pollution causes respiratory illness, premature deaths, and healthcare costs. Clean energy transition delivers immediate health benefits.',
     suggestedResponse: 'This is what we\'ve been advocating for! The health benefits from reduced coal pollution will save thousands of lives and reduce healthcare burdens on families.'
@@ -177,6 +187,7 @@ export const publicInteractions: InteractionTrigger[] = [
       { metric: 'investment.privateSectorShare', threshold: 40, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Large public investment could increase electricity tariffs, burdening households.',
     explanation: 'Consumers are sensitive to electricity price increases, especially low-income households.',
     suggestedResponse: 'We support clean energy, but are worried about affordability. What protections exist for vulnerable households? Will there be lifeline tariffs or subsidy programs?'
@@ -188,6 +199,7 @@ export const publicInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.solarPV.2040', threshold: 2000, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Large-scale renewable projects require significant land, potentially affecting communities and livelihoods.',
     explanation: 'Solar and wind farms can displace agricultural land, affect property values, and change community character.',
     suggestedResponse: 'We need to understand where these projects will be located. Have communities been consulted? What compensation and benefit-sharing arrangements are planned?'
@@ -206,6 +218,7 @@ export const csosNgosInteractions: InteractionTrigger[] = [
       { metric: 'jobs.fossilFuel.transition.support', threshold: 1, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Rapid coal phase-out without just transition provisions creates social risks.',
     explanation: 'Workers and communities dependent on fossil fuel industries need retraining, social protection, and economic diversification support.',
     suggestedResponse: 'We support the coal phase-out timeline, but this plan lacks a credible just transition framework. What provisions exist for affected workers and communities?'
@@ -217,6 +230,7 @@ export const csosNgosInteractions: InteractionTrigger[] = [
       { metric: 'emissions.reductionPercent2050', threshold: 80, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Significant gas expansion alongside weak 2050 targets suggests lock-in risk.',
     explanation: 'New gas infrastructure has 30-40 year lifetimes. Building now risks stranded assets or continued emissions.',
     suggestedResponse: 'The gas buildout concerns us. What is the decommissioning timeline for this infrastructure, and how does it align with Paris-compatible pathways?'
@@ -228,6 +242,7 @@ export const csosNgosInteractions: InteractionTrigger[] = [
       { metric: 'emissions.reductionPercent2040', threshold: 50, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'appreciation', // This is positive feedback, not a concern
     concernText: 'This scenario demonstrates strong climate leadership and positions the country as a regional clean energy champion.',
     explanation: 'Ambitious renewable targets and emissions reductions align with 1.5°C pathways and unlock international support.',
     suggestedResponse: 'This is the kind of climate ambition we need! This plan could position the country as a regional leader and unlock substantial climate finance. We fully support this trajectory.'
@@ -246,6 +261,7 @@ export const scientificInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.battery.2040', threshold: 200, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'This renewable penetration level exceeds typical flexibility thresholds. Detailed dispatch modeling needed to validate feasibility.',
     explanation: 'High VRE shares without sufficient storage may encounter stability limits not captured in planning models.',
     suggestedResponse: 'We recommend detailed power system simulations to validate this renewable trajectory. Our institute can support hourly dispatch modeling and grid stability analysis.'
@@ -257,6 +273,7 @@ export const scientificInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.solarPV.2040', threshold: 2000, direction: 'above' }
     ],
     operator: 'OR',
+    type: 'appreciation', // Research opportunity
     concernText: 'Large-scale renewable deployment creates valuable research opportunities on grid integration, forecasting, and optimization.',
     explanation: 'Major transitions generate data and insights valuable for academic research and regional knowledge sharing.',
     suggestedResponse: 'This transition presents significant research opportunities. We propose a collaborative monitoring program to track integration challenges and share lessons regionally.'
@@ -267,6 +284,7 @@ export const scientificInteractions: InteractionTrigger[] = [
       { metric: 'emissions.reductionPercent2040', threshold: 40, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Emissions trajectory may be insufficient for 1.5°C alignment. Carbon budget analysis recommended.',
     explanation: 'Scientific consensus requires steep near-term emissions reductions for Paris alignment.',
     suggestedResponse: 'Our modeling suggests this trajectory exceeds safe carbon budgets. We recommend accelerating the transition timeline or strengthening 2030 milestones.'
@@ -285,6 +303,7 @@ export const financeInteractions: InteractionTrigger[] = [
       { metric: 'investment.yearOverYearGrowth', threshold: 50, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Rapid investment scaling creates execution and absorption capacity risks.',
     explanation: 'Very fast investment ramps can overwhelm institutional capacity, creating project delays and cost overruns.',
     suggestedResponse: 'This investment timeline is aggressive. What evidence exists that the enabling environment (permitting, grid access, skilled labor) can absorb this pace? We need confidence in execution capacity before committing capital.'
@@ -296,6 +315,7 @@ export const financeInteractions: InteractionTrigger[] = [
       { metric: 'investment.privateSectorShare', threshold: 60, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High private sector reliance for ambitious targets requires stable, long-term policy frameworks.',
     explanation: 'Private capital requires regulatory certainty and credible offtake agreements.',
     suggestedResponse: 'We can mobilize this capital if the policy framework is credible. Are long-term PPAs available? What revenue guarantees exist? Currency risk hedging?'
@@ -307,6 +327,7 @@ export const financeInteractions: InteractionTrigger[] = [
       { metric: 'emissions.reductionPercent2040', threshold: 50, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'appreciation', // This is positive feedback, not a concern
     concernText: 'Strong decarbonization trajectory unlocks green bonds, climate funds, and concessional finance opportunities.',
     explanation: 'Ambitious climate-aligned pathways attract lower-cost capital from ESG-focused investors and climate funds.',
     suggestedResponse: 'This trajectory qualifies for substantial green finance. We see opportunities for green bond issuance and blended finance structures. Let\'s discuss innovative financial instruments.'
@@ -325,6 +346,7 @@ export const regionalBodiesInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.hydro.total', threshold: 500, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'appreciation', // Regional integration opportunity
     concernText: 'High renewable share with strong hydro resources creates valuable cross-border trading opportunities.',
     explanation: 'Countries with flexible hydro can provide balancing services to neighbors with high VRE, creating mutual benefits.',
     suggestedResponse: 'This energy mix positions you as a potential regional balancing hub. We should discuss interconnector expansion and wheeling agreements to enable cross-border trade.'
@@ -336,6 +358,7 @@ export const regionalBodiesInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.interconnector.2040', threshold: 200, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High renewable ambition without corresponding interconnection investment limits regional integration benefits.',
     explanation: 'Interconnectors enable resource sharing and system cost reduction but require coordinated planning.',
     suggestedResponse: 'Your renewable ambition aligns with the regional master plan, but interconnection investment appears insufficient. We recommend accelerating cross-border transmission projects.'
@@ -346,6 +369,7 @@ export const regionalBodiesInteractions: InteractionTrigger[] = [
       { metric: 'supply.capacity.total.2040', threshold: 3000, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Large-scale generation expansion should be coordinated with regional generation planning to avoid overcapacity.',
     explanation: 'Uncoordinated national plans can lead to regional oversupply and stranded assets.',
     suggestedResponse: 'This expansion is substantial. Let\'s ensure alignment with the regional generation master plan to optimize investments across borders.'
@@ -365,6 +389,7 @@ export const developmentPartnersInteractions: InteractionTrigger[] = [
       { metric: 'investment.privateSectorShare', threshold: 30, direction: 'below' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'Large investment needs with high sovereign exposure and limited private participation raises debt sustainability concerns.',
     explanation: 'Development partners assess fiscal sustainability and contingent liabilities. Heavy reliance on sovereign guarantees constrains future borrowing capacity.',
     suggestedResponse: 'We need to see a credible private sector mobilization strategy before committing concessional resources at this scale. Consider risk mitigation instruments to reduce sovereign exposure.'
@@ -376,6 +401,7 @@ export const developmentPartnersInteractions: InteractionTrigger[] = [
       { metric: 'renewableShare.2030', threshold: 70, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'concern',
     concernText: 'High renewable ambition alongside access gaps suggests potential trade-off in resource allocation.',
     explanation: 'Universal access remains the primary SDG7 goal. Climate ambition should complement, not compete with, access investments.',
     suggestedResponse: 'We appreciate the climate ambition, but need to understand how this aligns with universal access timelines. Are resources being allocated efficiently across both objectives?'
@@ -387,6 +413,7 @@ export const developmentPartnersInteractions: InteractionTrigger[] = [
       { metric: 'access.electrificationRate.2030', threshold: 95, direction: 'above' }
     ],
     operator: 'AND',
+    type: 'appreciation', // Concessional finance opportunity
     concernText: 'Strong performance on both climate and access objectives unlocks significant concessional finance and results-based payments.',
     explanation: 'Scenarios that achieve both SDG7 and Paris alignment attract substantial development partner support.',
     suggestedResponse: 'This scenario achieves our dual priorities excellently. We can mobilize significant concessional resources, including climate funds and results-based finance. Let\'s discuss a coordinated support package.'

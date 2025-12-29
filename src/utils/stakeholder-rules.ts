@@ -380,12 +380,19 @@ export function generateEnhancedResponse(
     console.log(`[Enhanced] Enhanced reaction: "${enhancedReaction.slice(0, 60)}..."`);
 
     // Add context-specific appreciation points
-    const enhancedAppreciation = enhanceAppreciationWithContext(
+    let enhancedAppreciation = enhanceAppreciationWithContext(
       baseResponse.appreciation,
       context,
       indicators
     );
 
+    // Add appreciation from positive interaction triggers
+    enhancedAppreciation = enhanceAppreciationWithInteractions(
+      enhancedAppreciation,
+      triggeredInteractions
+    );
+
+    console.log(`[Enhanced] Total appreciation: ${enhancedAppreciation.length} (base: ${baseResponse.appreciation.length})`);
     console.log('[Enhanced] Response enhancement complete');
 
     return {
@@ -517,6 +524,7 @@ function buildScenarioIndicators(
 
 /**
  * Enhance concerns by incorporating interaction trigger insights
+ * Only adds triggers marked as type: 'concern'
  */
 function enhanceConcernsWithInteractions(
   baseConcerns: Concern[],
@@ -524,8 +532,13 @@ function enhanceConcernsWithInteractions(
 ): Concern[] {
   const enhanced = [...baseConcerns];
 
-  // Add concerns from interaction triggers
+  // Add concerns from interaction triggers (filter for concerns only)
   for (const interaction of interactions) {
+    // Skip appreciation triggers - they go to appreciation array
+    if (interaction.type === 'appreciation') {
+      continue;
+    }
+
     // Check if similar concern already exists
     const exists = enhanced.some(c =>
       c.text.toLowerCase().includes(interaction.concernText.toLowerCase().slice(0, 30))
@@ -538,6 +551,36 @@ function enhanceConcernsWithInteractions(
         metric: interaction.id,
         severity: 'medium'
       });
+    }
+  }
+
+  return enhanced;
+}
+
+/**
+ * Enhance appreciation by incorporating positive interaction trigger insights
+ * Only adds triggers marked as type: 'appreciation'
+ */
+function enhanceAppreciationWithInteractions(
+  baseAppreciation: string[],
+  interactions: InteractionTrigger[]
+): string[] {
+  const enhanced = [...baseAppreciation];
+
+  // Add appreciation from interaction triggers (filter for appreciation only)
+  for (const interaction of interactions) {
+    // Skip concern triggers - they go to concerns array
+    if (interaction.type === 'concern') {
+      continue;
+    }
+
+    // Check if similar appreciation already exists
+    const exists = enhanced.some(a =>
+      a.toLowerCase().includes(interaction.concernText.toLowerCase().slice(0, 30))
+    );
+
+    if (!exists) {
+      enhanced.push(interaction.concernText);
     }
   }
 
