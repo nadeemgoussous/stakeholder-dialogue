@@ -1,5 +1,91 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-29 (F031 - Export Guidance)
+
+**Status**: ✅ F031 COMPLETE - Export Guidance for Communication Materials
+
+**Progress Summary**:
+
+Implemented the Export Guidance component in the Communication tab. This educational tool teaches energy planners how to create their own communication materials using step-by-step instructions, copyable scenario data, and downloadable template files.
+
+**✅ Completed**:
+
+1. **ExportGuidance.tsx** - Main component (600+ lines)
+   - 5-step creation guide with tips for each step
+   - Copy Key Data button (copies formatted scenario metrics to clipboard)
+   - 4 downloadable template files as Markdown:
+     * Presentation Outline (PowerPoint structure)
+     * Policy Brief Template (Word document structure)
+     * Infographic Structure (visual layout guide)
+     * Community Flyer Template (one-page handout)
+   - Customization checklist with 8 items and progress tracking
+   - IRENA Toolkit Resources section with references
+   - Scenario context banner showing loaded scenario
+   - Back navigation to strategies view
+
+2. **CommunicateTab.tsx Integration**
+   - Added 'export-guidance' to CommunicateView type
+   - Added Export Guidance tab button in view switcher
+   - Conditional rendering of ExportGuidance view
+   - Passes scenario data to component
+
+3. **Test Suite** - 31-export-guidance.spec.ts (290 lines)
+   - 13 comprehensive tests, **ALL 13 PASSING** ✅
+   - Tab visibility and navigation
+   - Scenario requirement enforcement
+   - Step-by-step instructions display
+   - Copy Key Data functionality
+   - Template download triggers
+   - Customization checklist interaction
+   - IRENA toolkit resources display
+
+**Key Achievement**: **EDUCATIONAL EXPORT TOOL!**
+- Teaches "how to create" rather than auto-generating documents
+- Copy-to-clipboard for scenario metrics (formatted text)
+- Downloadable templates with scenario data placeholders
+- Customization checklist helps users remember local context
+- Aligned with IRENA toolkit Section 4.3
+
+**Template Files Generated**:
+1. **presentation-outline.md** - 10-slide structure with speaker notes
+2. **policy-brief-template.md** - Executive summary format with sections
+3. **infographic-structure.md** - Visual layout guide with design tips
+4. **community-flyer-template.md** - One-page structure for outreach
+
+**Files Created**:
+- `src/components/output/ExportGuidance.tsx` (600+ lines)
+- `tests/e2e/31-export-guidance.spec.ts` (290 lines, 13 tests)
+
+**Files Modified**:
+- `src/components/output/CommunicateTab.tsx` (+15 lines for integration)
+- `feature_list.json` (F031 marked passing)
+
+**Git Commits**:
+- `80c6b68` - feat: implement F031 - Export Guidance for communication materials
+
+**Design Principles Applied**:
+- Educational focus (teach, don't automate)
+- Scenario-linked (uses loaded scenario data)
+- Copy-to-clipboard for easy customization
+- Downloadable templates as starting points
+- Customization checklist for local context
+- IRENA toolkit alignment
+
+**Next Features**: F032 (Dissemination Tips)
+
+---
+
+### Session: 2025-12-28 (F030 - Scenario Comparison Tool)
+
+**Status**: ✅ F030 COMPLETE - Scenario Comparison Tool Demo
+
+Implemented an interactive comparison tool for comparing user scenarios against Business as Usual and High Ambition benchmarks, with stakeholder-specific narrative interpretation.
+
+**Git Commits**:
+- `aa067eb` - feat: implement F030 - Scenario Comparison Tool demo
+
+---
+
 ### Session: 2025-12-28 (F029 - Community Impact Calculator Demo)
 
 **Status**: ✅ F029 COMPLETE - Interactive Demo Calculator for Community Engagement
@@ -824,3 +910,18 @@ See above for F025, F024, F023, F022, F020-F021, F019, F018, F017, F016, F015, F
 **Last Updated**: 2025-12-12
 **Current Git HEAD**: 916ccc3
 **Next Task**: Update calculations.ts for simplified schema
+
+
+## Post-Demo: IBM Carbon Design System Migration
+
+**Priority:** After demo completion
+**Effort:** ~3-5 hours with Claude Code
+**Package:** @carbon/react
+
+Key benefits:
+- Professional IBM aesthetic
+- Built-in accessibility (WCAG 2.1 AA)
+- Credible to government/institutional users
+
+Reference: https://react.carbondesignsystem.com/
+
