@@ -1187,3 +1187,67 @@ Key benefits:
 
 Reference: https://react.carbondesignsystem.com/
 
+
+---
+
+### Session: 2025-12-29 (Rename Rwanda to ScenarioLand)
+
+**Status**: ✅ COMPLETE - Example scenario renamed to generic ScenarioLand
+
+**Progress Summary**:
+
+Renamed the Rwanda example scenario to "ScenarioLand" to make it more generic and suitable for a global audience. Updated all references throughout the codebase, tests, and documentation.
+
+**✅ Completed**:
+
+1. **Renamed scenario data file**
+   - `public/sample-data/rwanda-baseline.json` → `scenarioland-baseline.json`
+   - Updated metadata: country "Rwanda" → "ScenarioLand"
+   - Updated sourceFile reference in metadata
+
+2. **Updated code files** (3 files)
+   - `src/components/input/InputTab.tsx` - Updated fetch URL and button description
+   - `src/components/input/CSVUploader.tsx` - Updated placeholder text
+   - `src/components/output/CommunicateTab.tsx` - Updated example reference
+
+3. **Updated test files** (35 files)
+   - Renamed test descriptions: "Rwanda Baseline" → "Example Baseline"
+   - Updated variable names: `rwandaData` → `scenarioData`
+   - Updated all country expectations: "Rwanda" → "ScenarioLand"
+   - Updated fetch URLs: `rwanda-baseline.json` → `scenarioland-baseline.json`
+   - All 12 scenario data tests passing ✅
+
+4. **Updated documentation** (10+ files)
+   - README.md
+   - All docs/*.md files
+   - Archive documentation
+   - feature_list.json
+
+**Test Results**:
+```
+F009: Example Baseline Scenario Data - 12/12 tests passing ✅
+- scenarioland-baseline.json file exists and loads
+- Valid metadata structure (country: ScenarioLand)
+- All required milestone years (2025, 2030, 2040, 2050)
+- Complete capacity, generation, emissions, investment data
+- Data compatible with response generation
+```
+
+**Files Changed**: 35 files
+- 1 file renamed
+- 3 source files modified
+- 21 test files modified
+- 10 documentation files modified
+
+**Git Commit**:
+- `78a358d` - refactor: rename Rwanda example to generic ScenarioLand
+
+**Benefits**:
+- ✅ More generic and globally applicable
+- ✅ Better suited for international workshops
+- ✅ Reduces regional bias in example data
+- ✅ Maintains all functionality and data structure
+- ✅ All tests still passing
+
+**Next Features**: F034 (Export session as JSON) or other remaining features
+

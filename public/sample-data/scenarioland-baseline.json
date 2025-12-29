@@ -1,59 +1,62 @@
 {
   "metadata": {
     "country": "ScenarioLand",
-    "scenarioName": "Business as Usual (Baseline)",
+    "scenarioName": "High Renewable Transition",
     "modelVersion": "SPLAT-MESSAGE",
     "dateCreated": "2025-01-15",
-    "sourceFile": "scenarioland_baseline.csv"
+    "sourceFile": "scenarioland_high_renewable.csv",
+    "description": "Ambitious renewable energy transition scenario aligned with Paris Agreement goals"
   },
   "milestones": [
     {
       "year": 2025,
       "capacity": {
         "total": {
-          "renewables": 245,
-          "fossil": 265,
-          "storage": 5,
-          "other": 30
+          "renewables": 420,
+          "fossil": 380,
+          "storage": 25,
+          "other": 45
         },
         "unit": "MW"
       },
       "generation": {
         "output": {
-          "renewables": 1041,
-          "fossil": 1650,
-          "other": 210
+          "renewables": 1780,
+          "fossil": 2520,
+          "other": 320
         },
         "unit": "GWh"
       },
-      "reShare": 35.9,
+      "reShare": 38.5,
       "investment": {
-        "cumulative": 125,
+        "cumulative": 185,
         "unit": "m$"
       },
       "emissions": {
-        "total": 1.85,
+        "total": 2.15,
+        "baseline": 2.15,
+        "reductionPercent": 0,
         "unit": "Mt CO2"
       },
       "peakDemand": {
-        "value": 430,
+        "value": 650,
         "unit": "MW"
       },
       "capacityAdditions": {
         "additions": {
-          "renewables": 11,
-          "fossil": 27,
-          "storage": 1,
-          "other": 6
+          "renewables": 18,
+          "fossil": 12,
+          "storage": 5,
+          "other": 3
         },
         "unit": "MW"
       },
       "annualOMCosts": {
-        "value": 20,
+        "value": 28,
         "unit": "m$"
       },
       "curtailment": {
-        "value": 0,
+        "value": 12,
         "unit": "GWh"
       }
     },
@@ -61,49 +64,51 @@
       "year": 2030,
       "capacity": {
         "total": {
-          "renewables": 315,
-          "fossil": 440,
-          "storage": 20,
-          "other": 50
+          "renewables": 945,
+          "fossil": 280,
+          "storage": 120,
+          "other": 85
         },
         "unit": "MW"
       },
       "generation": {
         "output": {
-          "renewables": 1318,
-          "fossil": 2920,
-          "other": 350
+          "renewables": 3680,
+          "fossil": 1620,
+          "other": 480
         },
         "unit": "GWh"
       },
-      "reShare": 28.6,
+      "reShare": 64.2,
       "investment": {
-        "cumulative": 1150,
+        "cumulative": 2850,
         "unit": "m$"
       },
       "emissions": {
-        "total": 2.95,
+        "total": 1.38,
+        "baseline": 2.15,
+        "reductionPercent": 35.8,
         "unit": "Mt CO2"
       },
       "peakDemand": {
-        "value": 685,
+        "value": 1020,
         "unit": "MW"
       },
       "capacityAdditions": {
         "additions": {
-          "renewables": 14,
-          "fossil": 35,
-          "storage": 3,
-          "other": 4
+          "renewables": 105,
+          "fossil": 0,
+          "storage": 19,
+          "other": 8
         },
         "unit": "MW"
       },
       "annualOMCosts": {
-        "value": 32,
+        "value": 42,
         "unit": "m$"
       },
       "curtailment": {
-        "value": 5,
+        "value": 95,
         "unit": "GWh"
       }
     },
@@ -111,49 +116,51 @@
       "year": 2040,
       "capacity": {
         "total": {
-          "renewables": 530,
-          "fossil": 520,
-          "storage": 60,
-          "other": 100
+          "renewables": 1820,
+          "fossil": 85,
+          "storage": 340,
+          "other": 165
         },
         "unit": "MW"
       },
       "generation": {
         "output": {
-          "renewables": 2113,
-          "fossil": 3620,
-          "other": 700
+          "renewables": 6950,
+          "fossil": 680,
+          "other": 890
         },
         "unit": "GWh"
       },
-      "reShare": 32.8,
+      "reShare": 82.1,
       "investment": {
-        "cumulative": 4250,
+        "cumulative": 7840,
         "unit": "m$"
       },
       "emissions": {
-        "total": 3.75,
+        "total": 0.58,
+        "baseline": 2.15,
+        "reductionPercent": 73.0,
         "unit": "Mt CO2"
       },
       "peakDemand": {
-        "value": 960,
+        "value": 1540,
         "unit": "MW"
       },
       "capacityAdditions": {
         "additions": {
-          "renewables": 21,
-          "fossil": 8,
-          "storage": 4,
-          "other": 5
+          "renewables": 87,
+          "fossil": 0,
+          "storage": 22,
+          "other": 8
         },
         "unit": "MW"
       },
       "annualOMCosts": {
-        "value": 48,
+        "value": 68,
         "unit": "m$"
       },
       "curtailment": {
-        "value": 18,
+        "value": 285,
         "unit": "GWh"
       }
     },
@@ -161,92 +168,107 @@
       "year": 2050,
       "capacity": {
         "total": {
-          "renewables": 785,
-          "fossil": 480,
-          "storage": 120,
-          "other": 150
+          "renewables": 2680,
+          "fossil": 25,
+          "storage": 580,
+          "other": 240
         },
         "unit": "MW"
       },
       "generation": {
         "output": {
-          "renewables": 3089,
-          "fossil": 3490,
-          "other": 1050
+          "renewables": 10250,
+          "fossil": 180,
+          "other": 1320
         },
         "unit": "GWh"
       },
-      "reShare": 40.2,
+      "reShare": 87.6,
       "investment": {
-        "cumulative": 7350,
+        "cumulative": 14200,
         "unit": "m$"
       },
       "emissions": {
-        "total": 3.65,
+        "total": 0.15,
+        "baseline": 2.15,
+        "reductionPercent": 93.0,
         "unit": "Mt CO2"
       },
       "peakDemand": {
-        "value": 1285,
+        "value": 2150,
         "unit": "MW"
       },
       "capacityAdditions": {
         "additions": {
-          "renewables": 25,
+          "renewables": 86,
           "fossil": 0,
-          "storage": 6,
-          "other": 5
+          "storage": 24,
+          "other": 7
         },
         "unit": "MW"
       },
       "annualOMCosts": {
-        "value": 58,
+        "value": 95,
         "unit": "m$"
       },
       "curtailment": {
-        "value": 42,
+        "value": 420,
         "unit": "GWh"
       }
     }
   ],
   "detailedTech": {
-    "2030": {
+    "2025": {
       "hydro": 245,
-      "solarPV": 45,
-      "wind": 10,
-      "geothermal": 0,
-      "biomass": 15,
-      "coal": 0,
-      "gas": 150,
-      "diesel": 110,
-      "hfo": 180,
-      "battery": 20,
-      "interconnector": 50
+      "solarPV": 95,
+      "wind": 45,
+      "geothermal": 15,
+      "biomass": 20,
+      "coal": 120,
+      "gas": 210,
+      "diesel": 35,
+      "hfo": 15,
+      "battery": 25,
+      "interconnector": 45
     },
-    "2040": {
+    "2030": {
       "hydro": 280,
-      "solarPV": 120,
-      "wind": 35,
-      "geothermal": 50,
-      "biomass": 25,
-      "coal": 0,
-      "gas": 280,
-      "diesel": 90,
-      "hfo": 150,
-      "battery": 60,
-      "interconnector": 100
-    },
-    "2050": {
-      "hydro": 320,
-      "solarPV": 250,
-      "wind": 80,
-      "geothermal": 100,
+      "solarPV": 385,
+      "wind": 180,
+      "geothermal": 65,
       "biomass": 35,
       "coal": 0,
-      "gas": 350,
-      "diesel": 50,
-      "hfo": 80,
+      "gas": 245,
+      "diesel": 25,
+      "hfo": 10,
       "battery": 120,
-      "interconnector": 150
+      "interconnector": 85
+    },
+    "2040": {
+      "hydro": 320,
+      "solarPV": 920,
+      "wind": 380,
+      "geothermal": 145,
+      "biomass": 55,
+      "coal": 0,
+      "gas": 75,
+      "diesel": 8,
+      "hfo": 2,
+      "battery": 340,
+      "interconnector": 165
+    },
+    "2050": {
+      "hydro": 360,
+      "solarPV": 1450,
+      "wind": 620,
+      "geothermal": 190,
+      "biomass": 60,
+      "coal": 0,
+      "gas": 20,
+      "diesel": 5,
+      "hfo": 0,
+      "battery": 580,
+      "interconnector": 240
     }
   }
 }

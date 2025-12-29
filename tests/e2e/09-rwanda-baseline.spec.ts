@@ -22,7 +22,7 @@ test.describe('F009: Example Baseline Scenario Data', () => {
   test('has valid metadata structure', () => {
     expect(scenarioData.metadata).toBeDefined();
     expect(scenarioData.metadata.country).toBe('ScenarioLand');
-    expect(scenarioData.metadata.scenarioName).toBe('Business as Usual (Baseline)');
+    expect(scenarioData.metadata.scenarioName).toBe('High Renewable Transition');
     expect(scenarioData.metadata.modelVersion).toBe('SPLAT-MESSAGE');
     expect(scenarioData.metadata.dateCreated).toMatch(/^\d{4}-\d{2}-\d{2}$/); // ISO date format
   });
@@ -163,33 +163,49 @@ test.describe('F009: Example Baseline Scenario Data', () => {
     });
   });
 
-  test('represents realistic ScenarioLand baseline scenario characteristics', () => {
+  test('represents realistic ScenarioLand transition scenario characteristics', () => {
     const milestone2025 = scenarioData.milestones.find(m => m.year === 2025);
+    const milestone2030 = scenarioData.milestones.find(m => m.year === 2030);
     const milestone2050 = scenarioData.milestones.find(m => m.year === 2050);
 
     expect(milestone2025).toBeDefined();
+    expect(milestone2030).toBeDefined();
     expect(milestone2050).toBeDefined();
 
-    // ScenarioLand baseline should show some renewable capacity (hydro)
-    expect(milestone2025!.capacity.total.renewables).toBeGreaterThan(0);
+    // Transition scenario should show significant renewable capacity from start
+    expect(milestone2025!.capacity.total.renewables).toBeGreaterThan(200);
 
-    // Baseline should show fossil fuel dependence in 2025
-    expect(milestone2025!.capacity.total.fossil).toBeGreaterThan(0);
+    // Should show fossil fuel dependence in 2025 but declining over time
+    expect(milestone2025!.capacity.total.fossil).toBeGreaterThan(milestone2050!.capacity.total.fossil);
 
-    // Renewable capacity should grow over time in baseline
+    // Renewable capacity should grow significantly over time
     expect(milestone2050!.capacity.total.renewables).toBeGreaterThan(
-      milestone2025!.capacity.total.renewables
+      milestone2025!.capacity.total.renewables * 3
     );
 
-    // RE share should increase over time
+    // RE share should increase significantly (transition scenario)
+    expect(milestone2050!.reShare).toBeGreaterThan(80); // High ambition target
     expect(milestone2050!.reShare).toBeGreaterThan(milestone2025!.reShare);
 
-    // If detailed tech data is available, verify no coal
+    // Battery storage should increase significantly
+    expect(milestone2050!.capacity.total.storage).toBeGreaterThan(
+      milestone2025!.capacity.total.storage * 10
+    );
+
+    // If detailed tech data is available, verify coal phaseout by 2030
     if (scenarioData.detailedTech) {
-      const coal2025 = scenarioData.detailedTech[2025]?.coal || 0;
+      const coal2030 = scenarioData.detailedTech[2030]?.coal || 0;
       const coal2050 = scenarioData.detailedTech[2050]?.coal || 0;
-      expect(coal2025).toBe(0);
+      expect(coal2030).toBe(0); // Coal phased out by 2030
       expect(coal2050).toBe(0);
+    }
+
+    // Emissions should decline over time (transition scenario)
+    expect(milestone2050!.emissions.total).toBeLessThan(milestone2025!.emissions.total);
+
+    // Check for emissions reduction percentage if available
+    if (milestone2050!.emissions.reductionPercent !== undefined) {
+      expect(milestone2050!.emissions.reductionPercent).toBeGreaterThan(80); // High ambition
     }
   });
 
