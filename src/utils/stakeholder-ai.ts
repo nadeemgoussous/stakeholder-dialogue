@@ -216,7 +216,7 @@ async function enhanceWithWebLLM(
 
     const completionPromise = engine.chat.completions.create({
       messages,
-      temperature: 0.7,
+      temperature: 0.5, // Lowered from 0.7 for more consistent outputs (less echo)
       max_tokens: 600, // Increased from 400 to allow complete responses
     });
 
@@ -231,6 +231,12 @@ async function enhanceWithWebLLM(
       return null;
     }
 
+    // Check if response is echoing the prompt (quality issue)
+    if (isEchoResponse(enhancedText)) {
+      console.log('❌ [WebLLM] Echo detected - falling back to rule-based response');
+      return null; // Will trigger fallback to rule-based
+    }
+
     // Use enhanced text to replace initial reaction
     // Keep all other response fields from rule-based response
     console.log('✅ [WebLLM] Using enhanced text for initialReaction');
@@ -243,6 +249,36 @@ async function enhanceWithWebLLM(
     console.error('❌ [WebLLM] Enhancement failed:', error);
     return null;
   }
+}
+
+/**
+ * Detect if response is echoing the prompt instead of generating new content
+ * Returns true if the response appears to be an echo/copy of prompt elements
+ */
+function isEchoResponse(response: string): boolean {
+  // Check for common echo patterns
+  const echoPatterns = [
+    'Voice:',           // Echoing voice description
+    'Examples:',        // Echoing examples section header
+    'Scenario:',        // Echoing scenario header from examples
+    'Response: "',      // Echoing example response format
+    '1. Scenario:',     // Echoing numbered example
+    '2. Scenario:',     // Echoing numbered example
+    'Write your response now',  // Echoing the user prompt
+    'Now respond to this scenario',  // Echoing system prompt
+    'would respond',    // Third-person description instead of first-person
+  ];
+
+  const lowerResponse = response.toLowerCase();
+
+  for (const pattern of echoPatterns) {
+    if (response.includes(pattern) || lowerResponse.includes(pattern.toLowerCase())) {
+      console.log(`⚠️ [Echo Detection] Found pattern: "${pattern}"`);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**
@@ -262,12 +298,15 @@ function buildEnhancementSystemPrompt(
   return `You are ${stakeholder.name}.
 
 ${fewShotSection}
-Now respond to this scenario for ${country}:
+---END OF EXAMPLES---
+
+Now respond to this NEW scenario for ${country}:
 - ${reShare2030}% renewable energy by 2030
 - Key concerns: ${stakeholder.priorities.slice(0, 2).join(', ')}
 
-Write 2-3 sentences as ${stakeholder.name}. Match the voice and style from the examples above.
-Output ONLY your response - no labels or formatting.`;
+IMPORTANT: Do NOT repeat the examples above. Write a NEW, ORIGINAL response.
+Write 2-3 sentences as ${stakeholder.name}. Match the voice and style but create NEW content.
+Output ONLY your response - no labels, no "Voice:", no "Examples:".`;
 }
 
 /**

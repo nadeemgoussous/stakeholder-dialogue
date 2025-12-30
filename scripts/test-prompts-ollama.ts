@@ -16,7 +16,7 @@ const CONFIG = {
   ollamaUrl: 'http://localhost:11434',
   outputFile: 'test-results/prompt-test-results.json',
   maxTokens: 600,
-  temperature: 0.7,
+  temperature: 0.5, // Lowered from 0.7 for more consistent outputs
 };
 
 // ============ STAKEHOLDER DATA ============
@@ -127,6 +127,31 @@ const SCENARIOS = [
   { reShare: 88, storage: 1500, country: 'Uruguay', context: 'wind-dominant' },
 ];
 
+// ============ ECHO DETECTION ============
+function isEchoResponse(response: string): boolean {
+  const echoPatterns = [
+    'Voice:',
+    'Examples:',
+    'Scenario:',
+    'Response: "',
+    '1. Scenario:',
+    '2. Scenario:',
+    'Write your response now',
+    'Now respond to this scenario',
+    'would respond',
+  ];
+
+  const lowerResponse = response.toLowerCase();
+
+  for (const pattern of echoPatterns) {
+    if (response.includes(pattern) || lowerResponse.includes(pattern.toLowerCase())) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // ============ PROMPT BUILDER ============
 function buildPrompt(stakeholder: typeof STAKEHOLDERS[0], scenario: typeof SCENARIOS[0]): { system: string; user: string } {
   const fewShotSection = `Voice: ${stakeholder.voiceDescription}
@@ -143,14 +168,17 @@ Response: "${stakeholder.examples[1].response}"
   const system = `You are ${stakeholder.name}.
 
 ${fewShotSection}
-Now respond to this scenario for ${scenario.country}:
+---END OF EXAMPLES---
+
+Now respond to this NEW scenario for ${scenario.country}:
 - ${scenario.reShare}% renewable energy by 2030
 - ${scenario.storage} MWh battery storage
 - Context: ${scenario.context}
 - Key concerns: ${stakeholder.priorities.slice(0, 2).join(', ')}
 
-Write 2-3 sentences as ${stakeholder.name}. Match the voice and style from the examples above.
-Output ONLY your response - no labels or formatting.`;
+IMPORTANT: Do NOT repeat the examples above. Write a NEW, ORIGINAL response.
+Write 2-3 sentences as ${stakeholder.name}. Match the voice and style but create NEW content.
+Output ONLY your response - no labels, no "Voice:", no "Examples:".`;
 
   const user = 'Write your response now.';
 
@@ -192,6 +220,7 @@ interface TestResult {
   scenario: typeof SCENARIOS[0];
   prompt: { system: string; user: string };
   response: string;
+  isEcho: boolean;  // NEW: Track if response echoes the prompt
   durationMs: number;
   timestamp: string;
 }
@@ -216,6 +245,7 @@ async function runTests(): Promise<void> {
 
       try {
         const { response, durationMs } = await queryOllama(prompt.system, prompt.user);
+        const echo = isEchoResponse(response);
 
         results.push({
           stakeholderId: stakeholder.id,
@@ -223,11 +253,12 @@ async function runTests(): Promise<void> {
           scenario,
           prompt,
           response,
+          isEcho: echo,
           durationMs,
           timestamp: new Date().toISOString()
         });
 
-        console.log(`✅ ${durationMs}ms`);
+        console.log(`${echo ? '⚠️' : '✅'} ${durationMs}ms${echo ? ' [ECHO]' : ''}`);
       } catch (error) {
         console.log(`❌ Error: ${error}`);
         results.push({
@@ -236,6 +267,7 @@ async function runTests(): Promise<void> {
           scenario,
           prompt,
           response: `ERROR: ${error}`,
+          isEcho: false,
           durationMs: 0,
           timestamp: new Date().toISOString()
         });
@@ -260,15 +292,33 @@ async function runTests(): Promise<void> {
   );
 
   // Summary
+  const successful = results.filter(r => !r.response.startsWith('ERROR'));
+  const echoes = results.filter(r => r.isEcho);
+  const goodQuality = successful.filter(r => !r.isEcho);
+
   console.log('\n' + '='.repeat(60));
   console.log('📊 TEST SUMMARY');
   console.log('='.repeat(60));
   console.log(`Total tests: ${results.length}`);
-  console.log(`Successful: ${results.filter(r => !r.response.startsWith('ERROR')).length}`);
+  console.log(`Successful: ${successful.length}`);
   console.log(`Failed: ${results.filter(r => r.response.startsWith('ERROR')).length}`);
+  console.log(`Echo detected: ${echoes.length} (${((echoes.length / results.length) * 100).toFixed(1)}%)`);
+  console.log(`Good quality: ${goodQuality.length} (${((goodQuality.length / results.length) * 100).toFixed(1)}%)`);
 
   const avgDuration = results.reduce((sum, r) => sum + r.durationMs, 0) / results.length;
   console.log(`Avg duration: ${avgDuration.toFixed(0)}ms`);
+
+  // Echo breakdown by stakeholder
+  if (echoes.length > 0) {
+    console.log('\n⚠️ ECHOES BY STAKEHOLDER:');
+    const echoByStakeholder: Record<string, number> = {};
+    echoes.forEach(r => {
+      echoByStakeholder[r.stakeholderId] = (echoByStakeholder[r.stakeholderId] || 0) + 1;
+    });
+    Object.entries(echoByStakeholder).forEach(([id, count]) => {
+      console.log(`  - ${id}: ${count}`);
+    });
+  }
 
   console.log(`\nResults saved to: ${CONFIG.outputFile}`);
 
