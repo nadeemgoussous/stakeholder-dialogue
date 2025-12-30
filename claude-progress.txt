@@ -1,5 +1,75 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-30 Part 3 (Few-Shot Prompting & Bulk Testing)
+
+**Status**: ✅ COMPLETE - Few-shot prompts implemented and bulk tested
+
+**Progress Summary**:
+
+Added few-shot examples for all 9 stakeholder groups and created an Ollama-based bulk testing system to validate prompt quality at scale.
+
+**✅ Completed**:
+
+1. **Few-Shot Examples** - Teaching the model each stakeholder's voice
+   - Created `src/data/stakeholder-fewshot.ts` with 2 examples per stakeholder
+   - All 9 stakeholders covered (18 examples total)
+   - Each example shows: scenario description + stakeholder-appropriate response
+   - Examples are short (2-3 sentences) for token efficiency
+   - Integrated into system prompts via `buildFewShotSection()` function
+
+2. **Ollama Bulk Testing Script** - Large-scale prompt validation
+   - Created `scripts/test-prompts-ollama.ts`
+   - Tests 9 stakeholders × 10 scenarios = 90 combinations
+   - Uses SmolLM2:1.7b via Ollama API
+   - Logs all responses to JSON for quality analysis
+   - Usage: `npx tsx scripts/test-prompts-ollama.ts`
+
+3. **Bulk Test Execution** - Validated prompts at scale
+   - Ran full 90-test suite successfully
+   - 100% completion rate (no errors)
+   - Average inference time: 4.7 seconds
+   - Results saved to `test-results/prompt-test-results.json`
+
+**Bulk Test Results**:
+
+| Metric | Value |
+|--------|-------|
+| Tests run | 90 |
+| Success rate | 100% |
+| Good quality | ~89% |
+| Issues | ~11% |
+
+**Quality by Stakeholder**:
+- ✅ Policy Makers - Excellent (formal, coherent policy language)
+- ✅ Grid Operators - Excellent (technical, N-1 contingency)
+- ✅ Industry - Good (cost/competitiveness focused)
+- ✅ Public - Good (accessible, asks about bills/jobs)
+- ✅ Financial - Good (PPAs, bankability)
+- ✅ Development Partners - Good (debt sustainability)
+- ✅ Regional Bodies - Good (cross-border trade)
+- ⚠️ CSOs/NGOs - Mixed (sometimes echoes prompt)
+- ⚠️ Scientific - Mixed (sometimes uses third person)
+
+**Known Issues**:
+- ~11% of responses echo the prompt instead of generating new text
+- CSOs/NGOs and Scientific need prompt refinement
+- Temperature (0.7) may need tuning
+
+**Files Created**:
+- `src/data/stakeholder-fewshot.ts` - Few-shot examples for all stakeholders
+- `scripts/test-prompts-ollama.ts` - Bulk testing script
+
+**Files Modified**:
+- `src/utils/stakeholder-ai.ts` - Integrated few-shot examples into prompts
+- `docs/WEBLLM-STATUS.md` - Documented test results
+
+**Git Commits**:
+- `a9f3230` - feat: add few-shot examples for better responses
+- `c228889` - feat: add Ollama bulk testing script for prompt validation
+- `17fc65a` - docs: add bulk testing results to WebLLM status
+
+---
+
 ### Session: 2025-12-30 Part 2 (WebLLM Prompt Engineering Fix)
 
 **Status**: ✅ IMPROVED - WebLLM prompt engineering optimized for SmolLM2-1.7B
@@ -394,6 +464,6 @@ Implemented a comprehensive tooltip system for technical terms throughout the ap
 
 [Previous session entries for F033, F032, F031, F030, F029, etc. remain unchanged...]
 
-**Last Updated**: 2025-12-29
-**Current Git HEAD**: 3900011
-**Next Task**: Continue with remaining features or refine existing functionality based on evaluation findings
+**Last Updated**: 2025-12-30
+**Current Git HEAD**: 17fc65a
+**Next Task**: Continue with remaining features (F034-F042) or refine prompts for CSOs/Scientific stakeholders
