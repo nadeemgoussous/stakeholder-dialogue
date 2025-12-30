@@ -81,6 +81,7 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
   const [showPrediction, setShowPrediction] = useState(false);
   const [userPrediction, setUserPrediction] = useState<string>('');
   const [stakeholderResponse, setStakeholderResponse] = useState<StakeholderResponse | null>(null);
+  const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
 
   // Response Settings collapsed state - defaults to collapsed after first use
   const [settingsExpanded, setSettingsExpanded] = useState(() => {
@@ -125,43 +126,47 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
 
   const handleRevealResponse = async (prediction: string) => {
     setUserPrediction(prediction);
+    setIsGeneratingResponse(true); // Show loading state
 
-    // Generate stakeholder response with enhanced framework
-    if (scenario && derivedMetrics && selectedStakeholder) {
-      console.log('Generating response for:', selectedStakeholder.name);
-      console.log('Context:', developmentContext, 'Variant:', stakeholderVariant);
-      console.log('Scenario loaded:', !!scenario);
-      console.log('Derived metrics loaded:', !!derivedMetrics);
+    try {
+      // Generate stakeholder response with enhanced framework
+      if (scenario && derivedMetrics && selectedStakeholder) {
+        console.log('🔄 Generating response for:', selectedStakeholder.name);
+        console.log('Context:', developmentContext, 'Variant:', stakeholderVariant);
+        console.log('WebLLM status:', webllm.status);
 
-      // Generate enhanced response with context and variant
-      const enhancedResponse = generateEnhancedResponse(
-        scenario,
-        derivedMetrics,
-        selectedStakeholder,
-        {
-          context: developmentContext,
-          variant: stakeholderVariant,
-          includeInteractionTriggers: true
-        }
-      );
+        // Generate enhanced response with context and variant
+        const enhancedResponse = generateEnhancedResponse(
+          scenario,
+          derivedMetrics,
+          selectedStakeholder,
+          {
+            context: developmentContext,
+            variant: stakeholderVariant,
+            includeInteractionTriggers: true
+          }
+        );
 
-      // Try to enhance with AI on top (silent failover if unavailable)
-      // Uses WebLLM if available, falls back to Ollama, then rule-based
-      const aiEnhancedResponse = await webllm.generateResponse(
-        enhancedResponse,
-        selectedStakeholder,
-        scenario,
-        derivedMetrics
-      );
+        // Try to enhance with AI on top (silent failover if unavailable)
+        // Uses WebLLM if available, falls back to Ollama, then rule-based
+        const aiEnhancedResponse = await webllm.generateResponse(
+          enhancedResponse,
+          selectedStakeholder,
+          scenario,
+          derivedMetrics
+        );
 
-      console.log('Response generated:', aiEnhancedResponse.generationType);
-      console.log('Interaction triggers:', aiEnhancedResponse.metadata?.interactionTriggersCount || 0);
-      setStakeholderResponse(aiEnhancedResponse);
-    } else {
-      console.error('Missing data for response generation:');
-      console.error('- Scenario:', !!scenario);
-      console.error('- Derived metrics:', !!derivedMetrics);
-      console.error('- Selected stakeholder:', !!selectedStakeholder);
+        console.log('✅ Response generated:', aiEnhancedResponse.generationType);
+        console.log('Interaction triggers:', aiEnhancedResponse.metadata?.interactionTriggersCount || 0);
+        setStakeholderResponse(aiEnhancedResponse);
+      } else {
+        console.error('❌ Missing data for response generation:');
+        console.error('- Scenario:', !!scenario);
+        console.error('- Derived metrics:', !!derivedMetrics);
+        console.error('- Selected stakeholder:', !!selectedStakeholder);
+      }
+    } finally {
+      setIsGeneratingResponse(false); // Hide loading state
     }
   };
 
@@ -197,6 +202,7 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
         stakeholder={selectedStakeholder}
         onRevealResponse={handleRevealResponse}
         onBack={handleBackToSelection}
+        isLoading={isGeneratingResponse}
       />
     );
   }
@@ -225,6 +231,19 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
               </svg>
               Enable AI Enhancement (Optional)
             </button>
+          )}
+
+          {/* Show loading indicator when initializing */}
+          {webllm.status === 'loading' && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 rounded-lg text-sm border border-blue-200">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span className="font-medium">
+                Downloading AI Model... {webllm.progress ? `${Math.round(webllm.progress.progress * 100)}%` : ''}
+              </span>
+            </div>
           )}
 
           {/* Show AI Ready indicator */}
