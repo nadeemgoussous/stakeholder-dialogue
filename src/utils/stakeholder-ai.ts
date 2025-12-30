@@ -15,6 +15,7 @@ import type { StakeholderProfile } from '../types/stakeholder';
 import type { StakeholderResponse } from '../types/response';
 import type { ScenarioInput } from '../types/scenario';
 import type { DerivedMetrics } from '../types/derived-metrics';
+import { buildFewShotSection } from '../data/stakeholder-fewshot';
 
 /**
  * AI enhancement configuration
@@ -245,7 +246,7 @@ async function enhanceWithWebLLM(
 }
 
 /**
- * Build system prompt for WebLLM enhancement (simplified for better output)
+ * Build system prompt for WebLLM enhancement with few-shot examples
  */
 function buildEnhancementSystemPrompt(
   stakeholder: StakeholderProfile,
@@ -255,15 +256,18 @@ function buildEnhancementSystemPrompt(
   const reShare2030 = calculateREShare(scenario, 2030).toFixed(1);
   const country = scenario.metadata?.country || 'the country';
 
-  return `You are ${stakeholder.name} reviewing an energy scenario for ${country}.
+  // Get few-shot examples for this stakeholder
+  const fewShotSection = buildFewShotSection(stakeholder.id);
 
-KEY CONCERNS: ${stakeholder.priorities.slice(0, 3).join(', ')}
-SCENARIO: ${reShare2030}% renewable energy by 2030
+  return `You are ${stakeholder.name}.
 
-Write a brief, natural response (2-3 sentences) expressing your initial reaction to this scenario.
-Use ${stakeholder.name}'s perspective and priorities.
-Be authentic and specific to your stakeholder role.
-Output ONLY the response text - no JSON, no labels, no formatting.`;
+${fewShotSection}
+Now respond to this scenario for ${country}:
+- ${reShare2030}% renewable energy by 2030
+- Key concerns: ${stakeholder.priorities.slice(0, 2).join(', ')}
+
+Write 2-3 sentences as ${stakeholder.name}. Match the voice and style from the examples above.
+Output ONLY your response - no labels or formatting.`;
 }
 
 /**
@@ -271,21 +275,19 @@ Output ONLY the response text - no JSON, no labels, no formatting.`;
  */
 function buildEnhancementUserPrompt(
   ruleBasedResponse: StakeholderResponse,
-  stakeholder: StakeholderProfile
+  _stakeholder: StakeholderProfile // Prefixed - stakeholder info is in system prompt
 ): string {
   // Extract key points from rule-based response (with null safety)
-  const concerns = ruleBasedResponse.concerns?.map(c => c.title).join('; ') || '';
-  const appreciations = ruleBasedResponse.appreciations?.map(a => a.title).join('; ') || '';
+  // concerns is Concern[], appreciation is string[]
+  const concernTexts = ruleBasedResponse.concerns?.map(c => c.text).join('; ') || '';
+  const appreciationTexts = ruleBasedResponse.appreciation?.join('; ') || '';
 
   let context = '';
-  if (appreciations) context += `POSITIVE: ${appreciations}\n`;
-  if (concerns) context += `CONCERNS: ${concerns}\n`;
+  if (appreciationTexts) context += `Positive aspects: ${appreciationTexts}\n`;
+  if (concernTexts) context += `Their concerns: ${concernTexts}\n`;
 
   return `${context}
-Write ${stakeholder.name}'s initial reaction to this energy scenario.
-Make it natural and conversational.
-Keep it to 2-3 sentences.
-Express their main perspective based on the points above.`;
+Write your response now.`;
 }
 
 /**
