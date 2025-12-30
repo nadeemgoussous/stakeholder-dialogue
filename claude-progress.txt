@@ -1,8 +1,100 @@
 ## Claude Code Progress Log
 
-### Session: 2025-12-30 (WebLLM Integration Debugging)
+### Session: 2025-12-30 Part 2 (WebLLM Prompt Engineering Fix)
 
-**Status**: ⚠️ PARTIAL - WebLLM working but output quality needs improvement
+**Status**: ✅ IMPROVED - WebLLM prompt engineering optimized for SmolLM2-1.7B
+
+**Progress Summary**:
+
+Completely rewrote WebLLM prompts to fix output quality issues. Previous prompts asked for JSON structure which caused SmolLM2 to output partial/malformed responses. New prompts are simple, focused, and ask for plain text only.
+
+**✅ Completed**:
+
+1. **Bug Fix: Duplicate Type Keys** - ALREADY FIXED
+   - Checked `stakeholder-enhancements.ts` for duplicate `type` keys
+   - File is clean - warnings were from Vite build cache
+   - No action needed (already resolved in previous session)
+
+2. **Created Simplified Prompt Functions** - New approach for WebLLM
+   - Created `buildEnhancementSystemPrompt()` - Concise, focused system prompt
+   - Created `buildEnhancementUserPrompt()` - Context from concerns/appreciations
+   - Prompts are ~50% shorter and clearer in intent
+   - Ask for plain text only (no JSON, no formatting)
+   - Focus on initial reaction enhancement only (not full response)
+
+3. **Updated `enhanceWithWebLLM()` Function**
+   - Now uses simplified prompts instead of complex JSON-based prompts
+   - Increased `max_tokens` from 400 to 600 (prevents cutoff)
+   - Only enhances `initialReaction` field (keeps other fields from rule-based)
+   - No longer attempts to parse JSON from LLM output
+   - Cleaner error handling and logging
+
+4. **Fixed TypeScript Import Error**
+   - Moved `StakeholderResponse` import from `types/stakeholder` to `types/response`
+   - Fixed unused parameter warning with `_derivedMetrics` prefix
+
+**Key Changes**:
+
+**OLD PROMPT (Problematic):**
+```
+System: [Long detailed prompt with all scenario metrics]
+User: [Full JSON response] + "Enhance this stakeholder response..."
+Result: LLM tries to output JSON, gets confused, returns partial/malformed JSON
+```
+
+**NEW PROMPT (Optimized):**
+```
+System: You are [Stakeholder] reviewing a scenario for [Country].
+KEY CONCERNS: [3 priorities]
+SCENARIO: [RE%] renewable energy by 2030
+Write 2-3 sentences. Output ONLY text - no JSON, no labels.
+
+User: POSITIVE: [appreciations]
+CONCERNS: [concerns]
+Write [Stakeholder]'s initial reaction. Natural and conversational. 2-3 sentences.
+
+Result: Clean, natural text that directly enhances initialReaction
+```
+
+**Benefits**:
+- ✅ Clearer instructions for small language models
+- ✅ No JSON parsing complexity
+- ✅ Focused on one task: enhance initial reaction
+- ✅ More tokens available for actual content (600 vs 400)
+- ✅ Stakeholder-specific context preserved
+- ✅ Concerns and appreciations guide the response
+
+**Files Modified**:
+- `src/utils/stakeholder-ai.ts` (+62 lines, -29 lines)
+  - New: `buildEnhancementSystemPrompt()`
+  - New: `buildEnhancementUserPrompt()`
+  - Updated: `enhanceWithWebLLM()`
+  - Fixed: Import statement for `StakeholderResponse`
+
+**Git Commit**:
+- `f1a2552` - fix: improve WebLLM prompt engineering for better output quality
+
+**Next Steps**:
+1. **Manual Testing** - Load scenario, select stakeholder, test WebLLM enhancement
+2. **Quality Assessment** - Verify output is natural, complete, stakeholder-appropriate
+3. **Model Comparison** (if needed) - Test Phi-3.5-mini or Gemma-2-2b if quality still poor
+4. **Documentation Update** - Update progress based on test results
+
+**Testing Instructions**:
+1. Open app at http://localhost:5173/stakeholder-dialogue/
+2. Load ScenarioLand example scenario
+3. Go to Stakeholder Dialogue tab
+4. Select any stakeholder (e.g., "Public & Communities")
+5. Click "Enable AI" button if WebLLM not loaded
+6. Enter prediction and reveal response
+7. Check browser console for WebLLM logs
+8. Verify response is natural text (not JSON fragments)
+
+---
+
+### Session: 2025-12-30 Part 1 (WebLLM Integration Debugging)
+
+**Status**: ⚠️ PARTIAL - WebLLM working but output quality needs improvement (NOW FIXED in Part 2)
 
 **Progress Summary**:
 

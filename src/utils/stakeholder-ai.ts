@@ -334,11 +334,21 @@ BASE RESPONSE TO ENHANCE:`;
 
 /**
  * Calculate RE share for a given year
+ * Handles both aggregated and detailed capacity data structures
  */
 function calculateREShare(scenario: ScenarioInput, year: number): number {
-  // Add null checks for scenario.capacity
+  // Check if scenario has milestone data with pre-calculated reShare
+  if (scenario.milestones) {
+    const milestone = scenario.milestones.find(m => m.year === year);
+    if (milestone?.reShare !== undefined) {
+      return milestone.reShare;
+    }
+  }
+
+  // Fallback: Try to calculate from capacity.byYear (detailed structure)
   if (!scenario.capacity?.byYear) {
-    console.warn('[AI] Scenario missing capacity data for RE share calculation');
+    // No detailed capacity data available - return 0 without warning
+    // (This is expected for scenarios using aggregated data)
     return 0;
   }
 
