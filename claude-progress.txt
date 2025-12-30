@@ -1,5 +1,94 @@
 ## Claude Code Progress Log
 
+### Session: 2025-12-30 (WebLLM Integration Debugging)
+
+**Status**: ⚠️ PARTIAL - WebLLM working but output quality needs improvement
+
+**Progress Summary**:
+
+Fixed critical bugs preventing WebLLM from generating AI-enhanced responses. WebLLM now successfully loads, generates responses, but output quality is poor (returns partial JSON instead of natural text).
+
+**✅ Completed**:
+
+1. **Fixed Scenario Data Passing Bug** - Scenario wasn't being passed to StakeholderTab
+   - Root cause: User wasn't loading scenario initially
+   - Verified ScenarioContext properly wraps all tabs in App.tsx
+   - Confirmed useScenario() hook correctly retrieves scenario and derivedMetrics
+
+2. **Added Comprehensive Debug Logging** - Track WebLLM enhancement pipeline
+   - Added logs to `enhanceWithWebLLM()` function (~10 log points)
+   - Added logs to `maybeEnhanceWithAI()` failover chain
+   - Shows: engine status, completion wait time, response content, parse status
+   - Logs reveal exact failure points during enhancement
+
+3. **Fixed Null Safety in `calculateREShare()`** - Prevented crash on missing capacity data
+   - Added null check: `if (!scenario.capacity?.byYear)`
+   - Returns 0 safely if capacity data is missing
+   - Added warning log for debugging
+   - Commit: `701f4d5` - "fix: add null safety to calculateREShare for WebLLM enhancement"
+
+4. **Fixed Null Safety in `buildSystemPrompt()`** - Prevented crashes on missing derived metrics
+   - Added safe access to `derivedMetrics.jobs?.byYear?.[2030]?.total`
+   - Added safe access to `derivedMetrics.emissions?.percentReduction`
+   - Added safe access to `scenario.metadata?.country` and `scenario.metadata?.scenarioName`
+   - All accesses use optional chaining (`?.`) with fallbacks to `'N/A'`
+   - Commit: `c58f296` - "fix: add comprehensive null safety to buildSystemPrompt"
+
+5. **Increased WebLLM Timeout** - Browser-based inference slower than server models
+   - Increased from 5 seconds to 20 seconds
+   - Prevents timeout during response generation
+   - Browser-based LLM inference typically takes 10-15 seconds
+   - Commit: `0565786` - "fix: increase WebLLM timeout from 5s to 20s for browser-based inference"
+
+6. **WebLLM Successfully Generating Responses** - Technical integration complete
+   - ✅ Model loads successfully (SmolLM2-1.7B-Instruct, ~1.77 GB)
+   - ✅ Engine initialization works (from cache after first load)
+   - ✅ Completion API called successfully
+   - ✅ Response returned within timeout
+   - ✅ Response marked as `ai-enhanced` (not `enhanced-rule-based`)
+
+**⚠️ Issues Identified**:
+
+1. **Poor Output Quality** - Model returning partial JSON instead of natural text
+   - Current output: `{ "stakeholderId": "public", "stakeholderName": "Public & Communities", "initialReaction": "Great to see a high renewable transition scenario being explored. We're eager to understand how this will impact our area and how we can ensure that vulnerable groups aren't left behind. Can you dive de`
+   - Problem: LLM is outputting JSON structure instead of just enhancing the text
+   - Problem: Response gets cut off mid-sentence ("Can you dive de")
+   - Likely causes:
+     - Prompt not clear enough about expected output format
+     - `max_tokens: 400` might be too low for complete JSON response
+     - SmolLM2-1.7B may need different prompt structure than Gemma
+
+2. **Scenario Data Structure Issues** - Warnings about missing capacity data
+   - Console shows: `[AI] Scenario missing capacity data for RE share calculation`
+   - Suggests loaded scenario may not have expected structure
+   - Need to verify example scenario has all required fields
+
+**Next Steps**:
+
+1. **Improve WebLLM Prompt** - Make output format clearer
+   - Option A: Tell model to output ONLY enhanced natural text (no JSON)
+   - Option B: Improve JSON structure prompt with examples
+   - Option C: Increase `max_tokens` from 400 to 800-1000
+
+2. **Test Different Models** - SmolLM2 may not be optimal for this task
+   - Try Gemma-2-2b-it-q4f16_1-MLC (original model)
+   - Try Phi-3.5-mini-instruct (better instruction following)
+   - Compare output quality across models
+
+3. **Verify Scenario Data** - Ensure example scenario has complete structure
+   - Check `scenario.capacity.byYear` exists
+   - Check `derivedMetrics.jobs.byYear` exists
+   - Fix or document required data structure
+
+**Files Modified**:
+- `src/utils/stakeholder-ai.ts` (+40 lines debug logging, null safety fixes, timeout increase)
+- Commits: `701f4d5`, `c58f296`, `0565786`
+
+**Current Git HEAD**: `0565786`
+**Branch**: `feature/webllm-smollm2-integration`
+
+---
+
 ### Session: 2025-12-29 (Stakeholder Response Evaluation & Fixes)
 
 **Status**: ✅ COMPLETE - Critical concern/appreciation categorization bugs fixed

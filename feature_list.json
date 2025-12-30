@@ -654,8 +654,8 @@
       "category": "offline",
       "priority": 43,
       "description": "WebLLM integration for browser-based AI (for workshop participants)",
-      "status": "COMPLETE - WebLLM integration implemented with browser-based AI enhancement",
-      "deploymentPriority": "HIGH - Ready for workshop deployment (requires WebGPU-enabled browsers)",
+      "status": "PARTIAL - WebLLM working but output quality needs improvement (returns partial JSON instead of natural text)",
+      "deploymentPriority": "MEDIUM - Technical integration complete, but needs prompt tuning before workshop deployment",
       "steps": [
         "Update AIConfig interface to support WebLLM settings",
         "Implement initializeWebLLM() function with progress tracking",
