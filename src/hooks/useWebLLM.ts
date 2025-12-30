@@ -93,34 +93,41 @@ export function useWebLLM(options: UseWebLLMOptions = {}): UseWebLLMReturn {
    * Initialize WebLLM engine (downloads model on first run)
    */
   const initializeModel = useCallback(async (): Promise<boolean> => {
+    console.log('🎯 initializeModel called - current status:', status);
+
     if (status === 'loading' || status === 'ready') {
+      console.log('⚠️ Already loading or ready, skipping initialization');
       return status === 'ready';
     }
 
     if (!isSupported) {
-      console.warn('WebLLM not supported in this browser');
+      console.warn('❌ WebLLM not supported in this browser - WebGPU required');
       return false;
     }
 
+    console.log('🚀 Starting WebLLM initialization...');
     setStatus('loading');
     setProgress(null);
 
     try {
       const engine = await initializeWebLLM(config, (progressReport) => {
+        console.log('📊 Progress update:', progressReport.text, `${(progressReport.progress * 100).toFixed(1)}%`);
         setProgress(progressReport);
       });
 
       if (engine) {
+        console.log('✅ WebLLM engine ready!');
         setStatus('ready');
         setProgress(null);
         return true;
       } else {
+        console.error('❌ WebLLM engine initialization returned null');
         setStatus('error');
         setProgress(null);
         return false;
       }
     } catch (error) {
-      console.error('WebLLM initialization error:', error);
+      console.error('❌ WebLLM initialization error:', error);
       setStatus('error');
       setProgress(null);
       return false;

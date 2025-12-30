@@ -50,8 +50,8 @@ export interface AIConfig {
  */
 export const DEFAULT_AI_CONFIG: AIConfig = {
   // WebLLM for participants (browser-based, zero setup)
-  // DISABLED by default - enable after packaging model
-  webLLMEnabled: false, // Set to true when model is packaged with PWA
+  // ENABLED for development/testing - model will download on first use (~1.77 GB)
+  webLLMEnabled: true, // Enable WebLLM for browser-based AI
   webLLMModel: 'SmolLM2-1.7B-Instruct-q4f16_1-MLC', // SmolLM2: Better instruction following than Gemma (~1.77 GB)
   webLLMTimeout: 5000,
 
@@ -143,24 +143,26 @@ export async function initializeWebLLM(
   }
 
   try {
-    console.log('🚀 Initializing WebLLM...');
+    console.log('🚀 Initializing WebLLM with model:', config.webLLMModel);
+    console.log('📦 Model size: ~1.77 GB - this will take 2-5 minutes on first load');
 
     // Initialize engine with progress tracking
     webLLMInitPromise = (async () => {
       try {
+        console.log('⏳ Starting WebLLM engine creation...');
         const engine = await webllm.CreateMLCEngine(config.webLLMModel, {
           initProgressCallback: (progress) => {
-            console.log(`WebLLM Loading: ${progress.text} (${(progress.progress * 100).toFixed(1)}%)`);
+            console.log(`📥 WebLLM Loading: ${progress.text} (${(progress.progress * 100).toFixed(1)}%)`);
             onProgress?.(progress);
           },
         });
 
         webLLMEngine = engine;
         webLLMInitialized = true;
-        console.log('✅ WebLLM initialized successfully');
+        console.log('✅ WebLLM initialized successfully - AI enhancement ready!');
         return engine;
       } catch (error) {
-        console.warn('WebLLM initialization failed:', error);
+        console.error('❌ WebLLM initialization failed:', error);
         webLLMInitPromise = null;
         return null;
       }
