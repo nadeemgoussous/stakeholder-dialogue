@@ -273,9 +273,9 @@ function buildEnhancementUserPrompt(
   ruleBasedResponse: StakeholderResponse,
   stakeholder: StakeholderProfile
 ): string {
-  // Extract key points from rule-based response
-  const concerns = ruleBasedResponse.concerns.map(c => c.title).join('; ');
-  const appreciations = ruleBasedResponse.appreciations.map(a => a.title).join('; ');
+  // Extract key points from rule-based response (with null safety)
+  const concerns = ruleBasedResponse.concerns?.map(c => c.title).join('; ') || '';
+  const appreciations = ruleBasedResponse.appreciations?.map(a => a.title).join('; ') || '';
 
   let context = '';
   if (appreciations) context += `POSITIVE: ${appreciations}\n`;
