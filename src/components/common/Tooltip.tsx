@@ -48,11 +48,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   // Get tooltip text from glossary or use custom content
   const tooltipText = isGlossaryKey ? getTooltip(content) : content;
 
-  // Don't render if no content available
-  if (!tooltipText) {
-    return <>{children}</>;
-  }
-
   // Adjust position if tooltip would go off-screen
   useEffect(() => {
     if (isVisible && tooltipRef.current && triggerRef.current) {
@@ -83,6 +78,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const handleMouseLeave = () => setIsVisible(false);
   const handleFocus = () => setIsVisible(true);
   const handleBlur = () => setIsVisible(false);
+
+  // If no tooltip text, just render children without tooltip functionality
+  if (!tooltipText) {
+    return <>{children}</>;
+  }
 
   // Position classes
   const positionClasses = {
