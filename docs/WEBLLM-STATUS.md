@@ -31,34 +31,43 @@ WebLLM integration is **technically complete and functional**. The SmolLM2-1.7B-
 
 ## Current Limitations
 
-⚠️ **Response Quality Issues**
-- Model sometimes produces generic or overly simple responses
-- Limited ability to capture nuanced stakeholder perspectives
-- May not fully utilize concern/appreciation context
+⚠️ **Response Quality**
+- Quality improved significantly with few-shot prompting (2025-12-30)
+- Still limited compared to larger models, but usable for workshops
+- May occasionally produce generic responses
 
-**Example Output:**
-```
-Rule-based: "We appreciate the ambitious renewable energy targets..."
+## Few-Shot Prompting (Implemented)
 
-AI-enhanced: "This looks good. We want to know more about jobs and costs."
-```
+Added 2 examples per stakeholder to teach the model each group's voice:
 
-The AI enhancement doesn't add much value over rule-based responses currently.
+| Stakeholder | Voice Description |
+|-------------|-------------------|
+| Policy Makers | Formal, balanced, policy coherence |
+| Grid Operators | Technical, risk-focused, stability |
+| Industry | Business-oriented, costs, competitiveness |
+| Public | Accessible language, local impacts |
+| CSOs/NGOs | Advocacy, climate ambition, justice |
+| Scientific | Evidence-based, methodological |
+| Financial | Investment-focused, bankability |
+| Regional Bodies | Cross-border, harmonization |
+| Development Partners | Debt sustainability, concessional finance |
 
-## Root Causes
+**File:** `src/data/stakeholder-fewshot.ts`
 
-1. **Small Model Size** - 1.7B parameters is very limited for this task
-2. **Prompt Complexity** - Stakeholder simulation requires nuanced understanding
-3. **Context Length** - Limited ability to process all scenario details
+## Root Causes (for remaining limitations)
+
+1. **Small Model Size** - 1.7B parameters is limited for nuanced simulation
+2. **Context Window** - Must keep prompts short for reliable inference
+3. **No Fine-Tuning** - Model not specifically trained on stakeholder data
 
 ## Improvement Roadmap
 
-### Option 1: Better Prompts (Low effort, moderate impact)
-- Add few-shot examples to system prompt
-- Include stakeholder-specific writing samples
-- Provide more explicit output format guidance
-- **Estimated effort:** 2-4 hours
-- **Expected improvement:** 20-30% better quality
+### ✅ Option 1: Few-Shot Prompts (DONE - 2025-12-30)
+- Added 2 examples per stakeholder to system prompt
+- Each example shows voice, tone, and typical concerns
+- Kept examples short (2-3 sentences) for token efficiency
+- **Effort:** ~2 hours
+- **Result:** Noticeably improved quality
 
 ### Option 2: Larger Model (Medium effort, high impact)
 - **Phi-3.5-mini-instruct** (3.8B params, ~2.4 GB)
