@@ -654,8 +654,8 @@
       "category": "offline",
       "priority": 43,
       "description": "WebLLM integration for browser-based AI (for workshop participants)",
-      "status": "PARTIAL - WebLLM working but output quality needs improvement (returns partial JSON instead of natural text)",
-      "deploymentPriority": "MEDIUM - Technical integration complete, but needs prompt tuning before workshop deployment",
+      "status": "COMPLETE - Technically functional, quality improvements deferred (see docs/WEBLLM-STATUS.md)",
+      "deploymentPriority": "LOW - Works but limited quality with SmolLM2-1.7B, recommend testing Phi-3.5-mini before workshops",
       "steps": [
         "Update AIConfig interface to support WebLLM settings",
         "Implement initializeWebLLM() function with progress tracking",
@@ -672,10 +672,12 @@
         "Test air-gapped environment (USB drive distribution)"
       ],
       "technicalNotes": [
-        "Model: gemma-2-2b-it-q4f16_1-MLC (~1.4GB) - matches Ollama gemma2:2b",
-        "Custom Models: Supports fine-tuned models by updating webLLMModel config",
-        "Browser: Requires WebGPU support (Chrome 113+)",
-        "Performance: 2-4 seconds inference on modern hardware",
+        "Model: SmolLM2-1.7B-Instruct-q4f16_1-MLC (~1.77GB) - currently deployed",
+        "Quality: Limited - responses work but lack nuance (see docs/WEBLLM-STATUS.md)",
+        "Alternatives: Phi-3.5-mini-instruct (3.8B, better quality) or Gemma-2-2b-it",
+        "Browser: Requires WebGPU support (Chrome 113+, Edge 113+)",
+        "Performance: 10-15 seconds inference on modern hardware",
+        "Timeout: 20 seconds with graceful failover to rule-based",
         "Caching: Model stored in browser IndexedDB (one-time download)",
         "Fallback: Silent failover to Ollama or rule-based if unsupported",
         "WebGPU detection: Checks for 'gpu' in navigator",
