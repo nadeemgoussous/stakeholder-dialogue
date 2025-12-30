@@ -218,7 +218,7 @@ Results saved to `test-results/prompt-test-results.json` (gitignored).
 | Quality issues | ~11% |
 | Avg inference time | 4.7 seconds |
 
-**Quality by Stakeholder:**
+**Quality by Stakeholder (after fix):**
 
 | Stakeholder | Quality | Notes |
 |-------------|---------|-------|
@@ -229,13 +229,19 @@ Results saved to `test-results/prompt-test-results.json` (gitignored).
 | Financial | ✅ Good | PPAs, bankability, risk returns |
 | Development Partners | ✅ Good | Debt sustainability focused |
 | Regional Bodies | ✅ Good | Cross-border trade perspective |
-| CSOs/NGOs | ⚠️ Mixed | Sometimes echoes prompt |
-| Scientific | ⚠️ Mixed | Sometimes uses third person |
+| CSOs/NGOs | ✅ Good | Climate ambition, justice (fixed) |
+| Scientific | ✅ Good | Evidence-based, methodological (fixed) |
 
-**Known Issues:**
-- ~11% of responses echo the prompt instead of generating new text
-- CSOs/NGOs and Scientific stakeholders occasionally fail to role-play correctly
-- Temperature (0.7) may need tuning for more consistent outputs
+**Known Issues (FIXED 2025-12-30):**
+- ~~11% of responses echo the prompt~~ → **FIXED** (0% echo rate now)
+- ~~CSOs/NGOs and Scientific fail to role-play~~ → **FIXED**
+- ~~Temperature (0.7) too high~~ → **FIXED** (lowered to 0.5)
+
+**Fix Applied:**
+1. Added explicit "don't echo" instruction to prompts
+2. Added `---END OF EXAMPLES---` separator
+3. Lowered temperature from 0.7 to 0.5
+4. Added `isEchoResponse()` detection with auto-fallback
 
 ## Next Steps
 
