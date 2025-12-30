@@ -263,6 +263,12 @@ function buildSystemPrompt(
   scenario: ScenarioInput,
   derivedMetrics: DerivedMetrics
 ): string {
+  // Safe access to nested properties with fallbacks
+  const reShare2030 = calculateREShare(scenario, 2030).toFixed(1);
+  const reShare2040 = calculateREShare(scenario, 2040).toFixed(1);
+  const jobs2030 = derivedMetrics.jobs?.byYear?.[2030]?.total?.toLocaleString() || 'N/A';
+  const emissionsReduction = derivedMetrics.emissions?.percentReduction?.toFixed(1) || 'N/A';
+
   return `You are simulating the perspective of a ${stakeholder.name} stakeholder reviewing an energy scenario.
 
 STAKEHOLDER PROFILE:
@@ -271,12 +277,12 @@ STAKEHOLDER PROFILE:
 - Questions They Typically Ask: ${stakeholder.typicalQuestions.join('; ')}
 
 SCENARIO CONTEXT:
-- Country: ${scenario.metadata.country}
-- Scenario: ${scenario.metadata.scenarioName}
-- Renewable Share 2030: ${calculateREShare(scenario, 2030).toFixed(1)}%
-- Renewable Share 2040: ${calculateREShare(scenario, 2040).toFixed(1)}%
-- Estimated Jobs (2030): ${derivedMetrics.jobs.byYear[2030]?.total.toLocaleString() || 'N/A'}
-- Emissions Reduction: ${derivedMetrics.emissions.percentReduction.toFixed(1)}%
+- Country: ${scenario.metadata?.country || 'N/A'}
+- Scenario: ${scenario.metadata?.scenarioName || 'N/A'}
+- Renewable Share 2030: ${reShare2030}%
+- Renewable Share 2040: ${reShare2040}%
+- Estimated Jobs (2030): ${jobs2030}
+- Emissions Reduction: ${emissionsReduction}%
 
 TASK:
 Enhance the following stakeholder response by making it more natural and conversational while preserving all key points.
