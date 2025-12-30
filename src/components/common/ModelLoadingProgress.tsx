@@ -1,7 +1,8 @@
 /**
  * Model Loading Progress Component
  *
- * Shows progress UI during first-time WebLLM model download (~800MB)
+ * Shows progress UI during first-time WebLLM model download
+ * SmolLM2-1.7B-Instruct: ~1.77 GB (better instruction following)
  * Allows users to skip and use basic (rule-based) responses
  */
 
@@ -72,7 +73,7 @@ export function ModelLoadingProgress({
           Downloading AI model for enhanced stakeholder responses...
         </p>
         <p className="text-sm text-gray-500 mb-6">
-          <strong>Note:</strong> This happens once (~800MB), then cached in your browser for future use.
+          <strong>Note:</strong> This happens once (~1.8GB), then cached in your browser for future use.
         </p>
 
         {/* Progress Bar */}

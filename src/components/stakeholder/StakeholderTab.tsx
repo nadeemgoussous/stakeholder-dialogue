@@ -7,9 +7,10 @@ import PredictionInput from '../prediction/PredictionInput';
 import CompareView from '../prediction/CompareView';
 import { useScenario } from '../../context/ScenarioContext';
 import { generateEnhancedResponse, getContextDescription } from '../../utils/stakeholder-rules';
-import { maybeEnhanceWithAI, DEFAULT_AI_CONFIG } from '../../utils/stakeholder-ai';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
 import { Tooltip } from '../common/Tooltip';
+import { useWebLLM } from '../../hooks/useWebLLM';
+import { ModelLoadingProgress } from '../common/ModelLoadingProgress';
 
 // Collapsible Section Component
 function CollapsibleSection({
@@ -72,6 +73,10 @@ const STORAGE_KEYS = {
 export default function StakeholderTab({ onStakeholderSelected }: StakeholderTabProps) {
   const { scenario, derivedMetrics } = useScenario();
   const isOnline = useOnlineStatus();
+
+  // WebLLM AI enhancement hook
+  const webllm = useWebLLM();
+
   const [selectedStakeholder, setSelectedStakeholder] = useState<StakeholderProfile | null>(null);
   const [showPrediction, setShowPrediction] = useState(false);
   const [userPrediction, setUserPrediction] = useState<string>('');
@@ -141,12 +146,12 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
       );
 
       // Try to enhance with AI on top (silent failover if unavailable)
-      const aiEnhancedResponse = await maybeEnhanceWithAI(
+      // Uses WebLLM if available, falls back to Ollama, then rule-based
+      const aiEnhancedResponse = await webllm.generateResponse(
         enhancedResponse,
         selectedStakeholder,
         scenario,
-        derivedMetrics,
-        DEFAULT_AI_CONFIG
+        derivedMetrics
       );
 
       console.log('Response generated:', aiEnhancedResponse.generationType);
@@ -207,16 +212,57 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
           Select a stakeholder group to explore their perspective on your scenario
         </p>
 
-        {/* AI Status Indicator - subtle, not alarming */}
-        {!isOnline && (
-          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <span>Working offline - responses use rule-based generation</span>
-          </div>
-        )}
+        {/* WebLLM Status and Enable Button */}
+        <div className="mt-4 flex flex-col items-center gap-3">
+          {/* Show Enable AI button if supported but not loaded */}
+          {webllm.isSupported && webllm.status === 'not-loaded' && (
+            <button
+              onClick={() => webllm.initializeModel()}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              Enable AI Enhancement (Optional)
+            </button>
+          )}
+
+          {/* Show AI Ready indicator */}
+          {webllm.status === 'ready' && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 rounded-lg text-sm border border-green-200">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">✨ AI Enhancement Active</span>
+            </div>
+          )}
+
+          {/* Offline indicator - subtle, not alarming */}
+          {!isOnline && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              <span>Working offline - responses use rule-based generation</span>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* WebLLM Model Loading Progress */}
+      {webllm.status === 'loading' && (
+        <ModelLoadingProgress
+          progress={webllm.progress}
+          isLoading={true}
+          onSkip={() => {
+            // User chose to skip - they can enable later
+            console.log('User skipped WebLLM initialization');
+          }}
+          onComplete={() => {
+            console.log('WebLLM model loaded successfully');
+          }}
+        />
+      )}
 
       {/* Enhanced Framework Controls - Collapsible */}
       <div className="card mb-8 bg-gradient-to-r from-blue-50 to-indigo-50">

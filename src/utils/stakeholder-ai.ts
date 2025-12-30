@@ -52,7 +52,7 @@ export const DEFAULT_AI_CONFIG: AIConfig = {
   // WebLLM for participants (browser-based, zero setup)
   // DISABLED by default - enable after packaging model
   webLLMEnabled: false, // Set to true when model is packaged with PWA
-  webLLMModel: 'gemma-2-2b-it-q4f16_1-MLC', // Or path to bundled model: '/models/gemma-2-2b-it-q4f16_1-MLC'
+  webLLMModel: 'SmolLM2-1.7B-Instruct-q4f16_1-MLC', // SmolLM2: Better instruction following than Gemma (~1.77 GB)
   webLLMTimeout: 5000,
 
   // Ollama for facilitators (better performance)
