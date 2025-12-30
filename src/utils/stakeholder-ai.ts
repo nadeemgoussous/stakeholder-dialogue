@@ -11,7 +11,8 @@
  */
 
 import * as webllm from '@mlc-ai/web-llm';
-import type { StakeholderResponse, StakeholderProfile } from '../types/stakeholder';
+import type { StakeholderProfile } from '../types/stakeholder';
+import type { StakeholderResponse } from '../types/response';
 import type { ScenarioInput } from '../types/scenario';
 import type { DerivedMetrics } from '../types/derived-metrics';
 
@@ -198,15 +199,13 @@ async function enhanceWithWebLLM(
 
     console.log('✅ [WebLLM] Engine available, generating completion...');
 
-    const systemPrompt = buildSystemPrompt(stakeholder, scenario, derivedMetrics);
-    const baseResponseText = JSON.stringify(ruleBasedResponse, null, 2);
+    // Build a simple, focused prompt that asks for plain text only
+    const systemPrompt = buildEnhancementSystemPrompt(stakeholder, scenario, derivedMetrics);
+    const userPrompt = buildEnhancementUserPrompt(ruleBasedResponse, stakeholder);
 
     const messages: webllm.ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
-      {
-        role: 'user',
-        content: `${baseResponseText}\n\nEnhance this stakeholder response to make it more natural and conversational while preserving all key points.`,
-      },
+      { role: 'user', content: userPrompt },
     ];
 
     // Generate response with timeout
@@ -217,38 +216,28 @@ async function enhanceWithWebLLM(
     const completionPromise = engine.chat.completions.create({
       messages,
       temperature: 0.7,
-      max_tokens: 400,
+      max_tokens: 600, // Increased from 400 to allow complete responses
     });
 
     console.log('⏳ [WebLLM] Waiting for completion (timeout: ' + config.webLLMTimeout + 'ms)...');
     const completion = await Promise.race([completionPromise, timeoutPromise]);
 
-    const enhancedText = completion.choices[0]?.message?.content;
-    console.log('📝 [WebLLM] Received response:', enhancedText?.substring(0, 100) + '...');
+    const enhancedText = completion.choices[0]?.message?.content?.trim();
+    console.log('📝 [WebLLM] Received response:', enhancedText?.substring(0, 150) + '...');
 
     if (!enhancedText) {
       console.log('❌ [WebLLM] No content in completion');
       return null;
     }
 
-    // Try to parse enhanced response as JSON
-    try {
-      const parsed = JSON.parse(enhancedText);
-      console.log('✅ [WebLLM] Successfully parsed JSON response');
-      return {
-        ...ruleBasedResponse,
-        ...parsed,
-        generationType: 'ai-enhanced' as const,
-      };
-    } catch {
-      // Use enhanced text for initial reaction only
-      console.log('⚠️ [WebLLM] Using text response (not JSON)');
-      return {
-        ...ruleBasedResponse,
-        initialReaction: enhancedText.trim().substring(0, 300),
-        generationType: 'ai-enhanced' as const,
-      };
-    }
+    // Use enhanced text to replace initial reaction
+    // Keep all other response fields from rule-based response
+    console.log('✅ [WebLLM] Using enhanced text for initialReaction');
+    return {
+      ...ruleBasedResponse,
+      initialReaction: enhancedText,
+      generationType: 'ai-enhanced' as const,
+    };
   } catch (error) {
     console.error('❌ [WebLLM] Enhancement failed:', error);
     return null;
@@ -256,7 +245,51 @@ async function enhanceWithWebLLM(
 }
 
 /**
- * Build system prompt for LLM with strict guardrails
+ * Build system prompt for WebLLM enhancement (simplified for better output)
+ */
+function buildEnhancementSystemPrompt(
+  stakeholder: StakeholderProfile,
+  scenario: ScenarioInput,
+  _derivedMetrics: DerivedMetrics // Prefixed with _ to indicate intentionally unused
+): string {
+  const reShare2030 = calculateREShare(scenario, 2030).toFixed(1);
+  const country = scenario.metadata?.country || 'the country';
+
+  return `You are ${stakeholder.name} reviewing an energy scenario for ${country}.
+
+KEY CONCERNS: ${stakeholder.priorities.slice(0, 3).join(', ')}
+SCENARIO: ${reShare2030}% renewable energy by 2030
+
+Write a brief, natural response (2-3 sentences) expressing your initial reaction to this scenario.
+Use ${stakeholder.name}'s perspective and priorities.
+Be authentic and specific to your stakeholder role.
+Output ONLY the response text - no JSON, no labels, no formatting.`;
+}
+
+/**
+ * Build user prompt for WebLLM enhancement
+ */
+function buildEnhancementUserPrompt(
+  ruleBasedResponse: StakeholderResponse,
+  stakeholder: StakeholderProfile
+): string {
+  // Extract key points from rule-based response
+  const concerns = ruleBasedResponse.concerns.map(c => c.title).join('; ');
+  const appreciations = ruleBasedResponse.appreciations.map(a => a.title).join('; ');
+
+  let context = '';
+  if (appreciations) context += `POSITIVE: ${appreciations}\n`;
+  if (concerns) context += `CONCERNS: ${concerns}\n`;
+
+  return `${context}
+Write ${stakeholder.name}'s initial reaction to this energy scenario.
+Make it natural and conversational.
+Keep it to 2-3 sentences.
+Express their main perspective based on the points above.`;
+}
+
+/**
+ * Build system prompt for LLM with strict guardrails (used by Ollama)
  */
 function buildSystemPrompt(
   stakeholder: StakeholderProfile,
