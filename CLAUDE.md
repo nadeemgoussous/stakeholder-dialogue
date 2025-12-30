@@ -208,6 +208,7 @@ The project documentation is split into focused files:
 3. **[docs/TECHNICAL-IMPLEMENTATION.md](docs/TECHNICAL-IMPLEMENTATION.md)** - Reference code for response generation, AI enhancement, and calculations
 4. **[docs/DATA-SCHEMAS.md](docs/DATA-SCHEMAS.md)** - TypeScript interfaces, data structures, and reference constants
 5. **[docs/UI-DESIGN.md](docs/UI-DESIGN.md)** - Design system, layouts, and component specifications
+6. **[docs/WEBLLM-STATUS.md](docs/WEBLLM-STATUS.md)** - WebLLM browser-based AI integration (model, prompts, echo detection, testing)
 
 ### IRENA Toolkit Source Documentation
 
@@ -497,6 +498,7 @@ If `claude-progress.txt` exists:
 - Reference CLAUDE.md and docs/ for all specifications
 - Test offline functionality explicitly
 - **Token Optimization**: Use Chromium-only tests during development (`--project=chromium`), full multi-browser before commits
+- **WebLLM Documentation**: When modifying any WebLLM-related files (`src/utils/stakeholder-ai.ts`, `src/data/stakeholder-fewshot.ts`, `src/hooks/useWebLLM.ts`, `scripts/test-prompts-ollama.ts`), update `docs/WEBLLM-STATUS.md` to reflect changes (prompts, models, test results, configuration)
 
 ### Reference Documentation
 
@@ -506,6 +508,7 @@ When implementing features, consult:
 - **Response generation**: [docs/TECHNICAL-IMPLEMENTATION.md](docs/TECHNICAL-IMPLEMENTATION.md)
 - **Data structures**: [docs/DATA-SCHEMAS.md](docs/DATA-SCHEMAS.md)
 - **UI components**: [docs/UI-DESIGN.md](docs/UI-DESIGN.md)
+- **WebLLM/AI enhancement**: [docs/WEBLLM-STATUS.md](docs/WEBLLM-STATUS.md)
 
 ---
 
