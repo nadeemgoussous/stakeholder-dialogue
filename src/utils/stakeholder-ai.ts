@@ -187,9 +187,16 @@ async function enhanceWithWebLLM(
   config: AIConfig
 ): Promise<StakeholderResponse | null> {
   try {
+    console.log('🤖 [WebLLM] Starting enhancement for:', stakeholder.name);
+
     // Initialize engine if needed (will use cached model after first load)
     const engine = await initializeWebLLM(config);
-    if (!engine) return null;
+    if (!engine) {
+      console.log('❌ [WebLLM] Engine not available');
+      return null;
+    }
+
+    console.log('✅ [WebLLM] Engine available, generating completion...');
 
     const systemPrompt = buildSystemPrompt(stakeholder, scenario, derivedMetrics);
     const baseResponseText = JSON.stringify(ruleBasedResponse, null, 2);
@@ -213,14 +220,21 @@ async function enhanceWithWebLLM(
       max_tokens: 400,
     });
 
+    console.log('⏳ [WebLLM] Waiting for completion (timeout: ' + config.webLLMTimeout + 'ms)...');
     const completion = await Promise.race([completionPromise, timeoutPromise]);
 
     const enhancedText = completion.choices[0]?.message?.content;
-    if (!enhancedText) return null;
+    console.log('📝 [WebLLM] Received response:', enhancedText?.substring(0, 100) + '...');
+
+    if (!enhancedText) {
+      console.log('❌ [WebLLM] No content in completion');
+      return null;
+    }
 
     // Try to parse enhanced response as JSON
     try {
       const parsed = JSON.parse(enhancedText);
+      console.log('✅ [WebLLM] Successfully parsed JSON response');
       return {
         ...ruleBasedResponse,
         ...parsed,
@@ -228,6 +242,7 @@ async function enhanceWithWebLLM(
       };
     } catch {
       // Use enhanced text for initial reaction only
+      console.log('⚠️ [WebLLM] Using text response (not JSON)');
       return {
         ...ruleBasedResponse,
         initialReaction: enhancedText.trim().substring(0, 300),
@@ -235,7 +250,7 @@ async function enhanceWithWebLLM(
       };
     }
   } catch (error) {
-    console.debug('WebLLM enhancement failed:', error);
+    console.error('❌ [WebLLM] Enhancement failed:', error);
     return null;
   }
 }
@@ -282,6 +297,12 @@ BASE RESPONSE TO ENHANCE:`;
  * Calculate RE share for a given year
  */
 function calculateREShare(scenario: ScenarioInput, year: number): number {
+  // Add null checks for scenario.capacity
+  if (!scenario.capacity?.byYear) {
+    console.warn('[AI] Scenario missing capacity data for RE share calculation');
+    return 0;
+  }
+
   const capacityData = scenario.capacity.byYear[year];
   if (!capacityData) return 0;
 
@@ -405,6 +426,7 @@ export async function maybeEnhanceWithAI(
   // 1. Try WebLLM first (browser-based, zero installation)
   // Note: WebLLM works offline after first model load
   if (config.webLLMEnabled) {
+    console.log('🔍 [AI] Attempting WebLLM enhancement...');
     const webllmResult = await enhanceWithWebLLM(
       ruleBasedResponse,
       stakeholder,
@@ -414,8 +436,10 @@ export async function maybeEnhanceWithAI(
     );
 
     if (webllmResult) {
-      console.debug('✅ Response enhanced with WebLLM');
+      console.log('✅ [AI] Response enhanced with WebLLM');
       return webllmResult;
+    } else {
+      console.log('⚠️ [AI] WebLLM enhancement returned null, trying fallbacks...');
     }
   }
 
