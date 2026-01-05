@@ -386,6 +386,7 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
             <button
               key={stakeholder.id}
               onClick={() => handleStakeholderClick(stakeholder)}
+              data-stakeholder-id={stakeholder.id}
               className={`
                 stakeholder-button
                 flex flex-col items-center justify-center
