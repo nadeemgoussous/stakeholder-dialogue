@@ -101,7 +101,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   };
 
   return (
-    <div
+    <span
       ref={triggerRef}
       className="relative inline-block"
       onMouseEnter={handleMouseEnter}
@@ -144,7 +144,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           />
         </div>
       )}
-    </div>
+    </span>
   );
 };
 

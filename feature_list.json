@@ -531,6 +531,7 @@
       "category": "persistence",
       "priority": 34,
       "description": "Export scenario and responses as JSON",
+      "status": "DEFERRED - Focus on core UX and packaging features first",
       "steps": [
         "Add 'Export Session' button",
         "Combine scenario, predictions, responses",
@@ -564,7 +565,7 @@
         "Provide recovery options",
         "Log errors for debugging"
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "F037",
