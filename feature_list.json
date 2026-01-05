@@ -585,6 +585,7 @@
       "category": "packaging",
       "priority": 38,
       "description": "Local server batch files",
+      "status": "DEFERRED - Wait until project is production-ready for deployment",
       "steps": [
         "Create start-local.bat for Windows",
         "Create start-local.sh for Mac/Linux",
@@ -599,6 +600,7 @@
       "category": "packaging",
       "priority": 39,
       "description": "PWA manifest and icons",
+      "status": "DEFERRED - Wait until project is production-ready for deployment",
       "steps": [
         "Create manifest.json with IRENA branding",
         "Add app icons in multiple sizes",
@@ -613,6 +615,7 @@
       "category": "documentation",
       "priority": 40,
       "description": "README with setup instructions",
+      "status": "DEFERRED - Wait until project is production-ready for deployment",
       "steps": [
         "Write comprehensive README.md",
         "Include installation steps",
@@ -627,6 +630,7 @@
       "category": "documentation",
       "priority": 41,
       "description": "Workshop facilitator guide",
+      "status": "DEFERRED - Wait until project is production-ready for deployment",
       "steps": [
         "Create FACILITATOR_GUIDE.md",
         "Document predict-before-reveal pedagogy",
@@ -641,6 +645,7 @@
       "category": "documentation",
       "priority": 42,
       "description": "Excel template user instructions",
+      "status": "DEFERRED - Wait until project is production-ready for deployment",
       "steps": [
         "Create TEMPLATE_INSTRUCTIONS.md",
         "Step-by-step guide for using Excel template",
