@@ -1,5 +1,82 @@
 ## Claude Code Progress Log
 
+### Session: 2026-01-05 Part 3 (WebLLM Error Handling - QuotaExceededError Fix)
+
+**Status**: ✅ COMPLETE - Actionable error messages for WebLLM loading failures
+
+**Progress Summary**:
+
+User reported experiencing QuotaExceededError at 49.8% during WebLLM model loading, with no indication in the dialog about what went wrong. Had to manually clear site data in DevTools. Fixed by implementing comprehensive error detection, parsing, and user-friendly error UI with one-click solutions.
+
+**✅ Completed**:
+
+1. **Error Detection & Parsing** - Structured error information
+   - Created `WebLLMError` interface with type, message, userMessage, actionable fields
+   - Implemented `parseWebLLMError()` function to identify error types:
+     - `quota`: QuotaExceededError (browser storage full, ~1.8GB needed)
+     - `network`: Download failed due to connectivity issues
+     - `unsupported`: Browser doesn't support WebGPU
+     - `unknown`: Generic failures
+   - Updated `initializeWebLLM()` to accept `onError` callback parameter
+   - Parse and pass error information through callback
+
+2. **Hook State Management** - Track error state in useWebLLM
+   - Added `error: WebLLMError | null` to hook state
+   - Added `error` to hook return value
+   - Updated `initializeModel()` to handle error callback from initializeWebLLM
+   - Set generic error if engine returns null without specific error
+
+3. **User-Friendly Error UI** - Clear, actionable error messages
+   - Updated `ModelLoadingProgress` component to display errors
+   - Shows error state with red accent colors and warning icon
+   - Displays specific error messages based on error type
+   - QuotaExceededError shows:
+     - "Not enough storage space to download AI model"
+     - Explanation: "The AI model (~1.8GB) needs browser storage, but there isn't enough space available"
+     - Solution: "Click 'Clear Cache & Retry' below to automatically free up space"
+   - Added `handleClearCacheAndRetry()` function that:
+     - Clears all browser caches (`caches.delete()`)
+     - Clears all IndexedDB databases (where WebLLM stores model)
+     - Automatically retries model loading
+     - Falls back to manual instructions if automatic clear fails
+   - Shows collapsible "Technical details" section for debugging
+   - Always displays "Skip AI (use basic responses)" option
+   - Added `onRetry` prop to allow retry without cache clear
+
+4. **Integration** - Show errors in StakeholderTab
+   - Updated condition to show ModelLoadingProgress for both 'loading' and 'error' states
+   - Pass `error` prop from useWebLLM hook
+   - Pass `onRetry` handler that calls `webllm.initializeModel()`
+
+**Key Features**:
+
+- **Specific error identification**: Users see exactly what went wrong (quota vs network vs unsupported)
+- **One-click solution**: "Clear Cache & Retry" button for quota errors (no more manual DevTools navigation)
+- **Automatic cleanup**: Clears both caches and IndexedDB in one action
+- **Graceful degradation**: "Skip AI" option always available to use rule-based responses
+- **Debug support**: Collapsible technical details section shows raw error message
+- **Manual fallback**: Instructions for manual cache clear if automatic method fails
+
+**Files Modified**:
+- `src/utils/stakeholder-ai.ts` (+72 lines - error parsing + onError callback)
+- `src/hooks/useWebLLM.ts` (+18 lines - error state management)
+- `src/components/common/ModelLoadingProgress.tsx` (+132 lines - error UI)
+- `src/components/stakeholder/StakeholderTab.tsx` (+6 lines - error display)
+
+**Git Commit**:
+- `26c9ff3` - fix: add actionable error messages for WebLLM loading failures
+
+**Key Benefits**:
+- ✅ Users immediately understand what went wrong
+- ✅ One-click fix for quota errors (most common failure)
+- ✅ No more confusion when loading gets stuck at 50%
+- ✅ Always fallback to rule-based responses available
+- ✅ Technical details available for debugging without cluttering UI
+
+**Next Steps**: Continue with F038-F042 (Packaging and documentation)
+
+---
+
 ### Session: 2026-01-05 Part 2 (F037 - Responsive Design for Tablets)
 
 **Status**: ✅ COMPLETE - Responsive design verified and tested across tablet viewports
