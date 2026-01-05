@@ -274,16 +274,21 @@ export default function StakeholderTab({ onStakeholderSelected }: StakeholderTab
       </div>
 
       {/* WebLLM Model Loading Progress */}
-      {webllm.status === 'loading' && (
+      {(webllm.status === 'loading' || webllm.status === 'error') && (
         <ModelLoadingProgress
           progress={webllm.progress}
-          isLoading={true}
+          isLoading={webllm.status === 'loading'}
+          error={webllm.error}
           onSkip={() => {
             // User chose to skip - they can enable later
             console.log('User skipped WebLLM initialization');
           }}
           onComplete={() => {
             console.log('WebLLM model loaded successfully');
+          }}
+          onRetry={() => {
+            console.log('User requested retry');
+            webllm.initializeModel();
           }}
         />
       )}

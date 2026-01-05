@@ -15,7 +15,8 @@ import {
   isWebLLMSupported,
   maybeEnhanceWithAI,
   DEFAULT_AI_CONFIG,
-  type AIConfig
+  type AIConfig,
+  type WebLLMError
 } from '../utils/stakeholder-ai';
 import type { StakeholderProfile } from '../types/stakeholder';
 import type { ScenarioInput } from '../types/scenario';
@@ -40,6 +41,7 @@ interface UseWebLLMReturn {
   status: WebLLMStatus;
   isSupported: boolean | null;
   progress: InitProgressReport | null;
+  error: WebLLMError | null;
 
   // Actions
   initializeModel: () => Promise<boolean>;
@@ -70,6 +72,7 @@ export function useWebLLM(options: UseWebLLMOptions = {}): UseWebLLMReturn {
   const [status, setStatus] = useState<WebLLMStatus>('not-checked');
   const [isSupported, setIsSupported] = useState<boolean | null>(null);
   const [progress, setProgress] = useState<InitProgressReport | null>(null);
+  const [error, setError] = useState<WebLLMError | null>(null);
 
   // Check WebGPU support on mount
   useEffect(() => {
@@ -108,31 +111,60 @@ export function useWebLLM(options: UseWebLLMOptions = {}): UseWebLLMReturn {
     console.log('🚀 Starting WebLLM initialization...');
     setStatus('loading');
     setProgress(null);
+    setError(null);
 
     try {
-      const engine = await initializeWebLLM(config, (progressReport) => {
-        console.log('📊 Progress update:', progressReport.text, `${(progressReport.progress * 100).toFixed(1)}%`);
-        setProgress(progressReport);
-      });
+      const engine = await initializeWebLLM(
+        config,
+        (progressReport) => {
+          console.log('📊 Progress update:', progressReport.text, `${(progressReport.progress * 100).toFixed(1)}%`);
+          setProgress(progressReport);
+        },
+        (errorInfo) => {
+          console.error('❌ WebLLM error:', errorInfo);
+          setError(errorInfo);
+          setStatus('error');
+          setProgress(null);
+        }
+      );
 
       if (engine) {
         console.log('✅ WebLLM engine ready!');
         setStatus('ready');
         setProgress(null);
+        setError(null);
         return true;
       } else {
         console.error('❌ WebLLM engine initialization returned null');
+        if (!error) {
+          // Set generic error if no specific error was provided
+          setError({
+            type: 'unknown',
+            message: 'Engine initialization returned null',
+            userMessage: 'Failed to load AI model',
+            actionable: 'Try refreshing the page or skip AI enhancement to use rule-based responses.'
+          });
+        }
         setStatus('error');
         setProgress(null);
         return false;
       }
-    } catch (error) {
-      console.error('❌ WebLLM initialization error:', error);
+    } catch (err) {
+      console.error('❌ WebLLM initialization error:', err);
+      if (!error) {
+        // Set generic error if no specific error was provided
+        setError({
+          type: 'unknown',
+          message: err instanceof Error ? err.message : String(err),
+          userMessage: 'Failed to load AI model',
+          actionable: 'Try refreshing the page or skip AI enhancement to use rule-based responses.'
+        });
+      }
       setStatus('error');
       setProgress(null);
       return false;
     }
-  }, [status, isSupported, config]);
+  }, [status, isSupported, config, error]);
 
   /**
    * Generate AI-enhanced stakeholder response
@@ -158,6 +190,7 @@ export function useWebLLM(options: UseWebLLMOptions = {}): UseWebLLMReturn {
     status,
     isSupported,
     progress,
+    error,
     initializeModel,
     generateResponse,
     config,

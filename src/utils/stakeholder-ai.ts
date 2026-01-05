@@ -116,12 +116,69 @@ export function isWebLLMSupported(): boolean {
 }
 
 /**
+ * Error information for WebLLM initialization
+ */
+export interface WebLLMError {
+  type: 'quota' | 'network' | 'unsupported' | 'unknown';
+  message: string;
+  userMessage: string;
+  actionable: string;
+}
+
+/**
+ * Parse error and return structured error information
+ */
+function parseWebLLMError(error: unknown): WebLLMError {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorName = error instanceof Error ? error.name : '';
+
+  // Quota exceeded error (most common - browser storage full)
+  if (errorName === 'QuotaExceededError' || errorMessage.includes('quota') || errorMessage.includes('Quota')) {
+    return {
+      type: 'quota',
+      message: errorMessage,
+      userMessage: 'Not enough storage space to download AI model',
+      actionable: 'Clear your browser cache to free up space, then try again.'
+    };
+  }
+
+  // Network errors
+  if (errorMessage.includes('fetch') || errorMessage.includes('network') || errorMessage.includes('NetworkError')) {
+    return {
+      type: 'network',
+      message: errorMessage,
+      userMessage: 'Network error during model download',
+      actionable: 'Check your internet connection and try again.'
+    };
+  }
+
+  // WebGPU/browser support issues
+  if (errorMessage.includes('WebGPU') || errorMessage.includes('gpu')) {
+    return {
+      type: 'unsupported',
+      message: errorMessage,
+      userMessage: 'Your browser doesn\'t support WebGPU',
+      actionable: 'Use Chrome 113+ or Edge 113+ for AI features, or skip AI enhancement.'
+    };
+  }
+
+  // Unknown error
+  return {
+    type: 'unknown',
+    message: errorMessage,
+    userMessage: 'Failed to load AI model',
+    actionable: 'Try refreshing the page or skip AI enhancement to use rule-based responses.'
+  };
+}
+
+/**
  * Initialize WebLLM engine (singleton pattern)
  * Shows progress during first load (~800MB model download)
  */
 export async function initializeWebLLM(
   config: AIConfig,
-  onProgress?: (progress: webllm.InitProgressReport) => void
+  onProgress?: (progress: webllm.InitProgressReport) => void,
+  onError?: (error: WebLLMError) => void
 ): Promise<webllm.MLCEngine | null> {
   // Return existing engine if already initialized
   if (webLLMEngine && webLLMInitialized) {
@@ -141,6 +198,13 @@ export async function initializeWebLLM(
   // Check browser support
   if (!isWebLLMSupported()) {
     console.warn('WebGPU not supported - WebLLM unavailable');
+    const error: WebLLMError = {
+      type: 'unsupported',
+      message: 'WebGPU not available',
+      userMessage: 'Your browser doesn\'t support WebGPU',
+      actionable: 'Use Chrome 113+ or Edge 113+ for AI features, or skip AI enhancement.'
+    };
+    onError?.(error);
     return null;
   }
 
@@ -165,6 +229,8 @@ export async function initializeWebLLM(
         return engine;
       } catch (error) {
         console.error('❌ WebLLM initialization failed:', error);
+        const parsedError = parseWebLLMError(error);
+        onError?.(parsedError);
         webLLMInitPromise = null;
         return null;
       }
@@ -173,6 +239,8 @@ export async function initializeWebLLM(
     return await webLLMInitPromise;
   } catch (error) {
     console.warn('WebLLM initialization failed:', error);
+    const parsedError = parseWebLLMError(error);
+    onError?.(parsedError);
     webLLMInitPromise = null;
     return null;
   }
