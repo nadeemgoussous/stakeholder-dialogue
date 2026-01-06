@@ -81,7 +81,7 @@ const DisseminationTemplates: React.FC<DisseminationTemplatesProps> = ({
           {disseminationTemplates.map((template) => (
             <div
               key={template.id}
-              className="border border-gray-200 rounded-lg hover:shadow-lg transition-shadow cursor-pointer bg-white"
+              className="border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer bg-white"
               onClick={() => setSelectedTemplate(template)}
             >
               <div className="p-6">

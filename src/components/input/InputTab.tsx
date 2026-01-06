@@ -79,7 +79,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         <button
           onClick={handleLoadExample}
           disabled={loading}
-          className="card text-left hover:shadow-lg transition-shadow duration-200 border-2 border-transparent hover:border-blue-500"
+          className="card text-left hover:bg-gray-50 transition-all duration-200 border-2 border-transparent hover:border-blue-500"
           data-testid="load-example-button"
         >
           <div className="text-4xl mb-3" style={{ color: 'var(--color-irena-blue)' }}>
@@ -100,7 +100,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         <button
           onClick={handlePasteJSON}
           disabled={loading}
-          className="card text-left hover:shadow-lg transition-shadow duration-200 border-2 border-transparent hover:border-blue-500"
+          className="card text-left hover:bg-gray-50 transition-all duration-200 border-2 border-transparent hover:border-blue-500"
           data-testid="paste-json-button"
         >
           <div className="text-4xl mb-3" style={{ color: 'var(--color-irena-orange)' }}>
@@ -121,7 +121,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         <button
           onClick={handleQuickEntry}
           disabled={loading}
-          className="card text-left hover:shadow-lg transition-shadow duration-200 border-2 border-transparent hover:border-blue-500"
+          className="card text-left hover:bg-gray-50 transition-all duration-200 border-2 border-transparent hover:border-blue-500"
           data-testid="quick-entry-button"
         >
           <div className="text-4xl mb-3 text-green-600">
@@ -142,7 +142,7 @@ export default function InputTab({ onProceedToDialogue }: InputTabProps) {
         <button
           onClick={handleCSVUpload}
           disabled={loading}
-          className="card text-left hover:shadow-lg transition-shadow duration-200 border-2 border-transparent hover:border-purple-500"
+          className="card text-left hover:bg-gray-50 transition-all duration-200 border-2 border-transparent hover:border-purple-500"
           data-testid="csv-upload-button"
         >
           <div className="text-4xl mb-3 text-purple-600">

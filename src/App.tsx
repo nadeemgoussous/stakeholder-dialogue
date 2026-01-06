@@ -34,7 +34,7 @@ function App() {
               )}
 
               {activeTab === 'dialogue' && (
-                <StakeholderTab />
+                <StakeholderTab onNavigateToExplore={() => setActiveTab('explore')} />
               )}
 
               {activeTab === 'explore' && (
