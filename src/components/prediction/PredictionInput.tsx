@@ -53,10 +53,7 @@ export default function PredictionInput({
             <StakeholderIcon stakeholder={stakeholder} size="large" />
           </div>
           <div className="flex-1">
-            <h2
-              className="text-2xl font-bold mb-1"
-              style={{ color: stakeholder.color }}
-            >
+            <h2 className="text-2xl font-bold mb-1 text-gray-800">
               {stakeholder.name}
             </h2>
             <p className="text-gray-600">

@@ -8,6 +8,7 @@ interface CompareViewProps {
   stakeholderResponse: StakeholderResponse;
   onTryAnother: () => void;
   onExportBrief?: () => void;
+  onExplore?: () => void;
 }
 
 export default function CompareView({
@@ -15,7 +16,8 @@ export default function CompareView({
   userPrediction,
   stakeholderResponse,
   onTryAnother,
-  onExportBrief
+  onExportBrief,
+  onExplore
 }: CompareViewProps) {
   return (
     <div className="max-w-4xl mx-auto">
@@ -23,10 +25,7 @@ export default function CompareView({
       <div className="mb-6 text-center">
         <div className="flex items-center justify-center gap-3 mb-2">
           <StakeholderIcon stakeholder={stakeholder} size="large" />
-          <h2
-            className="text-3xl font-bold"
-            style={{ color: stakeholder.color }}
-          >
+          <h2 className="text-3xl font-bold text-gray-800">
             {stakeholder.name}
           </h2>
         </div>
@@ -184,22 +183,39 @@ export default function CompareView({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <button
-          onClick={onTryAnother}
-          className="btn-secondary px-6 py-3"
-        >
-          ← Try Another Stakeholder
-        </button>
-        {onExportBrief && (
+      <div className="flex flex-col gap-4">
+        {/* Primary CTA: Explore Impacts */}
+        {onExplore && (
           <button
-            onClick={onExportBrief}
-            className="btn-primary px-6 py-3"
-            style={{ backgroundColor: stakeholder.color }}
+            onClick={onExplore}
+            className="w-full px-8 py-4 bg-irena-blue text-white rounded-lg hover:bg-irena-blue-medium transition-colors font-semibold text-lg shadow-md"
           >
-            Export Brief →
+            Explore Impacts & Adjust Scenario →
           </button>
         )}
+
+        {/* Secondary actions */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <button
+            onClick={onTryAnother}
+            className="btn-secondary px-6 py-2 text-sm"
+          >
+            ← Try Another Stakeholder
+          </button>
+          {onExportBrief && (
+            <button
+              onClick={onExportBrief}
+              className="px-6 py-2 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors text-sm"
+            >
+              Export Brief →
+            </button>
+          )}
+        </div>
+
+        {/* Helpful hint */}
+        <p className="text-sm text-center text-gray-600 italic">
+          💡 Now that you know their concerns, explore how adjustments affect stakeholder sentiment
+        </p>
       </div>
 
       {/* Learning Note */}

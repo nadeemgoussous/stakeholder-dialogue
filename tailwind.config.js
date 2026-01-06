@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        // IRENA Official Colors
+        // IRENA Official Colors (verified with brand guidelines)
         'irena-blue': {
-          DEFAULT: '#0078a7',
-          dark: '#005a82',
-          light: '#4da3c9',
+          DEFAULT: '#005a82',  // Official IRENA blue
+          medium: '#0078a7',   // Medium shade for accents
+          light: '#4da3c9',    // Light shade for backgrounds
         },
         'irena-orange': {
           DEFAULT: '#f7941d',

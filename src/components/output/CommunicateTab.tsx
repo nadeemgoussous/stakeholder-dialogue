@@ -228,8 +228,8 @@ export default function CommunicateTab() {
                   onClick={() => setSelectedStakeholder(profile.id as StakeholderId)}
                   className={`stakeholder-selector-btn p-4 rounded-lg border-2 transition-all ${
                     selectedStakeholder === profile.id
-                      ? 'border-current shadow-lg transform scale-105'
-                      : 'border-gray-300 hover:border-gray-400 hover:shadow-md'
+                      ? 'border-current'
+                      : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                   }`}
                   style={{
                     borderColor: selectedStakeholder === profile.id ? profile.color : undefined,

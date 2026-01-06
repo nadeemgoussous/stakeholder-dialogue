@@ -1,5 +1,113 @@
 ## Claude Code Progress Log
 
+### Session: 2026-01-06 (UI/UX Review - Gemini Accessibility & Professional Design Improvements)
+
+**Branch**: ui-ux-review
+
+**Status**: ✅ COMPLETE - 6 out of 8 improvements from Gemini's review implemented
+
+**Progress Summary**:
+
+User requested external UI/UX review from Gemini AI. Review identified 8 areas for improvement focusing on accessibility (WCAG 2.1 AA compliance), professional appearance (less "app-ish"), and workshop usability. Implemented 6 improvements, deferred 1 (Alignment Score visualization), and removed 1 at user request (auto-skip stall detection).
+
+**✅ Completed**:
+
+1. **Color Contrast (WCAG AA Compliance)** - Fixed accessibility issues
+   - Created `src/utils/color-utils.ts` with contrast ratio calculations
+   - Changed all stakeholder name headings from `style={{ color: stakeholder.color }}` to `text-gray-800`
+   - Stakeholder colors now used ONLY for borders and accents (not text)
+   - All text now meets 4.5:1 contrast ratio requirement on white backgrounds
+   - Files modified: `StakeholderTab.tsx`, `PredictionInput.tsx`, `CompareView.tsx`
+
+2. **IRENA Brand Color Verification** - Updated to official blue
+   - Changed `tailwind.config.js` primary from `#0078a7` to official `#005a82`
+   - Renamed color shades: DEFAULT `#005a82`, medium `#0078a7`, light `#4da3c9`
+   - Ensures exact alignment with IRENA brand guidelines
+
+3. **Move Response Settings to Advanced Settings** - Cleaner primary workflow
+   - Moved "Response Settings" section from above stakeholder grid to bottom of page
+   - Renamed: "Response Settings" → "Advanced Settings (Optional)"
+   - Changed styling: blue gradient → subtle gray border
+   - Smaller, less prominent (text-sm, gray-600 instead of text-lg, semibold)
+   - Collapsed by default to not distract from main task
+
+4. **Default-Open Typical Questions** - Better learning hints
+   - Changed `defaultOpen={false}` to `defaultOpen={true}` for "Typical Questions They Ask" section
+   - Keeps "Key Priorities" and "Typical Questions" visible by default
+   - Only "Engagement Rationale" remains collapsed
+   - Helps users formulate better predictions with visible hints
+
+5. **Simplify Visual Design** - Professional, stable appearance
+   - Removed all `scale-105` hover effects (felt gamified)
+   - Replaced `shadow-lg` with `hover:bg-gray-50` and subtle borders
+   - Files modified:
+     - `StakeholderTab.tsx`: stakeholder buttons now `hover:bg-gray-50` instead of scale/shadow
+     - `InputTab.tsx`: all 4 input option cards simplified (3x `hover:shadow-lg` → `hover:bg-gray-50`)
+     - `CommunicateTab.tsx`: stakeholder selector buttons simplified
+     - `DisseminationTemplates.tsx`: template cards simplified
+   - More "government dashboard" feel, less "startup app"
+
+6. **Highlight Explore as Primary CTA** - Guide users to next step
+   - Added `onNavigateToExplore` callback from `App.tsx` → `StakeholderTab.tsx` → `CompareView.tsx`
+   - New prominent button in `CompareView.tsx` after response reveal:
+     - "Explore Impacts & Adjust Scenario →"
+     - Large (px-8 py-4), IRENA blue, font-semibold, shadow-md
+   - Secondary buttons now smaller (py-2, text-sm):
+     - "← Try Another Stakeholder" (btn-secondary)
+     - "Export Brief →" (white bg, gray border)
+   - Added helpful hint: "💡 Now that you know their concerns, explore how adjustments affect stakeholder sentiment"
+   - Nudges users toward Tab 3 (Explore) instead of cycling through stakeholders endlessly
+
+**❌ Removed (per user request)**:
+
+7. ~~**Strengthen WebLLM Download UX with Auto-Skip**~~ - Initially implemented, then removed
+   - Had added: 5-second stall detection with yellow warning box
+   - Had added: Large prominent "Skip AI Mode" buttons
+   - User requested removal - reverted to original simple design
+   - Back to: small, subtle skip button (bottom-left, underlined text)
+
+**⏸️ Deferred**:
+
+8. **Add Visual Alignment Score to Comparison** - Would require ~30-45 mins
+   - Not implemented: gauge/visualization showing prediction vs. response similarity
+   - Would need: similarity calculation algorithm, visual gauge component, integration
+   - Marked as nice-to-have for future enhancement
+
+**Gemini Review Findings** (original feedback):
+- ✅ Pedagogy is strong (predict-before-reveal is excellent)
+- ✅ Offline-first architecture is solid
+- 🚩 Color contrast failures: stakeholder colors on white fail WCAG AA (2.4:1, need 4.5:1)
+- 🚩 "Response Settings" placement: confusing to have admin config before main task
+- ⚠️ Visual design too "app-like": scale/shadow effects feel gamified for ministry tool
+- ⚠️ Missing CTA priority: "Explore >" should be primary action after reveal
+- ⚠️ Typical Questions hidden: users miss learning hints when collapsed by default
+
+**Testing**:
+- ✅ Dev server running successfully (http://localhost:5173/stakeholder-dialogue/)
+- ✅ Fixed JSX syntax error (duplicate closing tag in ModelLoadingProgress.tsx:287)
+- ✅ All UI changes visible and working
+
+**Files Modified**:
+- `src/utils/color-utils.ts` (NEW - WCAG AA utility functions)
+- `src/components/stakeholder/StakeholderTab.tsx`
+- `src/components/prediction/PredictionInput.tsx`
+- `src/components/prediction/CompareView.tsx`
+- `src/components/input/InputTab.tsx`
+- `src/components/output/CommunicateTab.tsx`
+- `src/components/output/DisseminationTemplates.tsx`
+- `src/components/common/ModelLoadingProgress.tsx` (modified then reverted)
+- `src/App.tsx`
+- `tailwind.config.js`
+- `feature_list.json` (deferred F038-F042)
+
+**Next Steps**:
+- Commit changes to ui-ux-review branch
+- User to test and review visual improvements
+- Optionally implement #8 (Alignment Score) if desired
+- Merge to master when approved
+
+---
+
 ### Session: 2026-01-05 Part 3 (WebLLM Error Handling - QuotaExceededError Fix)
 
 **Status**: ✅ COMPLETE - Actionable error messages for WebLLM loading failures
